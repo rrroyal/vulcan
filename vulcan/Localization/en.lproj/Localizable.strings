@@ -1,0 +1,153 @@
+/* 
+  Localizable.strings
+  vulcan
+  en_US
+ 
+  Created by royal on 31/05/2020.
+  Copyright © 2020 shameful. All rights reserved.
+*/
+
+// ContentView.swift
+"Home" = "Home";
+"Grades" = "Grades";
+"Schedule" = "Schedule";
+"Tasks" = "Tasks";
+"Messages" = "Messages";
+"NO_CONNECTION_TITLE" = "No internet connection!";
+"NO_CONNECTION_SUBTITLE" = "Only cached data is available.";
+
+// OnboardingView.swift
+"Welcome to" = "Welcome to";
+"ONBOARDING_FUNCTION1_TITLE" = "Make use of the platform";
+"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgets, Watch app, dark mode - you name it.";
+"ONBOARDING_FUNCTION2_TITLE" = "Get reminded";
+"ONBOARDING_FUNCTION2_DESCRIPTION" = "App will remind you about the next classes, new messages, grades, etc.";
+"ONBOARDING_FUNCTION3_TITLE" = "Made by a student, not by a corporation";
+"ONBOARDING_FUNCTION3_DESCRIPTION" = "Us, scholars, know better what we need.";
+"Continue" = "Continue";
+
+// SetupView.swift
+"Log in" = "Log in";
+"SETUP_TITLE" = "Setup";
+"Token" = "Token";
+"Symbol" = "Symbol";
+"whateverwhereever" = "whateverwhereever";
+"PIN" = "PIN";
+"Fill all fields!" = "Fill all fields!";
+"Logging in..." = "Logging in...";
+"Error logging in" = "Error logging in";
+"Go back" = "Go back";
+"Nevermind" = "Nevermind";
+
+// HomeView.swift
+"User" = "User";
+"HELLO : %s" = "Hi, %@";
+"GOOD_MORNING : %@" = "Good morning, %@";
+"GOOD_AFTERNOON : %@" = "Good afternoon, %@";
+"GOOD_EVENING : %@" = "Good evening, %@";
+"DATE_CURRENTLY : %@" = "It's currently %@";
+
+"Current lesson" = "Current lesson";
+"Next lesson" = "Next lesson";
+"Exams" = "Exams";
+"Homework" = "Homework";
+"New messages" = "New messages";
+
+"User details" = "User details";
+"Not logged in" = "Not logged in";
+
+// ScheduleView.swift
+"PREVIOUS_WEEK : %@" = "Previous week (%@)";
+"CURRENT_WEEK : %@" = "Current week (%@)";
+"NEXT_WEEK : %@" = "Next week (%@)";
+"LOADING" = "Loading...";
+"No lessons" = "No lessons";
+
+// TasksView.swift
+"No tasks" = "No tasks";
+"TASKS_FOLDER_TITLE" = "Choose a category";
+
+// MessagesView.swift
+"PREVIOUS_MONTH" = "Previous month";
+"CURRENT_MONTH" = "Current month";
+"NEXT_MONTH" = "Next month";
+"PREVIOUS_MONTH : %@" = "Previous month (%@)";
+"CURRENT_MONTH : %@" = "Current month (%@)";
+"NEXT_MONTH : %@" = "Next month (%@)";
+"No messages" = "No messages";
+"Unknown" = "Unknown";
+"Reply" = "Reply";
+"Mark as read" = "Mark as read";
+"Copy" = "Copy";
+"Delete" = "Delete";
+"MESSAGES_FOLDER_TITLE" = "Choose a folder";
+"Received" = "Received";
+"Sent" = "Sent";
+"Deleted" = "Deleted";
+"MESSAGES : %@" = "Messages (%@)";
+
+// SettingsView.swift
+"Settings" = "Settings";
+
+"SETTINGS_LOGGEDIN : %@" = "Logged in as %@";
+"Log out" = "Log out";
+"User group" = "User group";
+"Show all" = "Show all";
+"SETTINGS_READMESSAGEONOPEN" = "Read messages on open";
+"SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Messages will be marked as read after they were opened.";
+
+"Interface" = "Interface";
+"SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
+"SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "If you don't like Haptic Feedback as much as I do, you might want to turn this off.";
+"SETTINGS_COLORIZEGRADES" = "Colorize grades";
+"SETTINGS_COLORIZEGRADES_TOOLTIP" = "Grade labels will be colored.";
+"SETTINGS_COLORIZEGRADEBACKGROUND" = "Colorize grade backgrounds";
+"SETTINGS_COLORIZEGRADEBACKGROUND_TOOLTIP" = "Grade backgrounds will be colored.";
+"SETTINGS_COLORSCHEME" = "Color scheme";
+
+"Other" = "Other";
+"Reset user settings" = "Reset user settings";
+"SETTINGS_RESET" = "Are you sure you want to reset?";
+"SETTINGS_RESET_TOOLTIP" = "All of your app data will be removed!";
+"SETTINGS_RESETTED" = "Resetted! Restart?";
+"Done!" = "Done!";
+"Yes" = "Yes";
+"No" = "No";
+"Reset" = "Reset";
+
+// GradesDetailView.swift
+"NO_DESCRIPTION" = "No description";
+"Average" = "Average";
+"Anticipated" = "Anticipated";
+"Final" = "Final";
+
+// ComposeMessageView.swift
+"Title" = "Title";
+"Choose a recipient..." = "Choose a recipient...";
+"Message content..." = "Message content...";
+
+// ColorSchemeSettingsView.swift
+"Color Scheme" = "Color Scheme";
+"Default" = "Default";
+
+// UsersView.swift
+"Users" = "Users";
+
+// UserDetailView.swift
+"About" = "About";
+"Name" = "Name";
+"Second name" = "Second name";
+"Surname" = "Surname";
+"Nick" = "Nick";
+"User Login ID" = "User Login ID";
+"Department Code" = "Department Code";
+"Branch Name" = "Branch Name";
+"Branch Name (short)" = "Branch Name (short)";
+"Nothing found" = "Nothing found";
+"Anticipated grades" = "Anticipated grades";
+"Final grades" = "Final grades";
+"Notes" = "Notes";
+
+// SettingsSection.swift
+"Made with ❤️ (and ☕️) by @rrroyal" = "Made with ❤️ (and ☕️) by @rrroyal";
+"Version %@ (Build %@)" = "Version %@ (Build %@)";

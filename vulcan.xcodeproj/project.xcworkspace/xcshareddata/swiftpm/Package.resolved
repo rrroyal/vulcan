@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+        "state": {
+          "branch": "master",
+          "revision": "b00f91d92ccb20f67196837db19aaf1a1b9e2ed7",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
+        "state": {
+          "branch": "master",
+          "revision": "cbf2d4955557abc1ed5debab21d20763e7ebc540",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

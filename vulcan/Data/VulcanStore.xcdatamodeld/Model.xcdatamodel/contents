@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E2269" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="VulcanDictionary" representedClassName=".VulcanDictionary" syncable="YES" codeGenerationType="class">
+        <attribute name="employees" optional="YES" attributeType="String"/>
+        <attribute name="gradeCategories" optional="YES" attributeType="String"/>
+        <attribute name="lastFetched" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lessonTimes" optional="YES" attributeType="String"/>
+        <attribute name="noteCategories" optional="YES" attributeType="String"/>
+        <attribute name="presenceCategories" optional="YES" attributeType="String"/>
+        <attribute name="presenceTypes" optional="YES" attributeType="String"/>
+        <attribute name="subjects" optional="YES" attributeType="String"/>
+        <attribute name="teachers" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="VulcanStored" representedClassName="VulcanStored" syncable="YES" codeGenerationType="class">
+        <attribute name="eotGrades" optional="YES" attributeType="Binary"/>
+        <attribute name="grades" optional="YES" attributeType="Binary"/>
+        <attribute name="messages" optional="YES" attributeType="Binary"/>
+        <attribute name="notes" optional="YES" attributeType="Binary"/>
+        <attribute name="schedule" optional="YES" attributeType="Binary"/>
+        <attribute name="tasks" optional="YES" attributeType="Binary"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="eotGrades"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="grades"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="messages"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="notes"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="schedule"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="tasks"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="VulcanDictionary" positionX="-63" positionY="-18" width="128" height="178"/>
+        <element name="VulcanStored" positionX="-54" positionY="72" width="128" height="133"/>
+    </elements>
+</model>

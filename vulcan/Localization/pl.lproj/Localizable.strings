@@ -1,0 +1,153 @@
+/* 
+  Localizable.strings
+  vulcan
+  pl_PL
+ 
+  Created by royal on 31/05/2020.
+  Copyright © 2020 shameful. All rights reserved.
+*/
+
+// ContentView.swift
+"Home" = "Strona główna";
+"Grades" = "Oceny";
+"Schedule" = "Plan lekcji";
+"Tasks" = "Zadania";
+"Messages" = "Wiadomości";
+"NO_CONNECTION_TITLE" = "Brak połączenia z internetem!";
+"NO_CONNECTION_SUBTITLE" = "Tylko lokalnie zapisane dane są dostępne.";
+
+// OnboardingView.swift
+"Welcome to" = "Witaj w";
+"ONBOARDING_FUNCTION1_TITLE" = "Korzystaj z platformy";
+"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgety, aplikacja na Watch, ciemny motyw - jest tutaj wszystko.";
+"ONBOARDING_FUNCTION2_TITLE" = "Powiadomienia";
+"ONBOARDING_FUNCTION2_DESCRIPTION" = "Aplikacja przypomni Ci o kolejnych zajęciach, nowych wiadomościach, ocenach, itp.";
+"ONBOARDING_FUNCTION3_TITLE" = "Stworzone przez studenta, nie firmę";
+"ONBOARDING_FUNCTION3_DESCRIPTION" = "My, uczniowie, lepiej wiemy czego potrzebujemy.";
+"Continue" = "Continue";
+
+// SetupView.swift
+"Log in" = "Zaloguj";
+"SETUP_TITLE" = "Setup";
+"Token" = "Token";
+"Symbol" = "Symbol";
+"whateverwhereever" = "gdziekolwiek";
+"PIN" = "PIN";
+"Fill all fields!" = "Wypełnij wszystkie pola!";
+"Logging in..." = "Loguje się...";
+"Error logging in" = "Błąd podczas logowania";
+"Go back" = "Wróć";
+"Nevermind" = "Nieważne";
+
+// HomeView.swift
+"User" = "Użytkownik";
+"HELLO : %s" = "Cześć, %@";
+"GOOD_MORNING : %@" = "Dzień dobry, %@";
+"GOOD_AFTERNOON : %@" = "Dzień dobry, %@";
+"GOOD_EVENING : %@" = "Dobry wieczór, %@";
+"DATE_CURRENTLY : %@" = "Jest %@";
+
+"Current lesson" = "Bieżąca lekcja";
+"Next lesson" = "Następna lekcja";
+"Exams" = "Sprawdziany";
+"Homework" = "Zadania domowe";
+"New messages" = "Nowe wiadomości";
+
+"User details" = "Dane użytkownika";
+"Not logged in" = "Nie zalogowano";
+
+// ScheduleView.swift
+"PREVIOUS_WEEK : %@" = "Poprzedni tydzień (%@)";
+"CURRENT_WEEK : %@" = "Teraźniejszy tydzień (%@)";
+"NEXT_WEEK : %@" = "Następny tydzień (%@)";
+"LOADING" = "Ładowanie...";
+"No lessons" = "Brak lekcji";
+
+// TasksView.swift
+"No tasks" = "Brak zadań";
+"TASKS_FOLDER_TITLE" = "Wybierz kategorię";
+
+// MessagesView.swift
+"PREVIOUS_MONTH" = "Poprzedni miesiąc";
+"CURRENT_MONTH" = "Teraźniejszy miesiąc";
+"NEXT_MONTH" = "Następny miesiąc";
+"PREVIOUS_MONTH : %@" = "Poprzedni miesiąc (%@)";
+"CURRENT_MONTH : %@" = "Teraźniejszy miesiąc (%@)";
+"NEXT_MONTH : %@" = "Następny miesiąc (%@)";
+"No messages" = "Brak wiadomości";
+"Unknown" = "Nieznane";
+"Reply" = "Odpowiedz";
+"Mark as read" = "Przeczytano";
+"Copy" = "Kopiuj";
+"Delete" = "Usuń";
+"MESSAGES_FOLDER_TITLE" = "Wybierz folder";
+"Received" = "Odebrane";
+"Sent" = "Wysłane";
+"Deleted" = "Usunięte";
+"MESSAGES : %@" = "Wiadomości (%@)";
+
+// SettingsView.swift
+"Settings" = "Ustawienia";
+
+"SETTINGS_LOGGEDIN : %@" = "Zalogowano jako %@";
+"Log out" = "Wyloguj się";
+"User group" = "Grupa";
+"Show all" = "Wszystkie";
+"SETTINGS_READMESSAGEONOPEN" = "Czytaj wiadomości po otwarciu";
+"SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Wiadomości zostaną oznaczone jako przeczytane po ich otwarciu.";
+
+"Interface" = "Interfejs";
+"SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
+"SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "Jeśli nie lubisz Haptic Feedback'u tak bardzo jak ja, możesz go wyłączyć.";
+"SETTINGS_COLORIZEGRADES" = "Koloruj oceny";
+"SETTINGS_COLORIZEGRADES_TOOLTIP" = "Etykiety ocen będą kolorowe.";
+"SETTINGS_COLORIZEGRADEBACKGROUND" = "Koloruj tła ocen";
+"SETTINGS_COLORIZEGRADEBACKGROUND_TOOLTIP" = "Tła ocen będą kolorowe.";
+"SETTINGS_COLORSCHEME" = "Motyw";
+
+"Other" = "Inne";
+"Reset user settings" = "Resetuj";
+"SETTINGS_RESET" = "Na pewno?";
+"SETTINGS_RESET_TOOLTIP" = "Wszystkie dane aplikacji zostaną usunięte!";
+"SETTINGS_RESETTED" = "Zresetowano! Zrestartować?";
+"Done!" = "Gotowe!";
+"Yes" = "Tak";
+"No" = "Nie";
+"Reset" = "Resetuj";
+
+// GradesDetailView.swift
+"NO_DESCRIPTION" = "Brak opisu";
+"Average" = "Średnia";
+"Anticipated" = "Ocena proponowana";
+"Final" = "Ocena ostateczna";
+
+// ComposeMessageView.swift
+"Title" = "Tytuł";
+"Choose a recipient..." = "Wybierz adresatów...";
+"Message content..." = "Treść wiadomości...";
+
+// ColorSchemeSettingsView.swift
+"Color Scheme" = "Motyw";
+"Default" = "Domyślny";
+
+// UsersView.swift
+"Users" = "Użytkownicy";
+
+// UserDetailView.swift
+"About" = "O użytkowniku";
+"Name" = "Imię";
+"Second name" = "Drugie imię";
+"Surname" = "Nazwisko";
+"Nick" = "Pseudonim";
+"User Login ID" = "Login ID użytkownika";
+"Department Code" = "Kod wydziału";
+"Branch Name" = "Nazwa wydziału";
+"Branch Name (short)" = "Krótka nazwa wydziału";
+"Nothing found" = "Nic nie znaleziono";
+"Anticipated grades" = "Oceny proponowane";
+"Final grades" = "Oceny ostateczne";
+"Notes" = "Uwagi";
+
+// SettingsSection.swift
+"Made with ❤️ (and ☕️) by @rrroyal" = "Zrobione z ❤️ (i ☕️) przez @rrroyal";
+"Version %@ (Build %@)" = "Wersja %@ (Numer %@)";
