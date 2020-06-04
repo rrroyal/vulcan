@@ -9,18 +9,22 @@
 import UIKit
 import CoreData
 import Network
+import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: - Core Data stack
+	/// Core Data container
 	lazy var persistentContainer: NSPersistentContainer = {
-		/*
-		The persistent container for the application. This implementation
-		creates and returns a container, having loaded the store for the
-		application to it. This property is optional since there are legitimate
-		error conditions that could cause the creation of the store to fail.
-		*/
 		let container: NSPersistentContainer = NSPersistentContainer(name: "VulcanStore")
+		
+		let storeURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Bundle.main.object(forInfoDictionaryKey: "GroupIdentifier") as? String ?? "")!.appendingPathComponent("vulcan.sqlite")
+		let description: NSPersistentStoreDescription = NSPersistentStoreDescription()
+		description.shouldInferMappingModelAutomatically = true
+		description.shouldMigrateStoreAutomatically = true
+		description.url = storeURL
+				
+		container.persistentStoreDescriptions = [description]
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 			if let error = error {
 				print("[!] (CoreData) Could not load store: \(error.localizedDescription)")
@@ -29,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			
 			print("[*] (CoreData) Store loaded!")
 		})
-		container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		
 		return container
 	}()
@@ -136,7 +139,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			UserDefaults.user.savedUserData = nil
 			UserDefaults.user.userGroup = 0
 			UserDefaults.user.isLoggedIn = false
+			UserDefaults.user.readMessageOnOpen = true
 		}
+		
+		// Background fetch
+		BGTaskScheduler.shared.register(forTaskWithIdentifier: Bundle.main.object(forInfoDictionaryKey: "BackgroundTaskIdentifier") as? String ?? "", using: nil) { task in
+			self.handleAppRefresh(task)
+		}
+		
+		// WCSession
+		WatchSessionManager.shared.startSession()
 				
 		return true
 	}
@@ -154,32 +166,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 	}
 	
-	/* func applicationWillTerminate(_ application: UIApplication) {
-		// Called before quitting
-		
-		// CoreData
-		let stored = try! self.persistentContainer.viewContext.fetch(VulcanStored.fetchRequest())
-		for (index, element) in stored.enumerated() {
-			if (index == stored.count - 1) {
-				break
-			}
-			
-			self.persistentContainer.viewContext.delete(element as! NSManagedObject)
+	
+	// MARK: - Background app refresh
+	func handleAppRefresh(_ task: BGTask) {
+		if (!UserDefaults.user.isLoggedIn) {
+			task.setTaskCompleted(success: true)
+			return
 		}
 		
-		let dictionary = try! self.persistentContainer.viewContext.fetch(VulcanDictionary.fetchRequest())
-		for (index, element) in stored.enumerated() {
-			if (index == dictionary.count - 1) {
-				break
-			}
-			
-			self.persistentContainer.viewContext.delete(element as! NSManagedObject)
+		print("[!] (Background Refresh) Refreshing...")
+		
+		let queue = OperationQueue()
+		queue.maxConcurrentOperationCount = 6
+		queue.addOperation { self.VulcanAPI.getGrades() }
+		queue.addOperation { self.VulcanAPI.getSchedule() }
+		queue.addOperation { self.VulcanAPI.getTasks(tag: .exam) }
+		queue.addOperation { self.VulcanAPI.getTasks(tag: .homework) }
+		queue.addOperation { self.VulcanAPI.getEOTGrades() }
+		queue.addOperation { self.VulcanAPI.getMessages(tag: .received, startDate: Date().startOfMonth, endDate: Date().endOfMonth) }
+		
+		task.expirationHandler = {
+			print("[!] (Background Refresh) Expired!")
+			queue.cancelAllOperations()
 		}
 		
+		let lastOperation = queue.operations.last
+		lastOperation?.completionBlock = {
+			task.setTaskCompleted(success: !(lastOperation?.isCancelled ?? false))
+		}
+		
+		scheduleAppRefresh()
+	}
+	
+	func scheduleAppRefresh() {
+		print("[!] (Background Refresh) Scheduling app refresh.")
 		do {
-			try self.persistentContainer.viewContext.save()
+			let request = BGAppRefreshTaskRequest(identifier: Bundle.main.object(forInfoDictionaryKey: "BackgroundTaskIdentifier") as? String ?? "")
+			request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 60)
+			try BGTaskScheduler.shared.submit(request)
 		} catch {
-			print("[!] (CoreData) Error saving: \(error.localizedDescription)")
+			print("[!] (Background Refresh) Error scheduling: \(error)")
 		}
-	} */
+	}
 }

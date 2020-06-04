@@ -11,7 +11,7 @@ import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	var window: UIWindow?
-	var currentPage: ScreenPage = .home
+	var currentTab: ScreenPage = .home
 	let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 	
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -32,24 +32,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			let shortcutMessagesItem = UIApplicationShortcutItem(type: "shortcutMessages", localizedTitle: NSLocalizedString("Messages", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "text.bubble.fill"), userInfo: nil)
 			UIApplication.shared.shortcutItems = [shortcutMessagesItem, shortcutTasksItem, shortcutScheduleItem, shortcutGradesItem]
 		} else {
-			let shortcutLoginItem = UIApplicationShortcutItem(type: "shortcutLogin", localizedTitle: NSLocalizedString("Log in", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "person"), userInfo: nil)
-			UIApplication.shared.shortcutItems = [shortcutLoginItem]
+			UIApplication.shared.shortcutItems = []
 		}
 		
 		if let shortcutItem = connectionOptions.shortcutItem {
 			switch (shortcutItem.type) {
-				case "shortcutGrades":		currentPage = .grades; VulcanAPI.getGrades(); break
-				case "shortcutSchedule":	currentPage = .schedule; VulcanAPI.getSchedule(startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
-				case "shortcutTasks":		currentPage = .tasks; VulcanAPI.getTasks(tag: .exam, startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
-				case "shortcutMessages":	currentPage = .messages; VulcanAPI.getMessages(tag: .received, startDate: Date().startOfMonth, endDate: Date().endOfMonth); break
-				case "shortcutLogin":		currentPage = .settings; break
-				default:					currentPage = .home; break
+				case "shortcutGrades":		self.currentTab = .grades; VulcanAPI.getGrades(); break
+				case "shortcutSchedule":	self.currentTab = .schedule; VulcanAPI.getSchedule(startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
+				case "shortcutTasks":		self.currentTab = .tasks; VulcanAPI.getTasks(tag: .exam, startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
+				case "shortcutMessages":	self.currentTab = .messages; VulcanAPI.getMessages(tag: .received, startDate: Date().startOfMonth, endDate: Date().endOfMonth); break
+				default:					self.currentTab = .home; break
 			}
 		}
 		#endif
 		
 		// Create the SwiftUI view that provides the window contents.
-		let contentView = ContentView(currentTab: currentPage)
+		let contentView = ContentView(currentTab: self.currentTab)
 			.environmentObject(VulcanAPI)
 			.environmentObject(Settings)
 			.accentColor(Color.mainColor)
@@ -67,12 +65,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
 		let VulcanAPI: VulcanAPIModel = appDelegate.VulcanAPI
 		switch (shortcutItem.type) {
-			case "shortcutGrades":		currentPage = .grades; VulcanAPI.getGrades(); break
-			case "shortcutSchedule":	currentPage = .schedule; VulcanAPI.getSchedule(startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
-			case "shortcutTasks":		currentPage = .tasks; VulcanAPI.getTasks(tag: .exam, startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
-			case "shortcutMessages":	currentPage = .messages; VulcanAPI.getMessages(tag: .received, startDate: Date().startOfMonth, endDate: Date().endOfMonth); break
-			case "shortcutLogin":		currentPage = .settings; break
-			default:					currentPage = .home; break
+			case "shortcutGrades":		self.currentTab = .grades; VulcanAPI.getGrades(); break
+			case "shortcutSchedule":	self.currentTab = .schedule; VulcanAPI.getSchedule(startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
+			case "shortcutTasks":		self.currentTab = .tasks; VulcanAPI.getTasks(tag: .exam, startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()); break
+			case "shortcutMessages":	self.currentTab = .messages; VulcanAPI.getMessages(tag: .received, startDate: Date().startOfMonth, endDate: Date().endOfMonth); break
+			default:					self.currentTab = .home; break
 		}
 	}
 	#endif
@@ -82,6 +79,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// This occurs shortly after the scene enters the background, or when its session is discarded.
 		// Release any resources associated with this scene that can be re-created the next time the scene connects.
 		// The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
+		
+		if (UserDefaults.user.isLoggedIn) {
+			appDelegate.scheduleAppRefresh()
+		}
 	}
 
 	func sceneDidBecomeActive(_ scene: UIScene) {
@@ -103,5 +104,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Called as the scene transitions from the foreground to the background.
 		// Use this method to save data, release shared resources, and store enough scene-specific state information
 		// to restore the scene back to its current state.
+		
+		if (UserDefaults.user.isLoggedIn) {
+			appDelegate.scheduleAppRefresh()
+		}
 	}
 }

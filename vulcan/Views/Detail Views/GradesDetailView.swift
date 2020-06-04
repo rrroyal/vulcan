@@ -22,7 +22,7 @@ struct GradesDetailView: View {
 				}
 			}
 			
-			if (self.gradesAverage != nil || self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject }) != nil || self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject }) != nil) {
+			if ((self.gradesAverage != nil || self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject }) != nil || self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject }) != nil) && self.gradesAverage ?? 0 > .zero) {
 				Section {
 					HStack {
 						Text("Average")
@@ -30,10 +30,10 @@ struct GradesDetailView: View {
 						Spacer()
 						Text(String(format: "%.2f", self.gradesAverage ?? 0))
 							.bold()
-							.foregroundColor(UserDefaults.user.colorizeGrades ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(Int(gradesAverage ?? 0))") : Color.primary)
+							.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: Int(gradesAverage ?? 0)) : Color.primary)
 					}
 					.padding(.vertical, 10)
-					.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(Int(gradesAverage ?? 0))").opacity(0.1) : nil)
+					.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color.fromScheme(value: Int(gradesAverage ?? 0)).opacity(0.1) : nil)
 					
 					// Anticipated
 					if (self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject }) != nil) {
@@ -43,10 +43,10 @@ struct GradesDetailView: View {
 							Spacer()
 							Text(String(self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject })?.grade ?? 0))
 								.bold()
-								.foregroundColor(UserDefaults.user.colorizeGrades ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject })?.grade ?? 0)") : Color.primary)
+								.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject })?.grade ?? 0) : Color.primary)
 						}
 						.padding(.vertical, 10)
-						.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject })?.grade ?? 0)").opacity(0.1) : nil)
+						.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color.fromScheme(value: self.VulcanAPI.endOfTermGrades.anticipated.first(where: { $0.subject == self.subject })?.grade ?? 0).opacity(0.1) : nil)
 					}
 					
 					// Final
@@ -57,10 +57,10 @@ struct GradesDetailView: View {
 							Spacer()
 							Text(String(self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject })?.grade ?? 0))
 								.bold()
-								.foregroundColor(UserDefaults.user.colorizeGrades ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject })?.grade ?? 0)") : Color.primary)
+								.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject })?.grade ?? 0) : Color.primary)
 						}
 						.padding(.vertical, 10)
-						.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject })?.grade ?? 0)").opacity(0.1) : nil)
+						.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color.fromScheme(value: self.VulcanAPI.endOfTermGrades.final.first(where: { $0.subject == self.subject })?.grade ?? 0).opacity(0.1) : nil)
 					}
 				}
 				.loadingOverlay(self.VulcanAPI.dataState.eotGrades.loading)

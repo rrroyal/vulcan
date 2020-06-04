@@ -20,13 +20,13 @@ struct ColorSchemeSettingsView: View {
 						.padding(.bottom, 2)
 					
 					HStack {
-						Text("6").foregroundColor(Color("ColorSchemes/\(scheme)/6"))
-						Text("5").foregroundColor(Color("ColorSchemes/\(scheme)/5"))
-						Text("4").foregroundColor(Color("ColorSchemes/\(scheme)/4"))
-						Text("3").foregroundColor(Color("ColorSchemes/\(scheme)/3"))
-						Text("2").foregroundColor(Color("ColorSchemes/\(scheme)/2"))
-						Text("1").foregroundColor(Color("ColorSchemes/\(scheme)/1"))
-						Text("-").foregroundColor(Color("ColorSchemes/\(scheme)/0"))
+						Text("6").foregroundColor(Color("ColorSchemes/\(scheme)/6", bundle: Bundle(identifier: "Colors")))
+						Text("5").foregroundColor(Color("ColorSchemes/\(scheme)/5", bundle: Bundle(identifier: "Colors")))
+						Text("4").foregroundColor(Color("ColorSchemes/\(scheme)/4", bundle: Bundle(identifier: "Colors")))
+						Text("3").foregroundColor(Color("ColorSchemes/\(scheme)/3", bundle: Bundle(identifier: "Colors")))
+						Text("2").foregroundColor(Color("ColorSchemes/\(scheme)/2", bundle: Bundle(identifier: "Colors")))
+						Text("1").foregroundColor(Color("ColorSchemes/\(scheme)/1", bundle: Bundle(identifier: "Colors")))
+						Text("-").foregroundColor(Color("ColorSchemes/\(scheme)/0", bundle: Bundle(identifier: "Colors")))
 					}
 				}
 				

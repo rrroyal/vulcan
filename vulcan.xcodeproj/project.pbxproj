@@ -25,6 +25,7 @@
 		00421C922482803500CAE11F /* GradeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00421C912482803500CAE11F /* GradeCell.swift */; };
 		00421C942482BB7D00CAE11F /* NotificationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00421C932482BB7D00CAE11F /* NotificationOverlay.swift */; };
 		0045AD9A2482ECAB007AC426 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 0045AD992482ECAB007AC426 /* KeychainAccess */; };
+		00481BBE2484F8BA008EA3DB /* VulcanStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 002D460E24637C9000F4BD3F /* VulcanStore.xcdatamodeld */; };
 		0056F594246084DE001763C8 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0056F593246084DE001763C8 /* Bundle.swift */; };
 		0056F59A24609ED8001763C8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0056F59924609ED8001763C8 /* OnboardingView.swift */; };
 		0056F59C24609F33001763C8 /* GradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0056F59B24609F33001763C8 /* GradesView.swift */; };
@@ -38,6 +39,7 @@
 		0056F5AD2460A1AD001763C8 /* AdaptsToSoftwareKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0056F5A92460A1AC001763C8 /* AdaptsToSoftwareKeyboard.swift */; };
 		0056F5AE2460A1AD001763C8 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0056F5AA2460A1AD001763C8 /* View.swift */; };
 		0056F5B12460B1F9001763C8 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0056F5AF2460B1F9001763C8 /* SettingsSection.swift */; };
+		006271532484EFA60062DF64 /* VulcanAPIStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006271522484EFA60062DF64 /* VulcanAPIStore.swift */; };
 		0063EDC22472CD5C00120CED /* Int+Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063EDC12472CD5C00120CED /* Int+Double.swift */; };
 		006F081124643F9C0095E942 /* ScheduleEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006F081024643F9C0095E942 /* ScheduleEventCell.swift */; };
 		007615D62460748C00518820 /* VulcanAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007615D52460748C00518820 /* VulcanAPIModel.swift */; };
@@ -58,7 +60,6 @@
 		00C5A30B2472BBCA000C7472 /* GradesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C5A30A2472BBCA000C7472 /* GradesDetailView.swift */; };
 		00CA3CB924826F7C003ACC63 /* Vulcan Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082CA362462D98600F713BC /* Vulcan Models.swift */; };
 		00CA3CBC24826FA5003ACC63 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0041F3AF2465C2F5002CA4AB /* UserDefaults.swift */; };
-		00F1830B2482F5D6001B36B2 /* VulcanAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007615D52460748C00518820 /* VulcanAPIModel.swift */; };
 		E7204AF8248163B900605817 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7204AF6248163B900605817 /* Interface.storyboard */; };
 		E7204AFA248163BE00605817 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7204AF9248163BE00605817 /* Assets.xcassets */; };
 		E7204B01248163BE00605817 /* vulcan.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E7204B00248163BE00605817 /* vulcan.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -73,7 +74,38 @@
 		E7204B21248165AD00605817 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E7204B20248165AD00605817 /* SwiftyJSON */; };
 		E7204B22248165C600605817 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0041F3AF2465C2F5002CA4AB /* UserDefaults.swift */; };
 		E7204B23248165CB00605817 /* Vulcan Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082CA362462D98600F713BC /* Vulcan Models.swift */; };
+		E730C4E22487FF6300DB2FC4 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E730C4E12487FF6300DB2FC4 /* Colors.xcassets */; };
+		E730C4E32488050600DB2FC4 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000692ED2461758C000AC155 /* Date.swift */; };
+		E730C4E42488050700DB2FC4 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000692ED2461758C000AC155 /* Date.swift */; };
+		E730C4E8248805E000DB2FC4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E730C4EA248805E000DB2FC4 /* Localizable.strings */; };
+		E730C4ED248809BB00DB2FC4 /* ScheduleEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E730C4EC248809BB00DB2FC4 /* ScheduleEventCell.swift */; };
+		E730C4F024880DB000DB2FC4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E730C4F224880DB000DB2FC4 /* InfoPlist.strings */; };
+		E730C4F52488112F00DB2FC4 /* NextEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E730C4F42488112F00DB2FC4 /* NextEventCell.swift */; };
+		E730C4F6248819B000DB2FC4 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BFB1232460E63E0083EC7D /* String.swift */; };
+		E730C4F7248819B000DB2FC4 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BFB1232460E63E0083EC7D /* String.swift */; };
+		E754DD91248797A800E1AEB5 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E754DD90248797A800E1AEB5 /* MessageCell.swift */; };
+		E754DD952487F87F00E1AEB5 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = E754DD942487F87F00E1AEB5 /* Array.swift */; };
+		E754DD962487FBE200E1AEB5 /* vulcan Schedule.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 00C3A2C52481A50300D54411 /* vulcan Schedule.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E754DD9B2487FC2D00E1AEB5 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E754DD9A2487FC2D00E1AEB5 /* DataModel.swift */; };
+		E758452C24885F4500A02BCC /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758452B24885F4500A02BCC /* WatchSessionManager.swift */; };
+		E758452E2488601B00A02BCC /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758452D2488601B00A02BCC /* WatchSessionManager.swift */; };
 		E75A6F8C247D70FB003677F4 /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75A6F8B247D70FB003677F4 /* UserDetailView.swift */; };
+		E763CA572488F26A006FEE3F /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA552488F255006FEE3F /* ScheduleView.swift */; };
+		E763CA592488F29C006FEE3F /* GradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA582488F29C006FEE3F /* GradesView.swift */; };
+		E763CA5B2488F2B2006FEE3F /* EOTGradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA5A2488F2B2006FEE3F /* EOTGradesView.swift */; };
+		E763CA5D2488F2C1006FEE3F /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA5C2488F2C1006FEE3F /* TasksView.swift */; };
+		E763CA5F2488F2CE006FEE3F /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA5E2488F2CE006FEE3F /* MessagesView.swift */; };
+		E763CA612489029A006FEE3F /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA602489029A006FEE3F /* DebugView.swift */; };
+		E763CA63248908F1006FEE3F /* GradesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA62248908F1006FEE3F /* GradesDetailView.swift */; };
+		E763CA6724890F5F006FEE3F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E763CA6924890F5F006FEE3F /* Localizable.strings */; };
+		E763CA6C24891CE3006FEE3F /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA6B24891CE3006FEE3F /* Color.swift */; };
+		E763CA6D24891D0F006FEE3F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E730C4E12487FF6300DB2FC4 /* Colors.xcassets */; };
+		E763CA6E24891D10006FEE3F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E730C4E12487FF6300DB2FC4 /* Colors.xcassets */; };
+		E763CA6F24891D10006FEE3F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E730C4E12487FF6300DB2FC4 /* Colors.xcassets */; };
+		E763CA7024891D26006FEE3F /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA6B24891CE3006FEE3F /* Color.swift */; };
+		E763CA7124891D27006FEE3F /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763CA6B24891CE3006FEE3F /* Color.swift */; };
+		E7BF5FDC2486EAC1004D09E6 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF5FDB2486EAC1004D09E6 /* DebugView.swift */; };
+		E7EC9773248545BD00FE5BBC /* VulcanStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 002D460E24637C9000F4BD3F /* VulcanStore.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +122,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = E7204AF3248163B900605817;
 			remoteInfo = watchkit;
+		};
+		E754DD972487FBE300E1AEB5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0016B2F42460595900521710 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00C3A2C42481A50300D54411;
+			remoteInfo = "vulcan Today Extension";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -112,6 +151,17 @@
 			dstSubfolderSpec = 13;
 			files = (
 				E7204B01248163BE00605817 /* vulcan.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E754DD992487FBE300E1AEB5 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E754DD962487FBE200E1AEB5 /* vulcan Schedule.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,6 +199,7 @@
 		0056F5A92460A1AC001763C8 /* AdaptsToSoftwareKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdaptsToSoftwareKeyboard.swift; sourceTree = "<group>"; };
 		0056F5AA2460A1AD001763C8 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		0056F5AF2460B1F9001763C8 /* SettingsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
+		006271522484EFA60062DF64 /* VulcanAPIStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VulcanAPIStore.swift; sourceTree = "<group>"; };
 		0063EDC12472CD5C00120CED /* Int+Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Double.swift"; sourceTree = "<group>"; };
 		006F081024643F9C0095E942 /* ScheduleEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEventCell.swift; sourceTree = "<group>"; };
 		007615D52460748C00518820 /* VulcanAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VulcanAPIModel.swift; sourceTree = "<group>"; };
@@ -168,7 +219,7 @@
 		00BFB1212460DAC40083EC7D /* PKCS12.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS12.swift; sourceTree = "<group>"; };
 		00BFB1232460E63E0083EC7D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		00C329692479953000F27E92 /* MessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailView.swift; sourceTree = "<group>"; };
-		00C3A2C52481A50300D54411 /* vulcan Today Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vulcan Today Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00C3A2C52481A50300D54411 /* vulcan Schedule.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vulcan Schedule.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00C3A2C62481A50300D54411 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		00C3A2C92481A50300D54411 /* HostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingView.swift; sourceTree = "<group>"; };
 		00C3A2CC2481A50300D54411 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -189,7 +240,33 @@
 		E7204B12248163C400605817 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E7204B14248163C400605817 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7204B15248163C400605817 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		E730C4E12487FF6300DB2FC4 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		E730C4E9248805E000DB2FC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E730C4EB248805EF00DB2FC4 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E730C4EC248809BB00DB2FC4 /* ScheduleEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEventCell.swift; sourceTree = "<group>"; };
+		E730C4F124880DB000DB2FC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E730C4F324880DB200DB2FC4 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E730C4F42488112F00DB2FC4 /* NextEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextEventCell.swift; sourceTree = "<group>"; };
+		E754DD90248797A800E1AEB5 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		E754DD942487F87F00E1AEB5 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		E754DD9A2487FC2D00E1AEB5 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		E758452B24885F4500A02BCC /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
+		E758452D2488601B00A02BCC /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		E75A6F8B247D70FB003677F4 /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
+		E763CA552488F255006FEE3F /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
+		E763CA582488F29C006FEE3F /* GradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesView.swift; sourceTree = "<group>"; };
+		E763CA5A2488F2B2006FEE3F /* EOTGradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOTGradesView.swift; sourceTree = "<group>"; };
+		E763CA5C2488F2C1006FEE3F /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		E763CA5E2488F2CE006FEE3F /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
+		E763CA602489029A006FEE3F /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		E763CA62248908F1006FEE3F /* GradesDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesDetailView.swift; sourceTree = "<group>"; };
+		E763CA6824890F5F006FEE3F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E763CA6A24890F67006FEE3F /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E763CA6B24891CE3006FEE3F /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		E7BF5FDB2486EAC1004D09E6 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		E7EC976B24851FB600FE5BBC /* vulcan WatchKit App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "vulcan WatchKit App.entitlements"; sourceTree = "<group>"; };
+		E7EC97712485261800FE5BBC /* vulcan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vulcan.entitlements; sourceTree = "<group>"; };
+		E7EC977224852AD400FE5BBC /* vulcan Today Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "vulcan Today Extension.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,7 +318,7 @@
 				0016B2FC2460595900521710 /* vulcan.app */,
 				E7204AF4248163B900605817 /* vulcan WatchKit App.app */,
 				E7204B00248163BE00605817 /* vulcan.appex */,
-				00C3A2C52481A50300D54411 /* vulcan Today Extension.appex */,
+				00C3A2C52481A50300D54411 /* vulcan Schedule.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,9 +334,9 @@
 				0016B30A2460596700521710 /* LaunchScreen.storyboard */,
 				00ADF3FF246F6E4F0064143E /* vulcan.entitlements */,
 				0016B3052460596700521710 /* Assets.xcassets */,
+				007615D8246074AF00518820 /* Data */,
 				0016B3422460599900521710 /* Views */,
 				0056F595246084EB001763C8 /* Extensions+Modifiers */,
-				007615D8246074AF00518820 /* Data */,
 				0098918F24841276005E94C2 /* Localization */,
 				0016B3072460596700521710 /* Preview Content */,
 			);
@@ -309,10 +386,9 @@
 				0056F5AA2460A1AD001763C8 /* View.swift */,
 				0056F5A72460A1AC001763C8 /* UIApplication.swift */,
 				0056F593246084DE001763C8 /* Bundle.swift */,
-				00BFB1232460E63E0083EC7D /* String.swift */,
-				000692ED2461758C000AC155 /* Date.swift */,
 				0041F3AD2465C0BA002CA4AB /* Published.swift */,
 				0063EDC12472CD5C00120CED /* Int+Double.swift */,
+				E754DD942487F87F00E1AEB5 /* Array.swift */,
 			);
 			path = "Extensions+Modifiers";
 			sourceTree = "<group>";
@@ -326,8 +402,18 @@
 				0005C704247D27D800460953 /* MultilineTextField.swift */,
 				00421C912482803500CAE11F /* GradeCell.swift */,
 				00421C932482BB7D00CAE11F /* NotificationOverlay.swift */,
+				E754DD90248797A800E1AEB5 /* MessageCell.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		006271542484EFAC0062DF64 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				006271522484EFA60062DF64 /* VulcanAPIStore.swift */,
+				E758452D2488601B00A02BCC /* WatchSessionManager.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		0066EA9A2461F34400627356 /* Detail Views */ = {
@@ -339,6 +425,7 @@
 				00BDFEFF24740A97000DA06C /* ColorSchemeSettingsView.swift */,
 				007A62232460B87300C3E2DE /* UsersView.swift */,
 				E75A6F8B247D70FB003677F4 /* UserDetailView.swift */,
+				E7BF5FDB2486EAC1004D09E6 /* DebugView.swift */,
 			);
 			path = "Detail Views";
 			sourceTree = "<group>";
@@ -346,8 +433,10 @@
 		00716D2024661F1000582843 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				0041F3AF2465C2F5002CA4AB /* UserDefaults.swift */,
+				E730C4E12487FF6300DB2FC4 /* Colors.xcassets */,
+				002D460E24637C9000F4BD3F /* VulcanStore.xcdatamodeld */,
 				0082CA362462D98600F713BC /* Vulcan Models.swift */,
+				E730C4F8248819BD00DB2FC4 /* Extensions+Modifiers */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -357,7 +446,7 @@
 			children = (
 				007615D52460748C00518820 /* VulcanAPIModel.swift */,
 				007A62212460B82800C3E2DE /* SettingsModel.swift */,
-				002D460E24637C9000F4BD3F /* VulcanStore.xcdatamodeld */,
+				E758452B24885F4500A02BCC /* WatchSessionManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -373,10 +462,15 @@
 		00C3A2C82481A50300D54411 /* vulcan Today Extension */ = {
 			isa = PBXGroup;
 			children = (
+				E7EC977224852AD400FE5BBC /* vulcan Today Extension.entitlements */,
 				00C3A2CB2481A50300D54411 /* MainInterface.storyboard */,
 				00C3A2CE2481A50300D54411 /* Info.plist */,
+				E754DD9A2487FC2D00E1AEB5 /* DataModel.swift */,
 				00C3A2C92481A50300D54411 /* HostingView.swift */,
 				00C3A2D62481A65B00D54411 /* WidgetView.swift */,
+				E730C4EC248809BB00DB2FC4 /* ScheduleEventCell.swift */,
+				E730C4F42488112F00DB2FC4 /* NextEventCell.swift */,
+				E730C4E5248805BB00DB2FC4 /* Localization */,
 			);
 			path = "vulcan Today Extension";
 			sourceTree = "<group>";
@@ -384,6 +478,7 @@
 		E7204AF5248163B900605817 /* vulcan WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
+				E7EC976B24851FB600FE5BBC /* vulcan WatchKit App.entitlements */,
 				E7204AF6248163B900605817 /* Interface.storyboard */,
 				E7204AF9248163BE00605817 /* Assets.xcassets */,
 				E7204AFB248163BE00605817 /* Info.plist */,
@@ -394,11 +489,13 @@
 		E7204B04248163BF00605817 /* vulcan WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
-				E7204B05248163BF00605817 /* ContentView.swift */,
-				E7204B07248163BF00605817 /* HostingController.swift */,
+				E7EC97712485261800FE5BBC /* vulcan.entitlements */,
 				E7204B09248163BF00605817 /* ExtensionDelegate.swift */,
+				E7204B07248163BF00605817 /* HostingController.swift */,
 				E7204B0B248163BF00605817 /* NotificationController.swift */,
-				E7204B0D248163BF00605817 /* NotificationView.swift */,
+				E763CA542488F241006FEE3F /* Views */,
+				006271542484EFAC0062DF64 /* Data */,
+				E763CA6624890EC4006FEE3F /* Localization */,
 				E7204B0F248163C400605817 /* Assets.xcassets */,
 				E7204B14248163C400605817 /* Info.plist */,
 				E7204B15248163C400605817 /* PushNotificationPayload.apns */,
@@ -415,6 +512,50 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		E730C4E5248805BB00DB2FC4 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E730C4EA248805E000DB2FC4 /* Localizable.strings */,
+				E730C4F224880DB000DB2FC4 /* InfoPlist.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		E730C4F8248819BD00DB2FC4 /* Extensions+Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				0041F3AF2465C2F5002CA4AB /* UserDefaults.swift */,
+				000692ED2461758C000AC155 /* Date.swift */,
+				00BFB1232460E63E0083EC7D /* String.swift */,
+				E763CA6B24891CE3006FEE3F /* Color.swift */,
+			);
+			path = "Extensions+Modifiers";
+			sourceTree = "<group>";
+		};
+		E763CA542488F241006FEE3F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E7204B0D248163BF00605817 /* NotificationView.swift */,
+				E7204B05248163BF00605817 /* ContentView.swift */,
+				E763CA552488F255006FEE3F /* ScheduleView.swift */,
+				E763CA582488F29C006FEE3F /* GradesView.swift */,
+				E763CA5A2488F2B2006FEE3F /* EOTGradesView.swift */,
+				E763CA5C2488F2C1006FEE3F /* TasksView.swift */,
+				E763CA5E2488F2CE006FEE3F /* MessagesView.swift */,
+				E763CA602489029A006FEE3F /* DebugView.swift */,
+				E763CA62248908F1006FEE3F /* GradesDetailView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E763CA6624890EC4006FEE3F /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E763CA6924890F5F006FEE3F /* Localizable.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -426,11 +567,13 @@
 				0016B2F92460595900521710 /* Frameworks */,
 				0016B2FA2460595900521710 /* Resources */,
 				0016B33E2460597400521710 /* Embed Watch Content */,
+				E754DD992487FBE300E1AEB5 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				E7204B17248163C400605817 /* PBXTargetDependency */,
+				E754DD982487FBE300E1AEB5 /* PBXTargetDependency */,
 			);
 			name = vulcan;
 			packageProductDependencies = (
@@ -455,7 +598,7 @@
 			);
 			name = "vulcan Today Extension";
 			productName = todayExtension;
-			productReference = 00C3A2C52481A50300D54411 /* vulcan Today Extension.appex */;
+			productReference = 00C3A2C52481A50300D54411 /* vulcan Schedule.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		E7204AF3248163B900605817 /* vulcan WatchKit App */ = {
@@ -553,6 +696,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E763CA6F24891D10006FEE3F /* Colors.xcassets in Resources */,
 				0016B30C2460596700521710 /* LaunchScreen.storyboard in Resources */,
 				00989192248412AC005E94C2 /* Localizable.strings in Resources */,
 				0016B3092460596700521710 /* Preview Assets.xcassets in Resources */,
@@ -564,6 +708,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E730C4E22487FF6300DB2FC4 /* Colors.xcassets in Resources */,
+				E730C4F024880DB000DB2FC4 /* InfoPlist.strings in Resources */,
+				E730C4E8248805E000DB2FC4 /* Localizable.strings in Resources */,
 				00C3A2CD2481A50300D54411 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -572,6 +719,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E763CA6E24891D10006FEE3F /* Colors.xcassets in Resources */,
 				E7204AFA248163BE00605817 /* Assets.xcassets in Resources */,
 				E7204AF8248163B900605817 /* Interface.storyboard in Resources */,
 			);
@@ -582,6 +730,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7204B13248163C400605817 /* Preview Assets.xcassets in Resources */,
+				E763CA6D24891D0F006FEE3F /* Colors.xcassets in Resources */,
+				E763CA6724890F5F006FEE3F /* Localizable.strings in Resources */,
 				E7204B10248163C400605817 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -602,9 +752,11 @@
 				00BFB1222460DAC40083EC7D /* PKCS12.swift in Sources */,
 				0016B3002460595900521710 /* AppDelegate.swift in Sources */,
 				00421C942482BB7D00CAE11F /* NotificationOverlay.swift in Sources */,
+				E754DD952487F87F00E1AEB5 /* Array.swift in Sources */,
 				00BDFF0024740A97000DA06C /* ColorSchemeSettingsView.swift in Sources */,
 				0056F5A024609FBB001763C8 /* MessagesView.swift in Sources */,
 				000692EC246170DF000AC155 /* ScheduleView.swift in Sources */,
+				E763CA7124891D27006FEE3F /* Color.swift in Sources */,
 				0041F3AE2465C0BA002CA4AB /* Published.swift in Sources */,
 				0056F59E24609F64001763C8 /* TasksView.swift in Sources */,
 				0082CA372462D98600F713BC /* Vulcan Models.swift in Sources */,
@@ -615,6 +767,7 @@
 				00C3296A2479953000F27E92 /* MessageDetailView.swift in Sources */,
 				0063EDC22472CD5C00120CED /* Int+Double.swift in Sources */,
 				0056F5B12460B1F9001763C8 /* SettingsSection.swift in Sources */,
+				E758452C24885F4500A02BCC /* WatchSessionManager.swift in Sources */,
 				00BFB1242460E63E0083EC7D /* String.swift in Sources */,
 				0056F5AD2460A1AD001763C8 /* AdaptsToSoftwareKeyboard.swift in Sources */,
 				0056F5AC2460A1AD001763C8 /* DeviceInfo.swift in Sources */,
@@ -627,8 +780,10 @@
 				000692EE2461758C000AC155 /* Date.swift in Sources */,
 				0041F3AC2465A971002CA4AB /* ActivityIndicator.swift in Sources */,
 				0056F59A24609ED8001763C8 /* OnboardingView.swift in Sources */,
+				E754DD91248797A800E1AEB5 /* MessageCell.swift in Sources */,
 				0056F594246084DE001763C8 /* Bundle.swift in Sources */,
 				0056F5A62460A0A7001763C8 /* SetupView.swift in Sources */,
+				E7BF5FDC2486EAC1004D09E6 /* DebugView.swift in Sources */,
 				0016B3042460595900521710 /* ContentView.swift in Sources */,
 				002D461024637C9000F4BD3F /* VulcanStore.xcdatamodeld in Sources */,
 				006F081124643F9C0095E942 /* ScheduleEventCell.swift in Sources */,
@@ -639,11 +794,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E754DD9B2487FC2D00E1AEB5 /* DataModel.swift in Sources */,
+				E730C4ED248809BB00DB2FC4 /* ScheduleEventCell.swift in Sources */,
+				E763CA7024891D26006FEE3F /* Color.swift in Sources */,
+				E730C4F7248819B000DB2FC4 /* String.swift in Sources */,
 				00C3A2D72481A65B00D54411 /* WidgetView.swift in Sources */,
+				E730C4E32488050600DB2FC4 /* Date.swift in Sources */,
 				00CA3CBC24826FA5003ACC63 /* UserDefaults.swift in Sources */,
 				00CA3CB924826F7C003ACC63 /* Vulcan Models.swift in Sources */,
-				00F1830B2482F5D6001B36B2 /* VulcanAPIModel.swift in Sources */,
+				E7EC9773248545BD00FE5BBC /* VulcanStore.xcdatamodeld in Sources */,
 				00C3A2CA2481A50300D54411 /* HostingView.swift in Sources */,
+				E730C4F52488112F00DB2FC4 /* NextEventCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -652,12 +813,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7204B08248163BF00605817 /* HostingController.swift in Sources */,
+				E730C4F6248819B000DB2FC4 /* String.swift in Sources */,
+				E763CA5F2488F2CE006FEE3F /* MessagesView.swift in Sources */,
+				E763CA592488F29C006FEE3F /* GradesView.swift in Sources */,
+				E730C4E42488050700DB2FC4 /* Date.swift in Sources */,
+				00481BBE2484F8BA008EA3DB /* VulcanStore.xcdatamodeld in Sources */,
+				E763CA63248908F1006FEE3F /* GradesDetailView.swift in Sources */,
 				E7204B06248163BF00605817 /* ContentView.swift in Sources */,
 				E7204B22248165C600605817 /* UserDefaults.swift in Sources */,
+				E758452E2488601B00A02BCC /* WatchSessionManager.swift in Sources */,
 				E7204B0C248163BF00605817 /* NotificationController.swift in Sources */,
 				E7204B23248165CB00605817 /* Vulcan Models.swift in Sources */,
 				E7204B0A248163BF00605817 /* ExtensionDelegate.swift in Sources */,
+				E763CA6C24891CE3006FEE3F /* Color.swift in Sources */,
+				E763CA612489029A006FEE3F /* DebugView.swift in Sources */,
+				E763CA5D2488F2C1006FEE3F /* TasksView.swift in Sources */,
+				E763CA5B2488F2B2006FEE3F /* EOTGradesView.swift in Sources */,
 				E7204B0E248163BF00605817 /* NotificationView.swift in Sources */,
+				E763CA572488F26A006FEE3F /* ScheduleView.swift in Sources */,
+				006271532484EFA60062DF64 /* VulcanAPIStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,6 +848,12 @@
 			platformFilter = ios;
 			target = E7204AF3248163B900605817 /* vulcan WatchKit App */;
 			targetProxy = E7204B16248163C400605817 /* PBXContainerItemProxy */;
+		};
+		E754DD982487FBE300E1AEB5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 00C3A2C42481A50300D54411 /* vulcan Today Extension */;
+			targetProxy = E754DD972487FBE300E1AEB5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -712,6 +892,33 @@
 				0098918D2484126A005E94C2 /* pl */,
 			);
 			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+		E730C4EA248805E000DB2FC4 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E730C4E9248805E000DB2FC4 /* en */,
+				E730C4EB248805EF00DB2FC4 /* pl */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E730C4F224880DB000DB2FC4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E730C4F124880DB000DB2FC4 /* en */,
+				E730C4F324880DB200DB2FC4 /* pl */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		E763CA6924890F5F006FEE3F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E763CA6824890F5F006FEE3F /* en */,
+				E763CA6A24890F67006FEE3F /* pl */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -840,6 +1047,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = vulcan/vulcan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"vulcan/Preview Content\"";
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				ENABLE_PREVIEWS = YES;
@@ -849,8 +1057,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "vulcan/vulcan-Bridging-Header.h";
@@ -867,6 +1075,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = vulcan/vulcan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"vulcan/Preview Content\"";
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				ENABLE_PREVIEWS = YES;
@@ -876,8 +1085,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "vulcan/vulcan-Bridging-Header.h";
@@ -889,7 +1098,9 @@
 		00C3A2D32481A50300D54411 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "vulcan Today Extension/vulcan Today Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				INFOPLIST_FILE = "$(SRCROOT)/vulcan Today Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -898,10 +1109,11 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan.todayExtension;
-				PRODUCT_NAME = "vulcan Today Extension";
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me.todayExtension;
+				PRODUCT_NAME = "vulcan Schedule";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -910,7 +1122,9 @@
 		00C3A2D42481A50300D54411 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "vulcan Today Extension/vulcan Today Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				INFOPLIST_FILE = "$(SRCROOT)/vulcan Today Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -919,10 +1133,11 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan.todayExtension;
-				PRODUCT_NAME = "vulcan Today Extension";
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me.todayExtension;
+				PRODUCT_NAME = "vulcan Schedule";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -932,7 +1147,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "vulcan WatchKit Extension/vulcan.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"vulcan WatchKit Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				ENABLE_PREVIEWS = YES;
@@ -942,8 +1159,8 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan.watchkitapp.watchkitextension;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me.watchkitapp.watchkitextension;
 				PRODUCT_NAME = vulcan;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -957,7 +1174,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "vulcan WatchKit Extension/vulcan.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"vulcan WatchKit Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				ENABLE_PREVIEWS = YES;
@@ -967,8 +1186,8 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan.watchkitapp.watchkitextension;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me.watchkitapp.watchkitextension;
 				PRODUCT_NAME = vulcan;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -983,12 +1202,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "vulcan WatchKit App/vulcan WatchKit App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				IBSC_MODULE = watchkit_Extension;
 				INFOPLIST_FILE = "vulcan WatchKit App/Info.plist";
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan.watchkitapp;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1003,12 +1224,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "vulcan WatchKit App/vulcan WatchKit App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = WPN9Y7CDCT;
 				IBSC_MODULE = watchkit_Extension;
 				INFOPLIST_FILE = "vulcan WatchKit App/Info.plist";
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.vulcan.watchkitapp;
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = please.change.me.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;

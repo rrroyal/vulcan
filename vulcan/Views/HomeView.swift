@@ -34,16 +34,16 @@ struct HomeView: View {
 		}
 		
 		// Lessons
-		let currentLesson: Vulcan.Event? = self.VulcanAPI.schedule.first(where: { $0.events.first(where: { $0.dateStarts < Date() && $0.dateEnds > Date() && $0.actualGroup == UserDefaults.user.userGroup }) != nil })?.events.first(where: { $0.dateStarts < Date() && $0.dateEnds > Date() && $0.actualGroup == UserDefaults.user.userGroup })
-		let nextLesson: Vulcan.Event? = self.VulcanAPI.schedule.first(where: { $0.events.first(where: { !$0.hasPassed && $0.actualGroup == UserDefaults.user.userGroup }) != nil })?.events.first(where: { !$0.hasPassed && $0.actualGroup == UserDefaults.user.userGroup })
-		
+		let currentLesson: Vulcan.Event? = self.VulcanAPI.schedule.first(where: { $0.events.first(where: { $0.isCurrent }) != nil })?.events.first(where: { $0.actualGroup != nil ? ($0.isCurrent && $0.actualGroup == UserDefaults.user.userGroup) : $0.isCurrent })
+		let nextLesson: Vulcan.Event? = self.VulcanAPI.schedule.first(where: { $0.events.first(where: { !$0.hasPassed && !$0.isCurrent }) != nil })?.events.first(where: { $0.actualGroup != nil ? (!$0.isCurrent && !$0.hasPassed && $0.actualGroup == UserDefaults.user.userGroup) : !$0.isCurrent && !$0.hasPassed })
+				
 		// Tasks
 		let newExams: [Vulcan.Task] = self.VulcanAPI.tasks.exams.filter({ $0.date > Date().startOfWeek ?? Date().startOfMonth && $0.date < Date().endOfWeek ?? Date().endOfMonth })
 		let newHomework: [Vulcan.Task] = self.VulcanAPI.tasks.homework.filter({ $0.date > Date().startOfWeek ?? Date().startOfMonth && $0.date < Date().endOfWeek ?? Date().endOfMonth })
 		
 		// Messages
 		let newMessages: [Vulcan.Message] = self.VulcanAPI.messages.received.filter({ !$0.hasBeenRead })
-		
+				
 		return List {
 			// General
 			Section {
@@ -54,10 +54,10 @@ struct HomeView: View {
 							.font(.title)
 							.bold()
 							.allowsTightening(true)
-							.minimumScaleFactor(0.5)
+							.minimumScaleFactor(0.85)
 							.padding(.bottom, 2)
 						
-						Text("DATE_CURRENTLY : \(Date().formattedString(format: "EEEE, d MMMM yyyy, HH:mm"))")
+						Text("DATE_CURRENTLY : \(Date().formattedString(format: "EEEE, d MMMM yyyy"))")
 							.font(.headline)
 							.allowsTightening(true)
 							.minimumScaleFactor(0.85)
@@ -78,6 +78,7 @@ struct HomeView: View {
 								Text("\(currentLesson!.dateStarts.localizedTime) - \(currentLesson!.dateEnds.localizedTime) • \(currentLesson!.teacher.name) \(currentLesson!.teacher.surname)")
 									.font(.callout)
 									.foregroundColor(.secondary)
+									.lineLimit(2)
 							}
 						}
 												
@@ -95,16 +96,15 @@ struct HomeView: View {
 								Text("\(nextLesson!.dateStarts.formattedString(format: "EEEE").capitalingFirstLetter()), \(nextLesson!.dateStarts.localizedTime) - \(nextLesson!.dateEnds.localizedTime) • \(nextLesson!.teacher.name) \(nextLesson!.teacher.surname)")
 									.font(.callout)
 									.foregroundColor(.secondary)
+									.lineLimit(2)
 							}
 						}
 					}
-					.allowsTightening(true)
-					.minimumScaleFactor(0.85)
 				}
 				.padding(.vertical, 5)
 			}
 			
-			// Tasks - Exams
+			// MARK: - Tasks - Exams
 			if (newExams.count > 0) {
 				Section(header: Text("Exams")) {
 					ForEach(newExams) { task in
@@ -117,11 +117,12 @@ struct HomeView: View {
 								.foregroundColor(.secondary)
 						}
 						.padding(.vertical, 5)
+						.opacity(task.date > Date() ? 1 : 0.25)
 					}
 				}
 			}
 			
-			// Tasks - Homework
+			// MARK: - Tasks - Homework
 			if (newHomework.count > 0) {
 				Section(header: Text("Homework")) {
 					ForEach(newHomework) { task in
@@ -134,11 +135,12 @@ struct HomeView: View {
 								.foregroundColor(.secondary)
 						}
 						.padding(.vertical, 5)
+						.opacity(task.date > Date() ? 1 : 0.25)
 					}
 				}
 			}
 			
-			// Messages
+			// MARK: - Messages
 			if (newMessages.count > 0) {
 				Section(header: Text("New messages")) {
 					ForEach(newMessages) { message in
@@ -163,7 +165,7 @@ struct HomeView: View {
 								if (!message.hasBeenRead && message.tag != .sent) {
 									Button(action: {
 										generateHaptic(.light)
-										self.VulcanAPI.moveMessage(messageID: message.id, folder: .read) { success, error in
+										self.VulcanAPI.moveMessage(messageID: message.id, tag: message.tag, folder: .read) { success, error in
 											if (error != nil) {
 												generateHaptic(.error)
 											}
@@ -194,7 +196,7 @@ struct HomeView: View {
 								// Remove
 								Button(action: {
 									generateHaptic(.medium)
-									self.VulcanAPI.moveMessage(messageID: message.id, folder: .deleted) { success, error in
+									self.VulcanAPI.moveMessage(messageID: message.id, tag: message.tag, folder: .deleted) { success, error in
 										if (error != nil) {
 											generateHaptic(.error)
 										}
@@ -213,6 +215,140 @@ struct HomeView: View {
 								string += message.content
 								return NSItemProvider(object: string.trimmingCharacters(in: .whitespacesAndNewlines) as NSString)
 							}
+						}
+					}
+				}
+			}
+			
+			// MARK: - Anticipated grades
+			Section(header: Text("Anticipated grades")) {
+				if (self.VulcanAPI.endOfTermGrades.anticipated.count == 0) {
+					HStack {
+						Spacer()
+						Text("No grades")
+							.foregroundColor(.secondary)
+						Spacer()
+					}
+				} else {
+					ForEach(self.VulcanAPI.endOfTermGrades.anticipated, id: \.subject.id) { grade in
+						HStack {
+							Text(grade.subject.name)
+								.bold()
+								.lineLimit(2)
+								.allowsTightening(true)
+								.minimumScaleFactor(0.5)
+								.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: grade.grade) : Color.primary)
+							Spacer()
+							Text("\(grade.grade)")
+								.bold()
+								.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: grade.grade) : Color.primary)
+						}
+						.padding(.vertical, 10)
+						.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color.fromScheme(value: grade.grade).opacity(0.1) : nil)
+					}
+				}
+			}
+			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+			.loadingOverlay(self.VulcanAPI.dataState.eotGrades.loading)
+			.onAppear {
+				if (!self.VulcanAPI.isLoggedIn || !UserDefaults.user.isLoggedIn || !(UIApplication.shared.delegate as! AppDelegate).isReachable) {
+					return
+				}
+				
+				if (!self.VulcanAPI.dataState.eotGrades.fetched || self.VulcanAPI.dataState.eotGrades.loading || self.VulcanAPI.dataState.eotGrades.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+					self.VulcanAPI.getEOTGrades() { success, error in
+						if (error != nil) {
+							generateHaptic(.error)
+						}
+					}
+				}
+			}
+			
+			// MARK: - Final grades
+			Section(header: Text("Final grades")) {
+				if (self.VulcanAPI.endOfTermGrades.final.count == 0) {
+					HStack {
+						Spacer()
+						Text("No grades")
+							.foregroundColor(.secondary)
+						Spacer()
+					}
+				} else {
+					ForEach(self.VulcanAPI.endOfTermGrades.final, id: \.subject.id) { grade in
+						HStack {
+							Text(grade.subject.name)
+								.bold()
+								.lineLimit(2)
+								.allowsTightening(true)
+								.minimumScaleFactor(0.5)
+								.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: grade.grade) : Color.primary)
+							Spacer()
+							Text("\(grade.grade)")
+								.bold()
+								.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: grade.grade) : Color.primary)
+						}
+						.padding(.vertical, 10)
+						.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color.fromScheme(value: grade.grade).opacity(0.1) : nil)
+					}
+				}
+			}
+			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+			.loadingOverlay(self.VulcanAPI.dataState.eotGrades.loading)
+			.onAppear {
+				if (!self.VulcanAPI.isLoggedIn || !UserDefaults.user.isLoggedIn || !(UIApplication.shared.delegate as! AppDelegate).isReachable) {
+					return
+				}
+				
+				if (!self.VulcanAPI.dataState.eotGrades.fetched || self.VulcanAPI.dataState.eotGrades.loading || self.VulcanAPI.dataState.eotGrades.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+					self.VulcanAPI.getEOTGrades() { success, error in
+						if (error != nil) {
+							generateHaptic(.error)
+						}
+					}
+				}
+			}
+			
+			// MARK: - Notes
+			Section(header: Text("Notes")) {
+				if (self.VulcanAPI.notes.count == 0) {
+					HStack {
+						Spacer()
+						Text("Nothing found")
+							.foregroundColor(.secondary)
+						Spacer()
+					}
+				} else {
+					ForEach(self.VulcanAPI.notes) { note in
+						VStack(alignment: .leading) {
+							Text(note.content)
+								.font(.headline)
+								.allowsTightening(true)
+								.minimumScaleFactor(0.5)
+								.lineLimit(nil)
+								.padding(.bottom, 2)
+							
+							Text("\(note.teacher.name) \(note.teacher.surname): \(note.category.name) • \(note.date.formattedString(format: "dd/MM/yyyy"))")
+								.foregroundColor(.secondary)
+								.multilineTextAlignment(.leading)
+								.allowsTightening(true)
+								.minimumScaleFactor(0.5)
+								.lineLimit(5)
+						}
+						.padding(.vertical, 5)
+					}
+				}
+			}
+			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+			.loadingOverlay(self.VulcanAPI.dataState.notes.loading)
+			.onAppear {
+				if (!self.VulcanAPI.isLoggedIn || !UserDefaults.user.isLoggedIn || !(UIApplication.shared.delegate as! AppDelegate).isReachable) {
+					return
+				}
+				
+				if (!self.VulcanAPI.dataState.notes.fetched || self.VulcanAPI.dataState.notes.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+					self.VulcanAPI.getNotes() { success, error in
+						if (error != nil) {
+							generateHaptic(.error)
 						}
 					}
 				}

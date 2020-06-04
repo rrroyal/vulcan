@@ -19,5 +19,5 @@ extension Bundle {
 	
 	public var colorSchemes: [String] {
 		return ["Default", "Dzienniczek+"]
-	}
+	}	
 }

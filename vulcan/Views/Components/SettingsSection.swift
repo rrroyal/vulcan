@@ -39,6 +39,10 @@ struct SettingsSection<Content>: View where Content: View {
 						.bold()
 					Text("Version \(Bundle.main.buildVersion) (Build \(Bundle.main.buildNumber))")
 						.bold()
+					#if DEBUG
+					Text("🚧 DEBUG 🚧")
+						.bold()
+					#endif
 				}
 				.font(.callout)
 				.opacity(0.2)

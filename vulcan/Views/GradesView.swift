@@ -13,6 +13,28 @@ struct GradesView: View {
 	@EnvironmentObject var VulcanAPI: VulcanAPIModel
 	@EnvironmentObject var Settings: SettingsModel
 	
+	var buttonOrIndicator: some View {
+		Group {
+			if (self.VulcanAPI.dataState.grades.loading) {
+				ActivityIndicator(isAnimating: self.$VulcanAPI.dataState.grades.loading, style: .medium)
+			} else {
+				Button(action: {
+					generateHaptic(.light)
+					withAnimation {
+						self.VulcanAPI.getGrades() { success, error in
+							if (error != nil) {
+								generateHaptic(.error)
+							}
+						}
+					}
+				}, label: {
+					Image(systemName: "arrow.clockwise")
+						.navigationBarButton(edge: .trailing)
+				})
+			}
+		}
+	}
+	
 	var body: some View {
 		NavigationView {
 			List(self.VulcanAPI.grades) { grade in
@@ -31,27 +53,19 @@ struct GradesView: View {
 			.listStyle(GroupedListStyle())
 			.environment(\.horizontalSizeClass, .regular)
 			.navigationBarTitle(Text("Grades"))
-			.navigationBarItems(trailing: Button(action: {
-					generateHaptic(.light)
-					self.VulcanAPI.getGrades() { success, error in
-						if (error != nil) {
-							generateHaptic(.error)
-						}
-					}
-			}, label: {
-				Image(systemName: "arrow.clockwise")
-					.navigationBarButton(edge: .trailing)
-				})
-			)
+			.navigationBarItems(trailing: buttonOrIndicator)
+			
+			Text("Nothing selected")
+				.opacity(0.1)
 		}
-		.allowsHitTesting(!self.VulcanAPI.dataState.grades.loading)
-		.loadingOverlay(self.VulcanAPI.dataState.grades.loading)
+		// .allowsHitTesting(!self.VulcanAPI.dataState.grades.loading)
+		// .loadingOverlay(self.VulcanAPI.dataState.grades.loading)
 		.onAppear {
 			if (!self.VulcanAPI.isLoggedIn || !UserDefaults.user.isLoggedIn || !(UIApplication.shared.delegate as! AppDelegate).isReachable) {
 				return
 			}
 			
-			if (!self.VulcanAPI.dataState.grades.fetched || self.VulcanAPI.dataState.grades.lastFetched < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+			if (!self.VulcanAPI.dataState.grades.fetched || self.VulcanAPI.dataState.grades.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
 				self.VulcanAPI.getGrades() { success, error in
 					if (error != nil) {
 						generateHaptic(.error)

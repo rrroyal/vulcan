@@ -15,6 +15,7 @@
 "Messages" = "Wiadomości";
 "NO_CONNECTION_TITLE" = "Brak połączenia z internetem!";
 "NO_CONNECTION_SUBTITLE" = "Tylko lokalnie zapisane dane są dostępne.";
+"Nothing selected" = "Nic nie wybrano";
 
 // OnboardingView.swift
 "Welcome to" = "Witaj w";
@@ -22,13 +23,13 @@
 "ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgety, aplikacja na Watch, ciemny motyw - jest tutaj wszystko.";
 "ONBOARDING_FUNCTION2_TITLE" = "Powiadomienia";
 "ONBOARDING_FUNCTION2_DESCRIPTION" = "Aplikacja przypomni Ci o kolejnych zajęciach, nowych wiadomościach, ocenach, itp.";
-"ONBOARDING_FUNCTION3_TITLE" = "Stworzone przez studenta, nie firmę";
+"ONBOARDING_FUNCTION3_TITLE" = "Stworzone przez studenta";
 "ONBOARDING_FUNCTION3_DESCRIPTION" = "My, uczniowie, lepiej wiemy czego potrzebujemy.";
-"Continue" = "Continue";
+"Continue" = "Kontynuuj";
 
 // SetupView.swift
 "Log in" = "Zaloguj";
-"SETUP_TITLE" = "Setup";
+"SETUP_TITLE" = "Logowanie";
 "Token" = "Token";
 "Symbol" = "Symbol";
 "whateverwhereever" = "gdziekolwiek";
@@ -41,11 +42,11 @@
 
 // HomeView.swift
 "User" = "Użytkownik";
-"HELLO : %s" = "Cześć, %@";
-"GOOD_MORNING : %@" = "Dzień dobry, %@";
-"GOOD_AFTERNOON : %@" = "Dzień dobry, %@";
-"GOOD_EVENING : %@" = "Dobry wieczór, %@";
-"DATE_CURRENTLY : %@" = "Jest %@";
+"HELLO : %s" = "Cześć, %@!";
+"GOOD_MORNING : %@" = "Dzień dobry, %@!";
+"GOOD_AFTERNOON : %@" = "Dzień dobry, %@!";
+"GOOD_EVENING : %@" = "Dobry wieczór, %@!";
+"DATE_CURRENTLY : %@" = "Jest %@.";
 
 "Current lesson" = "Bieżąca lekcja";
 "Next lesson" = "Następna lekcja";
@@ -56,9 +57,11 @@
 "User details" = "Dane użytkownika";
 "Not logged in" = "Nie zalogowano";
 
+"No grades" = "Brak ocen";
+
 // ScheduleView.swift
 "PREVIOUS_WEEK : %@" = "Poprzedni tydzień (%@)";
-"CURRENT_WEEK : %@" = "Teraźniejszy tydzień (%@)";
+"CURRENT_WEEK : %@" = "Bieżący tydzień (%@)";
 "NEXT_WEEK : %@" = "Następny tydzień (%@)";
 "LOADING" = "Ładowanie...";
 "No lessons" = "Brak lekcji";
@@ -69,10 +72,10 @@
 
 // MessagesView.swift
 "PREVIOUS_MONTH" = "Poprzedni miesiąc";
-"CURRENT_MONTH" = "Teraźniejszy miesiąc";
+"CURRENT_MONTH" = "Bieżący miesiąc";
 "NEXT_MONTH" = "Następny miesiąc";
 "PREVIOUS_MONTH : %@" = "Poprzedni miesiąc (%@)";
-"CURRENT_MONTH : %@" = "Teraźniejszy miesiąc (%@)";
+"CURRENT_MONTH : %@" = "Bieżący miesiąc (%@)";
 "NEXT_MONTH : %@" = "Następny miesiąc (%@)";
 "No messages" = "Brak wiadomości";
 "Unknown" = "Nieznane";
@@ -85,9 +88,12 @@
 "Sent" = "Wysłane";
 "Deleted" = "Usunięte";
 "MESSAGES : %@" = "Wiadomości (%@)";
+"Filter" = "Filtrowanie";
+"All" = "Wszystko";
 
 // SettingsView.swift
 "Settings" = "Ustawienia";
+"Libraries" = "Biblioteki";
 
 "SETTINGS_LOGGEDIN : %@" = "Zalogowano jako %@";
 "Log out" = "Wyloguj się";

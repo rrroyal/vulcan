@@ -7,11 +7,76 @@
 //
 
 import WatchKit
+import WatchConnectivity
+import CoreData
 
-class ExtensionDelegate: NSObject, WKExtensionDelegate {
-
+class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
+	// MARK: - Core Data stack
+	/// Core Data container
+	lazy var persistentContainer: NSPersistentContainer = {
+		let container: NSPersistentContainer = NSPersistentContainer(name: "VulcanStore")
+		
+		let storeURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Bundle.main.object(forInfoDictionaryKey: "GroupIdentifier") as? String ?? "")!.appendingPathComponent("vulcan.sqlite")
+		let description: NSPersistentStoreDescription = NSPersistentStoreDescription()
+		description.shouldInferMappingModelAutomatically = true
+		description.shouldMigrateStoreAutomatically = true
+		description.url = storeURL
+		
+		container.persistentStoreDescriptions = [description]
+		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+			if let error = error {
+				print("[!] (CoreData) Could not load store: \(error.localizedDescription)")
+				return
+			}
+			
+			print("[*] (CoreData) Store loaded!")
+		})
+		
+		return container
+	}()
+	
+	/// Saves CoreData context
+	func saveContext() {
+		let context = persistentContainer.viewContext
+		
+		if (context.hasChanges) {
+			do {
+				VulcanAPIStore.shared.loadCached()
+				try context.save()
+			} catch {
+				print("[!] (CoreData) Error saving: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/// Creates or updates CoreData (forgive me)
+	/// - Parameters:
+	///   - forEntityName: Entity name to search for
+	///   - forKey: Key to search/set for
+	///   - object: Object that is being set
+	func createOrUpdate(forEntityName entityName: String, forKey key: String, value: Data) {
+		let context = self.persistentContainer.viewContext
+		let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: entityName)
+		do {
+			let response = try context.fetch(fetchRequest)
+			if let object = response.first {
+				object.setValue(value, forKey: key)
+			} else {
+				let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)
+				object.setValue(value, forKey: key)
+			}
+		} catch {
+			print("[!] (CoreData) Could not fetch: \(error)")
+		}
+		
+		self.saveContext()
+	}
+		
+	lazy var VulcanStore: VulcanAPIStore = VulcanAPIStore.shared
+	
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
+		WatchSessionManager.shared.startSession()
     }
 
     func applicationDidBecomeActive() {
@@ -52,5 +117,14 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
         }
     }
+	
+	// MARK: - WatchConnectivity
+	func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+		print("[*] (WCSession) Session activated! State: \(activationState.rawValue)")
+	}
+	
+	func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+		print("[*] (WCSession) New message!")
+	}
 
 }

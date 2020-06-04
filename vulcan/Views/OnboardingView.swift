@@ -46,6 +46,7 @@ struct InformationDetailView: View {
 					.font(.headline)
 					.foregroundColor(.primary)
 					.accessibility(addTraits: .isHeader)
+					.lineLimit(2)
 				
 				Text(subtitle)
 					.font(.body)
@@ -102,7 +103,7 @@ struct OnboardingView: View {
 			}
 		}
 		.onAppear {
-			UserDefaults.standard.set(true, forKey: "launchedBefore")
+			UserDefaults.group.set(true, forKey: "launchedBefore")
 		}
 	}
 }

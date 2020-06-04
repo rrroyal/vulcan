@@ -16,7 +16,7 @@ struct GradeCell: View {
 			Text(grade.value == nil ? "..." : grade.entry)
 				.font(.largeTitle)
 				.bold()
-				.foregroundColor(UserDefaults.user.colorizeGrades ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(Int(grade.actualGrade))") : Color.primary)
+				.foregroundColor(UserDefaults.user.colorizeGrades ? Color.fromScheme(value: Int(grade.actualGrade)) : Color.primary)
 			
 			Spacer(minLength: 20)
 			
@@ -53,7 +53,7 @@ struct GradeCell: View {
 			}
 		}
 		.padding(.vertical, 10)
-		.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color("ColorSchemes/\(UserDefaults.user.colorScheme)/\(Int(grade.actualGrade))").opacity(0.1) : nil)
+		.listRowBackground((UserDefaults.user.colorizeGrades && UserDefaults.user.colorizeGradeBackground) ? Color.fromScheme(value: Int(grade.actualGrade)).opacity(0.1) : nil)
     }
 }
 

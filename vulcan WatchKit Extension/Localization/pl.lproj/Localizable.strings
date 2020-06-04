@@ -1,0 +1,28 @@
+/* 
+  Localizable.strings
+  vulcan
+  pl_PL
+
+  Created by royal on 04/06/2020.
+  Copyright © 2020 shameful. All rights reserved.
+*/
+
+// ContentView.swift
+"Not logged in" = "Nie zalogowano";
+"Schedule" = "Plan lekcji";
+"Grades" = "Oceny";
+"Final grades" = "Oceny proponowane";
+"Tasks" = "Zadania";
+"Messages" = "Wiadomości";
+"Debug" = "Debug";
+
+// EOTGradesView.swift
+"Final" = "Ostateczne";
+"Anticipated" = "Proponowane";
+
+// TasksView.swift
+"Homework" = "Zadania domowe";
+"Exams" = "Sprawdziany";
+
+// GradesDetailView.swift
+"No category" = "Brak kategorii";

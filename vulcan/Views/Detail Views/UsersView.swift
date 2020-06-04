@@ -50,9 +50,7 @@ struct UsersView: View {
 			self.VulcanAPI.getUsers()
 		}, label: {
 			Image(systemName: "arrow.clockwise")
-				.font(.system(size: 20))
-				.padding([.leading, .vertical])
-				.padding(.trailing, 2)
+				.navigationBarButton(edge: .trailing)
 			})
 		)
 		.loadingOverlay((self.VulcanAPI.users.count == 0) && UserDefaults.user.isLoggedIn)

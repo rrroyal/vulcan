@@ -15,6 +15,7 @@
 "Messages" = "Messages";
 "NO_CONNECTION_TITLE" = "No internet connection!";
 "NO_CONNECTION_SUBTITLE" = "Only cached data is available.";
+"Nothing selected" = "Nothing selected";
 
 // OnboardingView.swift
 "Welcome to" = "Welcome to";
@@ -22,7 +23,7 @@
 "ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgets, Watch app, dark mode - you name it.";
 "ONBOARDING_FUNCTION2_TITLE" = "Get reminded";
 "ONBOARDING_FUNCTION2_DESCRIPTION" = "App will remind you about the next classes, new messages, grades, etc.";
-"ONBOARDING_FUNCTION3_TITLE" = "Made by a student, not by a corporation";
+"ONBOARDING_FUNCTION3_TITLE" = "Made by a student";
 "ONBOARDING_FUNCTION3_DESCRIPTION" = "Us, scholars, know better what we need.";
 "Continue" = "Continue";
 
@@ -41,11 +42,11 @@
 
 // HomeView.swift
 "User" = "User";
-"HELLO : %s" = "Hi, %@";
-"GOOD_MORNING : %@" = "Good morning, %@";
-"GOOD_AFTERNOON : %@" = "Good afternoon, %@";
-"GOOD_EVENING : %@" = "Good evening, %@";
-"DATE_CURRENTLY : %@" = "It's currently %@";
+"HELLO : %s" = "Hi, %@!";
+"GOOD_MORNING : %@" = "Good morning, %@!";
+"GOOD_AFTERNOON : %@" = "Good afternoon, %@!";
+"GOOD_EVENING : %@" = "Good evening, %@!";
+"DATE_CURRENTLY : %@" = "It's currently %@.";
 
 "Current lesson" = "Current lesson";
 "Next lesson" = "Next lesson";
@@ -55,6 +56,8 @@
 
 "User details" = "User details";
 "Not logged in" = "Not logged in";
+
+"No grades" = "No grades";
 
 // ScheduleView.swift
 "PREVIOUS_WEEK : %@" = "Previous week (%@)";
@@ -85,9 +88,12 @@
 "Sent" = "Sent";
 "Deleted" = "Deleted";
 "MESSAGES : %@" = "Messages (%@)";
+"Filter" = "Filter";
+"All" = "All";
 
 // SettingsView.swift
 "Settings" = "Settings";
+"Libraries" = "Libraries";
 
 "SETTINGS_LOGGEDIN : %@" = "Logged in as %@";
 "Log out" = "Log out";

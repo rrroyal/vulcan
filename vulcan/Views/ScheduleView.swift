@@ -17,6 +17,29 @@ struct ScheduleView: View {
 	@State var previousWeekButtonText: LocalizedStringKey = "PREVIOUS_WEEK"
 	@State var nextWeekButtonText: LocalizedStringKey = "NEXT_WEEK"
 	
+	var buttonOrIndicator: some View {
+		Group {
+			if (self.VulcanAPI.dataState.schedule.loading) {
+				ActivityIndicator(isAnimating: self.$VulcanAPI.dataState.schedule.loading, style: .medium)
+			} else {
+				Button(action: {
+					generateHaptic(.light)
+					let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
+					withAnimation {
+						self.VulcanAPI.getSchedule(persistentData: self.weekOffset == 0, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
+							if (error != nil) {
+								generateHaptic(.error)
+							}
+						}
+					}
+				}, label: {
+					Image(systemName: "arrow.clockwise")
+						.navigationBarButton(edge: .trailing)
+				})
+			}
+		}
+	}
+	
 	private func changeWeek(next: Bool = true, reset: Bool = false) {		
 		generateHaptic(.light)
 		self.previousWeekButtonText = "LOADING"
@@ -30,7 +53,7 @@ struct ScheduleView: View {
 		
 		let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
 		
-		self.VulcanAPI.getSchedule(startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
+		self.VulcanAPI.getSchedule(persistentData: reset, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
 			if (error != nil) {
 				generateHaptic(.error)
 			}
@@ -60,10 +83,11 @@ struct ScheduleView: View {
 			}
 		}) {
 			Text(self.previousWeekButtonText)
-				.tag("previousweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.schedule)")
+				.id("previousweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.schedule)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
@@ -74,10 +98,11 @@ struct ScheduleView: View {
 			}
 		}) {
 			Text("CURRENT_WEEK : \((Date().startOfWeek ?? Date()).formattedString(format: "dd MMMM yyyy"))")
-				.tag("currentweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.schedule)")
+				.id("currentweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.schedule)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
@@ -88,17 +113,18 @@ struct ScheduleView: View {
 			}
 		}) {
 			Text(self.nextWeekButtonText)
-				.tag("nextweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.schedule)")
+				.id("nextweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.schedule)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
 	var body: some View {
 		NavigationView {
 			List {
-				// Current/PREVIOUS_WEEK button
+				// Current/previous button
 				Section {
 					if (self.weekOffset > 1) {
 						currentWeekButton
@@ -138,23 +164,11 @@ struct ScheduleView: View {
 			.listStyle(GroupedListStyle())
 			.environment(\.horizontalSizeClass, .regular)
 			.navigationBarTitle(Text("Schedule"))
-			.navigationBarItems(trailing: Button(action: {
-					generateHaptic(.light)
-					let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
-					self.VulcanAPI.getSchedule(startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
-						if (error != nil) {
-							generateHaptic(.error)
-						}
-					}
-				}, label: {
-					Image(systemName: "arrow.clockwise")
-						.navigationBarButton(edge: .trailing)
-				})
-			)
+			.navigationBarItems(trailing: buttonOrIndicator)
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
-		.allowsHitTesting(!self.VulcanAPI.dataState.schedule.loading)
-		.loadingOverlay(self.VulcanAPI.dataState.schedule.loading)
+		// .allowsHitTesting(!self.VulcanAPI.dataState.schedule.loading)
+		// .loadingOverlay(self.VulcanAPI.dataState.schedule.loading)
 		.onAppear {
 			self.previousWeekButtonText = "PREVIOUS_WEEK : \((Calendar.current.date(byAdding: .weekOfYear, value: self.weekOffset - 1, to: Date()) ?? Date()).startOfWeek?.formattedString(format: "dd MMMM yyyy") ?? "")"
 			self.nextWeekButtonText = "NEXT_WEEK : \((Calendar.current.date(byAdding: .weekOfYear, value: self.weekOffset + 1, to: Date()) ?? Date()).startOfWeek?.formattedString(format: "dd MMMM yyyy") ?? "")"
@@ -163,7 +177,7 @@ struct ScheduleView: View {
 				return
 			}
 						
-			if (!self.VulcanAPI.dataState.schedule.fetched || self.VulcanAPI.dataState.schedule.lastFetched < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+			if (!self.VulcanAPI.dataState.schedule.fetched || self.VulcanAPI.dataState.schedule.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
 				self.VulcanAPI.getSchedule(startDate: Date().startOfWeek ?? Date(), endDate: Date().endOfWeek ?? Date()) { success, error in
 					if (error != nil) {
 						generateHaptic(.error)

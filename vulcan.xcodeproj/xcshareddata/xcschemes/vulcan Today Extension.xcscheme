@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00C3A2C42481A50300D54411"
-               BuildableName = "vulcan Today Extension.appex"
+               BuildableName = "vulcan Schedule.appex"
                BlueprintName = "vulcan Today Extension"
                ReferencedContainer = "container:vulcan.xcodeproj">
             </BuildableReference>

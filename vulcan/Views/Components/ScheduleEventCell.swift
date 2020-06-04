@@ -63,7 +63,7 @@ struct ScheduleEventCell: View {
 				}
 			}
 		}
-		.opacity(event.hasPassed ? 0.25 : 1)
+		.opacity(event.isCurrent ? 1 : event.hasPassed ? 0.25 : 0.6)
 		.padding(.vertical, 5)
     }
 }

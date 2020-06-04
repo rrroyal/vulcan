@@ -10,10 +10,9 @@ import WatchKit
 import SwiftUI
 import UserNotifications
 
-class NotificationController: WKUserNotificationHostingController<NotificationView> {
-
-    override var body: NotificationView {
-        return NotificationView()
+class NotificationController: WKUserNotificationHostingController<AnyView> {
+    override var body: AnyView {
+		return AnyView(NotificationView().accentColor(Color.mainColor))
     }
 
     override func willActivate() {

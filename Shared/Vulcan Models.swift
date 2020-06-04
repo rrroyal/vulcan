@@ -263,8 +263,11 @@ enum Vulcan {
 			self.strikethrough = strikethrough
 			self.bold = bold
 			self.userSchedule = userSchedule
-			self.hasPassed = dateEnds < Date()
-			self.actualGroup = Int(String(group?.prefix(1) ?? "0")) ?? 0
+			if (group != nil) {
+				self.actualGroup = Int(String(group?.prefix(1) ?? "0")) ?? 0
+			} else {
+				self.actualGroup = nil
+			}
 		}
 		
 		let id: UUID = UUID()
@@ -276,14 +279,23 @@ enum Vulcan {
 		let lesson: Vulcan.Lesson	// Parsed NumerLekcji
 		let subject: Vulcan.Subject	// Parsed IdPrzedmiot
 		let group: String?			// PodzialSkrot
-		let actualGroup: Int		// Parsed from `group`
+		let actualGroup: Int?		// Parsed from `group`
 		let room: String			// Sala
 		let teacher: Vulcan.Teacher	// Parsed IdPracownik
 		let note: String			// AdnotacjaOZmianie
 		let strikethrough: Bool		// PrzekreslonaNazwa
 		let bold: Bool				// PogrubionaNazwa
 		let userSchedule: Bool		// PlanUcznia
-		var hasPassed: Bool			// dateEnds < Date()
+		var hasPassed: Bool {
+			get {
+				return Date() > self.dateEnds
+			}
+		}
+		var isCurrent: Bool {
+			get {
+				return Date() > self.dateStarts && Date() < self.dateEnds
+			}
+		}
 	}
 	
 	// MARK: - Tasks

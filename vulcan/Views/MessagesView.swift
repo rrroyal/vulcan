@@ -14,15 +14,101 @@ struct MessagesView: View {
 	@EnvironmentObject var Settings: SettingsModel
 	
 	@State var isActionSheetPresented: Bool = false
+	@State var isFilterSheetPresented: Bool = false
 	@State var isComposeSheetPresented: Bool = false
 	@State var messageToReply: Vulcan.Message?
 	@State var messageTag: Vulcan.MessageTag = .received
 	@State var monthOffset: Int = 0
+	@State var messagesFilter: Vulcan.Teacher?
 	@State var messages: [Vulcan.Message] = []
 	
 	@State var previousMonthButtonText: LocalizedStringKey = "PREVIOUS_MONTH"
 	@State var nextMonthButtonText: LocalizedStringKey = "NEXT_MONTH"
 	@State var tagStringKey: LocalizedStringKey = "Received"
+	
+	var buttonOrIndicator: some View {
+		HStack {
+			Group {
+				if (self.VulcanAPI.dataState.messages.loading) {
+					ActivityIndicator(isAnimating: self.$VulcanAPI.dataState.messages.loading, style: .medium)
+				} else {
+					Button(action: {
+						self.isActionSheetPresented.toggle()
+					}) {
+						Image(systemName: "folder")
+							.navigationBarButton(edge: .leading)
+					}
+				}
+			}
+			.actionSheet(isPresented: $isActionSheetPresented) {
+				ActionSheet(title: Text("MESSAGES_FOLDER_TITLE"), buttons: [
+					.default(Text("Received")) {
+						self.messageTag = .received
+						generateHaptic(.light)
+						let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
+						withAnimation {
+							self.VulcanAPI.getMessages(tag: self.messageTag, persistentData: self.monthOffset == 0, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
+								if (error != nil) {
+									generateHaptic(.error)
+								}
+								
+								self.messages = self.VulcanAPI.messages.received
+								self.tagStringKey = "Received"
+							}
+						}
+					},
+					.default(Text("Sent")) {
+						self.messageTag = .sent
+						generateHaptic(.light)
+						let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
+						withAnimation {
+							self.VulcanAPI.getMessages(tag: self.messageTag, persistentData: self.monthOffset == 0, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
+								if (error != nil) {
+									generateHaptic(.error)
+								}
+								
+								self.messages = self.VulcanAPI.messages.sent
+								self.tagStringKey = "Sent"
+							}
+						}
+					},
+					.default(Text("Deleted")) {
+						self.messageTag = .deleted
+						generateHaptic(.light)
+						let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
+						withAnimation {
+							self.VulcanAPI.getMessages(tag: self.messageTag, persistentData: self.monthOffset == 0, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
+								if (error != nil) {
+									generateHaptic(.error)
+								}
+								
+								self.messages = self.VulcanAPI.messages.deleted
+								self.tagStringKey = "Deleted"
+							}
+						}
+					},
+					.cancel()
+				])
+			}
+			Button(action: {
+				self.isFilterSheetPresented.toggle()
+			}) {
+				Image(systemName: "line.horizontal.3.decrease")
+					.navigationBarButton(edge: .leading)
+			}
+			.actionSheet(isPresented: $isFilterSheetPresented) {
+				var options: [ActionSheet.Button] = [.default(Text("All"), action: { self.messagesFilter = nil })]
+				self.VulcanAPI.teachers.uniques.forEach { teacher in
+					options.append(.default(Text("\(teacher.surname) \(teacher.name) (\(teacher.code))"), action: {
+						self.messagesFilter = teacher
+					}))
+				}
+				options.append(.cancel())
+				
+				return ActionSheet(title: Text("Filter"), buttons: options)
+			}
+		}
+	}
 	
 	private func changeMonth(next: Bool = true, reset: Bool = false) {
 		generateHaptic(.light)
@@ -37,7 +123,7 @@ struct MessagesView: View {
 		}
 		
 		let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
-		self.VulcanAPI.getMessages(tag: self.messageTag, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
+		self.VulcanAPI.getMessages(tag: self.messageTag, persistentData: reset, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
 			if (error != nil) {
 				generateHaptic(.error)
 			}
@@ -73,10 +159,11 @@ struct MessagesView: View {
 			}
 		}) {
 			Text(self.previousMonthButtonText)
-				.tag("previousmonthbutton:\(self.monthOffset):\(self.VulcanAPI.dataState.messages)")
+				.id("previousmonthbutton:\(self.monthOffset):\(self.VulcanAPI.dataState.messages)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
@@ -87,10 +174,11 @@ struct MessagesView: View {
 			}
 		}) {
 			Text("CURRENT_MONTH : \(Date().formattedString(format: "MMM yyyy"))")
-				.tag("currentmonthbutton:\(self.monthOffset):\(self.VulcanAPI.dataState.messages)")
+				.id("currentmonthbutton:\(self.monthOffset):\(self.VulcanAPI.dataState.messages)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
@@ -101,17 +189,18 @@ struct MessagesView: View {
 			}
 		}) {
 			Text(self.nextMonthButtonText)
-				.tag("nextmonthbutton:\(self.monthOffset):\(self.VulcanAPI.dataState.messages)")
+				.id("nextmonthbutton:\(self.monthOffset):\(self.VulcanAPI.dataState.messages)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
 	var body: some View {
 		NavigationView {
 			List {
-				// Current/PREVIOUS_MONTH button
+				// Current/previous button
 				Section {
 					if (self.monthOffset > 1) {
 						currentMonthButton
@@ -121,14 +210,14 @@ struct MessagesView: View {
 				}
 				
 				// Messages
-				if (self.messages.count == 0) {
+				if (self.messagesFilter == nil ? self.messages.count == 0 : self.messages.filter({ $0.senders.contains(self.messagesFilter!) }).count == 0) {
 					HStack {
 						Spacer()
 						Text("No messages")
 						Spacer()
 					}
 				} else {
-					ForEach(self.messages) { message in
+					ForEach(self.messagesFilter == nil ? self.messages : self.messages.filter({ $0.senders.contains(self.messagesFilter!) })) { message in
 						NavigationLink(destination: MessageDetailView(message: message)) {
 							VStack(alignment: .leading) {
 								// Name Surname, Date
@@ -182,9 +271,14 @@ struct MessagesView: View {
 								if (!message.hasBeenRead && message.tag != .sent) {
 									Button(action: {
 										generateHaptic(.light)
-										self.VulcanAPI.moveMessage(messageID: message.id, folder: .read) { success, error in
+										self.VulcanAPI.moveMessage(messageID: message.id, tag: message.tag, folder: .read) { success, error in
 											if (error != nil) {
 												generateHaptic(.error)
+											}
+											switch (self.messageTag) {
+												case .received: self.messages = self.VulcanAPI.messages.received; break;
+												case .sent: self.messages = self.VulcanAPI.messages.sent; break;
+												case .deleted: self.messages = self.VulcanAPI.messages.deleted; break
 											}
 										}
 									}) {
@@ -213,9 +307,14 @@ struct MessagesView: View {
 								// Remove
 								Button(action: {
 									generateHaptic(.medium)
-									self.VulcanAPI.moveMessage(messageID: message.id, folder: .deleted) { success, error in
+									self.VulcanAPI.moveMessage(messageID: message.id, tag: message.tag, folder: .deleted) { success, error in
 										if (error != nil) {
 											generateHaptic(.error)
+										}
+										switch (self.messageTag) {
+											case .received: self.messages = self.VulcanAPI.messages.received; break;
+											case .sent: self.messages = self.VulcanAPI.messages.sent; break;
+											case .deleted: self.messages = self.VulcanAPI.messages.deleted; break
 										}
 									}
 								}) {
@@ -249,56 +348,7 @@ struct MessagesView: View {
 			.environment(\.horizontalSizeClass, .regular)
 			.navigationBarTitle(Text(self.tagStringKey))
 			.navigationBarItems(
-				leading: Button(action: {
-					self.isActionSheetPresented.toggle()
-				}) {
-					Image(systemName: "folder")
-						.navigationBarButton(edge: .leading)
-				}
-				.actionSheet(isPresented: $isActionSheetPresented) {
-					ActionSheet(title: Text("MESSAGES_FOLDER_TITLE"), buttons: [
-						.default(Text("Received")) {
-							self.messageTag = .received
-							generateHaptic(.light)
-							let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
-							self.VulcanAPI.getMessages(tag: self.messageTag, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
-								if (error != nil) {
-									generateHaptic(.error)
-								}
-								
-								self.messages = self.VulcanAPI.messages.received
-								self.tagStringKey = "Received"
-							}
-						},
-						.default(Text("Sent")) {
-							self.messageTag = .sent
-							generateHaptic(.light)
-							let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
-							self.VulcanAPI.getMessages(tag: self.messageTag, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
-								if (error != nil) {
-									generateHaptic(.error)
-								}
-								
-								self.messages = self.VulcanAPI.messages.sent
-								self.tagStringKey = "Sent"
-							}
-						},
-						.default(Text("Deleted")) {
-							self.messageTag = .deleted
-							generateHaptic(.light)
-							let month: Date = Calendar.current.date(byAdding: .month, value: self.monthOffset, to: Date()) ?? Date()
-							self.VulcanAPI.getMessages(tag: self.messageTag, startDate: month.startOfMonth, endDate: month.endOfMonth) { success, error in
-								if (error != nil) {
-									generateHaptic(.error)
-								}
-								
-								self.messages = self.VulcanAPI.messages.deleted
-								self.tagStringKey = "Deleted"
-							}
-						},
-						.cancel()
-					])
-				},
+				leading: buttonOrIndicator,
 				trailing: Button(action: {
 					self.messageToReply = nil
 					self.isComposeSheetPresented = true
@@ -307,25 +357,29 @@ struct MessagesView: View {
 						.navigationBarButton(edge: .trailing)
 				}
 			)
+			.onAppear {
+				switch (self.messageTag) {
+					case .received:	self.messages = self.VulcanAPI.messages.received; break
+					case .sent:		self.messages = self.VulcanAPI.messages.sent; break
+					case .deleted:	self.messages = self.VulcanAPI.messages.deleted; break
+				}
+			}
+			
+			Text("Nothing selected")
+				.opacity(0.1)
 		}
-		.allowsHitTesting(!self.VulcanAPI.dataState.messages.loading)
-		.loadingOverlay(self.VulcanAPI.dataState.messages.loading)
+		// .allowsHitTesting(!self.VulcanAPI.dataState.messages.loading)
+		// .loadingOverlay(self.VulcanAPI.dataState.messages.loading)
 		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: self.$isComposeSheetPresented, message: self.messageToReply).environmentObject(self.VulcanAPI).environmentObject(self.Settings) })
 		.onAppear {
 			self.previousMonthButtonText = "PREVIOUS_MONTH : \((Calendar.current.date(byAdding: .month, value: self.monthOffset - 1, to: Date()) ?? Date()).startOfMonth.formattedString(format: "MMM yyyy"))"
 			self.nextMonthButtonText = "NEXT_MONTH : \((Calendar.current.date(byAdding: .month, value: self.monthOffset + 1, to: Date()) ?? Date()).startOfMonth.formattedString(format: "MMM yyyy"))"
 			
-			switch (self.messageTag) {
-				case .received:	self.messages = self.VulcanAPI.messages.received; break
-				case .sent:		self.messages = self.VulcanAPI.messages.sent; break
-				case .deleted:	self.messages = self.VulcanAPI.messages.deleted; break
-			}
-			
 			if (!self.VulcanAPI.isLoggedIn || !UserDefaults.user.isLoggedIn || !(UIApplication.shared.delegate as! AppDelegate).isReachable) {
 				return
 			}
 			
-			if (!self.VulcanAPI.dataState.messages.fetched || self.VulcanAPI.dataState.messages.lastFetched < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+			if (!self.VulcanAPI.dataState.messages.fetched || self.VulcanAPI.dataState.messages.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
 				self.VulcanAPI.getMessages(
 					tag: self.messageTag,
 					startDate: Date().startOfMonth,
@@ -333,6 +387,12 @@ struct MessagesView: View {
 				) { success, error in
 					if (error != nil) {
 						generateHaptic(.error)
+					}
+					
+					switch (self.messageTag) {
+						case .received:	self.messages = self.VulcanAPI.messages.received; break
+						case .sent:		self.messages = self.VulcanAPI.messages.sent; break
+						case .deleted:	self.messages = self.VulcanAPI.messages.deleted; break
 					}
 				}
 			}

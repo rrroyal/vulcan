@@ -46,6 +46,14 @@ extension Date {
 		return hello
 	}
 	
+	var relativeString: String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeStyle = .none
+		dateFormatter.dateStyle = .long
+		dateFormatter.doesRelativeDateFormatting = true
+		return dateFormatter.string(from: self)
+	}
+	
 	var timestampString: String? {
 		let formatter = DateComponentsFormatter()
 		formatter.unitsStyle = .abbreviated
@@ -65,6 +73,17 @@ extension Date {
 		dateFormatter.dateStyle = .none
 		dateFormatter.timeStyle = .short
 		return dateFormatter.string(from: self)
+	}
+	
+	var startOfDay: Date {
+		return Calendar.current.startOfDay(for: self)
+	}
+	
+	var endOfDay: Date {
+		var components = DateComponents()
+		components.day = 1
+		components.second = -1
+		return Calendar.current.date(byAdding: components, to: startOfDay)!
 	}
 	
 	var startOfWeek: Date? {

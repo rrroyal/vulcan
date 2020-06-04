@@ -22,6 +22,29 @@ struct TasksView: View {
 	@State var nextWeekButtonText: LocalizedStringKey = "NEXT_WEEK"
 	@State var tagStringKey: LocalizedStringKey = "Exams"
 	
+	var buttonOrIndicator: some View {
+		Group {
+			if (self.VulcanAPI.dataState.tasks.loading) {
+				ActivityIndicator(isAnimating: self.$VulcanAPI.dataState.tasks.loading, style: .medium)
+			} else {
+				Button(action: {
+					generateHaptic(.light)
+					let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
+					withAnimation {
+						self.VulcanAPI.getTasks(tag: self.taskTag, persistentData: self.weekOffset == 0, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
+							if (error != nil) {
+								generateHaptic(.error)
+							}
+						}
+					}
+				}) {
+					Image(systemName: "arrow.clockwise")
+						.navigationBarButton(edge: .trailing)
+				}
+			}
+		}
+	}
+	
 	private func changeWeek(next: Bool = true, reset: Bool = false) {
 		generateHaptic(.light)
 		
@@ -35,7 +58,7 @@ struct TasksView: View {
 		}
 		
 		let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
-		self.VulcanAPI.getTasks(tag: self.taskTag, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
+		self.VulcanAPI.getTasks(tag: self.taskTag, persistentData: reset, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
 			if (error != nil) {
 				generateHaptic(.error)
 			}
@@ -70,10 +93,11 @@ struct TasksView: View {
 			}
 		}) {
 			Text(self.previousWeekButtonText)
-				.tag("previousweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.tasks)")
+				.id("previousweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.tasks)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
@@ -84,10 +108,11 @@ struct TasksView: View {
 			}
 		}) {
 			Text("CURRENT_WEEK : \((Date().startOfWeek ?? Date()).formattedString(format: "dd MMMM yyyy"))")
-				.tag("currentweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.tasks)")
+				.id("currentweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.tasks)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
@@ -98,17 +123,18 @@ struct TasksView: View {
 			}
 		}) {
 			Text(self.nextWeekButtonText)
-				.tag("nextweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.tasks)")
+				.id("nextweekbutton:\(self.weekOffset):\(self.VulcanAPI.dataState.tasks)")
 				.padding(.vertical, 8)
 				.frame(maxWidth: .infinity)
 				.transition(.opacity)
+				.multilineTextAlignment(.center)
 		}
 	}
 	
 	var body: some View {
 		NavigationView {
 			List {
-				// Current/PREVIOUS_WEEK button
+				// Current/previous button
 				Section {
 					if (self.weekOffset > 1) {
 						currentWeekButton
@@ -125,9 +151,9 @@ struct TasksView: View {
 						Spacer()
 					}
 				} else {
-					ForEach(self.tasks) { exam in
+					ForEach(self.tasks) { task in
 						VStack(alignment: .leading) {
-							Text(exam.description)
+							Text(task.description)
 								.font(.headline)
 								.multilineTextAlignment(.leading)
 								.allowsTightening(true)
@@ -135,7 +161,7 @@ struct TasksView: View {
 								.lineLimit(4)
 								.padding(.bottom, 2)
 								
-							Text("\(exam.subject.name) • \(exam.date.formattedString(format: "EEEE, d MMMM yyyy").capitalingFirstLetter())")
+							Text("\(task.subject.name) • \(task.date.formattedString(format: "EEEE, d MMMM yyyy").capitalingFirstLetter())")
 								.font(.callout)
 								.foregroundColor(.secondary)
 								.multilineTextAlignment(.leading)
@@ -144,6 +170,7 @@ struct TasksView: View {
 								.lineLimit(3)
 						}
 						.padding(.vertical, 5)
+						.opacity(task.date > Date() ? 1 : 0.25)
 					}
 				}
 				
@@ -172,48 +199,40 @@ struct TasksView: View {
 							self.taskTag = .exam
 							let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
 							generateHaptic(.light)
-							self.VulcanAPI.getTasks(tag: self.taskTag, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
-								if (error != nil) {
-									generateHaptic(.error)
+							withAnimation {
+								self.VulcanAPI.getTasks(tag: self.taskTag, persistentData: self.weekOffset == 0, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
+									if (error != nil) {
+										generateHaptic(.error)
+									}
+									
+									self.tasks = self.VulcanAPI.tasks.exams
+									self.tagStringKey = "Exams"
 								}
-								
-								self.tasks = self.VulcanAPI.tasks.exams
-								self.tagStringKey = "Exams"
 							}
 						},
 						.default(Text("Homework")) {
 							self.taskTag = .homework
 							let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
 							generateHaptic(.light)
-							self.VulcanAPI.getTasks(tag: self.taskTag, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
-								if (error != nil) {
-									generateHaptic(.error)
+							withAnimation {
+								self.VulcanAPI.getTasks(tag: self.taskTag, persistentData: self.weekOffset == 0, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
+									if (error != nil) {
+										generateHaptic(.error)
+									}
+									
+									self.tasks = self.VulcanAPI.tasks.homework
+									self.tagStringKey = "Homework"
 								}
-								
-								self.tasks = self.VulcanAPI.tasks.homework
-								self.tagStringKey = "Homework"
 							}
 						},
 						.cancel()
 					])
 				},
-				trailing: Button(action: {
-					generateHaptic(.light)
-					let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
-					self.VulcanAPI.getTasks(tag: self.taskTag, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
-						if (error != nil) {
-							generateHaptic(.error)
-						}
-					}
-				}) {
-					Image(systemName: "arrow.clockwise")
-						.navigationBarButton(edge: .trailing)
-				}
-			)
+				trailing: buttonOrIndicator)
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
-		.allowsHitTesting(!self.VulcanAPI.dataState.tasks.loading)
-		.loadingOverlay(self.VulcanAPI.dataState.tasks.loading)
+		// .allowsHitTesting(!self.VulcanAPI.dataState.tasks.loading)
+		// .loadingOverlay(self.VulcanAPI.dataState.tasks.loading)
 		.onAppear {
 			self.previousWeekButtonText = "PREVIOUS_WEEK : \((Calendar.current.date(byAdding: .weekOfYear, value: self.weekOffset - 1, to: Date()) ?? Date()).startOfWeek?.formattedString(format: "dd MMMM yyyy") ?? "")"
 			self.nextWeekButtonText = "NEXT_WEEK : \((Calendar.current.date(byAdding: .weekOfYear, value: self.weekOffset + 1, to: Date()) ?? Date()).startOfWeek?.formattedString(format: "dd MMMM yyyy") ?? "")"
@@ -227,11 +246,16 @@ struct TasksView: View {
 				return
 			}
 			
-			if (!self.VulcanAPI.dataState.tasks.fetched || self.VulcanAPI.dataState.tasks.lastFetched < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
+			if (!self.VulcanAPI.dataState.tasks.fetched || self.VulcanAPI.dataState.tasks.lastFetched ?? Date(timeIntervalSince1970: 0) < (Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date())) {
 				let week: Date = Calendar.current.date(byAdding: .weekOfMonth, value: self.weekOffset, to: Date()) ?? Date()
 				self.VulcanAPI.getTasks(tag: self.taskTag, startDate: week.startOfWeek ?? Date(), endDate: week.endOfWeek ?? Date()) { success, error in
 					if (error != nil) {
 						generateHaptic(.error)
+					}
+					
+					switch (self.taskTag) {
+						case .exam:		self.tasks = self.VulcanAPI.tasks.exams; break
+						case .homework:	self.tasks = self.VulcanAPI.tasks.homework; break
 					}
 				}
 			}

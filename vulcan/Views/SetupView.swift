@@ -115,7 +115,7 @@ struct SetupView: View {
 					}
 				}
 			}) {
-				Text(buttonText)
+				Text(LocalizedStringKey(buttonText))
 					.customButton(buttonColor)
 					.multilineTextAlignment(.center)
 			}

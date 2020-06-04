@@ -62,7 +62,7 @@ struct MessageDetailView: View {
 			}
 			
 			if (UserDefaults.user.readMessageOnOpen) {
-				self.VulcanAPI.moveMessage(messageID: self.message.id, folder: .read)
+				self.VulcanAPI.moveMessage(messageID: self.message.id, tag: self.message.tag, folder: .read)
 			}
 		}
     }

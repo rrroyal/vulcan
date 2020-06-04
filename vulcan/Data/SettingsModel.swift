@@ -8,7 +8,6 @@
 
 import Foundation
 import Combine
-import SwiftUI
 import SwiftyJSON
 
 /// Model containing user settings data
@@ -27,9 +26,9 @@ class SettingsModel: ObservableObject {
 	
 	public func resetSettings() {
 		print("[!] Resetting settings!")
-		UserDefaults.standard.removeObject(forKey: "launchedBefore")
-		let domain = Bundle.main.bundleIdentifier!
-		UserDefaults.standard.removePersistentDomain(forName: domain)
-		UserDefaults.standard.synchronize()
+		UserDefaults.group.removeObject(forKey: "launchedBefore")
+		UserDefaults.group.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+		UserDefaults.group.removePersistentDomain(forName: Bundle.main.object(forInfoDictionaryKey: "GroupIdentifier") as? String ?? "")
+		UserDefaults.group.synchronize()
 	}
 }

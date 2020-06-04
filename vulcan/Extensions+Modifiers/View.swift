@@ -30,9 +30,9 @@ struct NavigationBarButtonModifier: ViewModifier {
 	
 	func body(content: Content) -> some View {
 		content
+			.padding([.vertical, edge == .leading ? .trailing : .leading])
+			.padding(edge, 5)
 			.font(.system(size: 20))
-			.padding([edge == .leading ? .trailing : .leading, .vertical])
-			.padding(edge, 2)
 	}
 }
 
@@ -88,9 +88,4 @@ extension Text {
 			return self
 		}
 	}
-}
-
-// MARK: - Color
-extension Color {
-	static var mainColor: Color = Color("mainColor")
 }

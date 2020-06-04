@@ -1,5 +1,5 @@
 //
-//  APIModel.swift
+//  VulcanAPIModel.swift
 //  vulcan
 //
 //  Created by royal on 04/05/2020.
@@ -12,10 +12,11 @@ import CoreData
 import SwiftyJSON
 import KeychainAccess
 
+/// Model that manages all of the Vulcan-related data.
 class VulcanAPIModel: ObservableObject {
 	// MARK: - Private variables
 	private let settings: SettingsModel = SettingsModel()
-	private let ud: UserDefaults = UserDefaults.standard
+	private let ud: UserDefaults = UserDefaults.group
 	private let keychain: Keychain = Keychain(service: ("\(Bundle.main.bundleIdentifier ?? "vulcan")-\(UIDevice.current.name)" )).label("vulcan Certificate (\(UIDevice.current.name))").synchronizable(false).accessibility(.afterFirstUnlock)
 	private let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 	private let dataContainer: NSPersistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -33,7 +34,7 @@ class VulcanAPIModel: ObservableObject {
 		struct Status {
 			var loading: Bool = false
 			var fetched: Bool = false
-			var lastFetched: Date = Date(timeIntervalSince1970: 0)
+			var lastFetched: Date?
 		}
 
 		var grades: DataState.Status = DataState.Status()
@@ -45,10 +46,14 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - Public variables
+	/// Are we logged in?
 	@Published var isLoggedIn: Bool = false
+	/// Data state
 	@Published var dataState: DataState = DataState()
 	
+	/// Available users
 	@Published var users: [Vulcan.User] = []
+	/// Selected user
 	@Published var selectedUser: Vulcan.User?
 	
 	@Published var teachers: [Vulcan.Teacher] = []
@@ -59,6 +64,7 @@ class VulcanAPIModel: ObservableObject {
 	@Published var notes: [Vulcan.Note] = []
 	@Published var endOfTermGrades: Vulcan.TermGrades = Vulcan.TermGrades(anticipated: [], final: [])
 	
+	/// Do we have the Firebase token, required when logging in on a new device?
 	public var hasFirebaseToken: Bool {
 		get {
 			return self.keychain["FirebaseToken"] != nil && self.keychain["FirebaseToken"] != ""
@@ -81,8 +87,8 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - init
-	init() {
-		print("[*] (VulcanAPI) init")
+	init() {		
+		// Update Core Data context
 		self.coreDataContext = dataContainer.viewContext
 		
 		// Load cached data
@@ -152,7 +158,7 @@ class VulcanAPIModel: ObservableObject {
 				print("[!] (VulcanAPI) No FirebaseToken! Registering...")
 				self.registerFirebaseDevice()
 			}
-			self.logOut()
+			// self.logOut()
 			return
 		}
 		
@@ -189,6 +195,12 @@ class VulcanAPIModel: ObservableObject {
 	///   - symbol: Alphanumeric, lower-caps school symbol
 	///   - pin: 6 numbers
 	public func login(token: String, symbol: String, pin: Int, completionHandler: @escaping (Bool, Error?) -> (Void)) {
+		// Check for FirebaseToken
+		if (self.keychain["FirebaseToken"] == nil || self.keychain["FirebaseToken"] == "") {
+			print("[!] (Login) No FirebaseToken! Registering...")
+			self.registerFirebaseDevice()
+		}
+		
 		// Get endpointURL based on our symbol
 		URLSession.shared.dataTaskPublisher(for: URL(string: "http://komponenty.vulcan.net.pl/UonetPlusMobile/RoutingRules.txt")!)
 			.receive(on: DispatchQueue.main)
@@ -265,7 +277,7 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) logOut
-	/// Log out, removing all stored data
+	/// Log out, removing all stored data.
 	public func logOut() {
 		print("[!] (Logout) Logging out!")
 		// Keychain
@@ -298,7 +310,7 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) getUsers
-	/// Get and parse available users
+	/// Get and parse available users.
 	public func getUsers() {
 		// Check reachability
 		if (!appDelegate.isReachable) {
@@ -314,7 +326,7 @@ class VulcanAPIModel: ObservableObject {
 				switch (completion) {
 					case .failure(let error):
 						print("[!] (Users) Error: \(error.localizedDescription)")
-						self.logOut()
+						// self.logOut()
 						break
 					case .finished:
 						break
@@ -353,12 +365,18 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) setUser
-	/// Set default user
+	/// Sets the default user.
 	/// - Parameter user: Selected VulcanUser
 	public func setUser(_ user: Vulcan.User) {
-		print("[!] (Users) Setting default user to \"\(user.UzytkownikNazwa)\" (\(user.id)).")
+		print("[*] (Users) Setting default user to \"\(user.UzytkownikNazwa)\" (\(user.id)).")
 		self.selectedUser = user
 		UserDefaults.user.isLoggedIn = true
+		do {
+			// Send the data to the Watch
+			try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["value": true, "key": "isLoggedIn", "type": "userDefaults"])
+		} catch {
+			print("[!] (Users) Error updating watch context: \(error).")
+		}
 		self.isLoggedIn = true
 		self.getDictionary()
 		
@@ -372,7 +390,7 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) getDictionary
-	/// Fetches and saves dictionary
+	/// Fetches and saves the dictionary.
 	public func getDictionary(force: Bool = false) {
 		var storedDictionary = try? self.coreDataContext.fetch(VulcanDictionary.fetchRequest() as NSFetchRequest)
 		if (storedDictionary?.count ?? 0 <= 0 || force) {
@@ -503,11 +521,12 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) getSchedule
-	/// Get user's schedule
-	/// - Parameter startDate: <#startDate description#>
-	/// - Parameter endDate: <#endDate description#>
-	/// - Parameter completionHandler: <#completionHandler description#>
-	public func getSchedule(startDate: Date = Date(), endDate: Date = Date(), completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+	/// Gets selected user's schedule.
+	/// - Parameter persistentData: Should data be preserved?
+	/// - Parameter startDate: From this date
+	/// - Parameter endDate: To this date
+	/// - Parameter completionHandler: Callback
+	public func getSchedule(persistentData: Bool = true, startDate: Date = Date(), endDate: Date = Date(), completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
 		// Return if no user
 		guard let user: Vulcan.User = self.selectedUser else {
 			completionHandler(false, APIError.error(reason: "Not logged in"))
@@ -624,21 +643,6 @@ class VulcanAPIModel: ObservableObject {
 							}
 							
 							tempSchedule[date]?.append(newEvent)
-							/* if (event["PodzialSkrot"].string == nil) {
-								// Not grouped
-								tempSchedule[date]?.append(newEvent)
-							} else {
-								// Grouped
-								if (UserDefaults.user.userGroup != 0) {
-									// User specified group - show only user group
-									if (event["PodzialSkrot"].stringValue == "\(UserDefaults.user.userGroup)/2" ) {
-										tempSchedule[date]?.append(newEvent)
-									}
-								} else {
-									// Not specified - don't show grouped
-									tempSchedule[date]?.append(newEvent)
-								}
-							} */
 						}
 						
 						// Sort and append
@@ -660,11 +664,20 @@ class VulcanAPIModel: ObservableObject {
 						self.schedule = tempDays
 						self.dataState.schedule.lastFetched = Date()
 						
-						// Save to VulcanStored
-						let jsonEncoder = JSONEncoder()
-						let jsonData = try jsonEncoder.encode(self.schedule)
-						self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "schedule", value: jsonData)
-						self.appDelegate.saveContext()
+						if (persistentData) {
+							// Save to VulcanStored
+							let jsonEncoder = JSONEncoder()
+							let jsonData = try jsonEncoder.encode(self.schedule)
+							self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "schedule", value: jsonData)
+							self.appDelegate.saveContext()
+							
+							// Send the data to the Watch
+							do {
+								try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["key": "schedule", "value": jsonData, "type": "coreData"])
+							} catch {
+								print("[!] (Schedule) Error updating context: \(error).")
+							}
+						}
 						
 						print("[*] (Schedule) Done parsing!")
 					}
@@ -679,9 +692,10 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) getGrades
-	/// Get current user's grades
-	/// - Parameter completionHandler: <#completionHandler description#>
-	public func getGrades(completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+	/// Gets selected user's grades.
+	/// - Parameter persistentData: Should data be preserved?
+	/// - Parameter completionHandler: Callback
+	public func getGrades(persistentData: Bool = true, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
 		// Return if no user
 		guard let user: Vulcan.User = self.selectedUser else {
 			completionHandler(false, APIError.error(reason: "Not logged in"))
@@ -804,11 +818,20 @@ class VulcanAPIModel: ObservableObject {
 						self.grades = tempGrades
 						self.dataState.grades.lastFetched = Date()
 						
-						// Save to VulcanStored
-						let jsonEncoder = JSONEncoder()
-						let jsonData = try jsonEncoder.encode(self.grades)
-						self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "grades", value: jsonData)
-						self.appDelegate.saveContext()
+						if (persistentData) {
+							// Save to VulcanStored
+							let jsonEncoder = JSONEncoder()
+							let jsonData = try jsonEncoder.encode(self.grades)
+							self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "grades", value: jsonData)
+							self.appDelegate.saveContext()
+							
+							// Send the data to the Watch
+							do {
+								try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["key": "grades", "value": jsonData, "type": "coreData"])
+							} catch {
+								print("[!] (Grades) Error updating context: \(error).")
+							}
+						}
 						
 						print("[*] (Grades) Done parsing!")
 					}
@@ -822,9 +845,10 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) getEOTGrades
-	/// <#Description#>
-	/// - Parameter completionHandler: <#completionHandler description#>
-	public func getEOTGrades(completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+	/// Gets selected user's end-of-term grades.
+	/// - Parameter persistentData: Should data be preserved?
+	/// - Parameter completionHandler: Callback
+	public func getEOTGrades(persistentData: Bool = true, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
 		// Return if no user
 		guard let user: Vulcan.User = self.selectedUser else {
 			completionHandler(false, APIError.error(reason: "Not logged in"))
@@ -919,6 +943,13 @@ class VulcanAPIModel: ObservableObject {
 						let jsonData = try jsonEncoder.encode(self.endOfTermGrades)
 						self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "eotGrades", value: jsonData)
 						self.appDelegate.saveContext()
+						
+						// Send the data to the Watch
+						do {
+							try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["key": "eotGrades", "value": jsonData, "type": "coreData"])
+						} catch {
+							print("[!] (EOT Grades) Error updating context: \(error).")
+						}
 					}
 				} catch {
 					print("[!] (EOT Grades) Error serializing JSON: \(error.localizedDescription)")
@@ -929,13 +960,133 @@ class VulcanAPIModel: ObservableObject {
 			.store(in: &cancellableSet)
 	}
 	
+	// MARK: - (Public) getNotes
+	/// Gets selected user's notes.
+	/// - Parameter persistentData: Should data be preserved?
+	/// - Parameter completionHandler: Callback
+	public func getNotes(persistentData: Bool = true, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+		// Return if no user
+		guard let user: Vulcan.User = self.selectedUser else {
+			completionHandler(false, APIError.error(reason: "Not logged in"))
+			return
+		}
+		
+		// Return if already pending
+		if (self.dataState.notes.loading) {
+			completionHandler(true, nil)
+			return
+		}
+		
+		print("[*] (Notes) Getting notes of userID \(user.id)...")
+		self.dataState.notes.loading = true
+		var request: URLRequest = URLRequest(url: URL(string: "\(self.endpointURL)\(user.JednostkaSprawozdawczaSymbol)/mobile-api/Uczen.v3.Uczen/UwagiUcznia")!)
+		let body: [String: Any] = [
+			"IdOkresKlasyfikacyjny": user.IdOkresKlasyfikacyjny,
+			"IdUczen": user.id,
+		]
+		
+		let bodyJson = try? JSONSerialization.data(withJSONObject: body)
+		request.httpBody = bodyJson
+		
+		self.request(request)
+			.map { $0 }
+			.sink(receiveCompletion: { completion in
+				print("[*] (Notes) Completion: \(completion)")
+				self.dataState.notes.loading = false
+				switch (completion) {
+					case .failure(let error):
+						print("[!] (Notes) Error: \(error.localizedDescription)")
+						completionHandler(false, error)
+						break
+					case .finished:
+						self.dataState.notes.fetched = true
+						completionHandler(true, nil)
+						break
+				}
+			}, receiveValue: { value in
+				do {
+					let json: JSON = try JSON(data: value)
+					
+					// Check for error
+					if (json["IsError"].boolValue) {
+						print("[!] (Notes) IsError!")
+						print(json)
+						throw APIError.error(reason: json["Message"].stringValue)
+					}
+					
+					// Parse
+					if (json["Status"].stringValue == "Ok") {
+						var tempNotes: [Vulcan.Note] = []
+						
+						let notes = json["Data"].arrayValue
+						for note in notes {
+							let date: Date = Date(timeIntervalSince1970: TimeInterval(note["DataWpisu"].intValue))
+							
+							// Teacher
+							var teacher: Vulcan.Teacher
+							guard let eventTeacher: JSON = self.parseDictionary(tag: .teachers, id: note["IdPracownik"].intValue) else {
+								print("[!] (Notes) No teacher with id \(note["IdPracownik"].intValue) found!")
+								return
+							}
+							teacher = Vulcan.Teacher(id: eventTeacher["Id"].intValue, name: eventTeacher["Imie"].stringValue, surname: eventTeacher["Nazwisko"].stringValue, code: eventTeacher["Kod"].stringValue, active: eventTeacher["Aktywny"].boolValue, teacher: eventTeacher["Nauczyciel"].boolValue, loginID: eventTeacher["LoginId"].intValue)
+							
+							// Note Category
+							var noteCategory: Vulcan.NoteCategory
+							guard let eventNoteCategory: JSON = self.parseDictionary(tag: .noteCategories, id: note["IdKategoriaUwag"].intValue, key: "Id") else {
+								print("[!] (Notes) No noteCategory with id \(note["IdKategoriaUwag"].intValue) found!")
+								return
+							}
+							noteCategory = Vulcan.NoteCategory(id: eventNoteCategory["Id"].intValue, name: eventNoteCategory["Nazwa"].stringValue, active: eventNoteCategory["Aktywny"].boolValue)
+							
+							let newNote: Vulcan.Note = Vulcan.Note(
+								id: note["Id"].intValue,
+								content: note["TrescUwagi"].stringValue,
+								date: date,
+								userID: note["IdUczen"].intValue,
+								teacher: teacher,
+								category: noteCategory
+							)
+							tempNotes.append(newNote)
+						}
+						
+						// Sort
+						tempNotes = tempNotes.sorted(by: { $0.date > $1.date })
+						self.notes = tempNotes
+						self.dataState.notes.lastFetched = Date()
+						
+						if (persistentData) {
+							// Save to VulcanStored
+							let jsonEncoder = JSONEncoder()
+							let jsonData = try jsonEncoder.encode(self.notes)
+							self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "notes", value: jsonData)
+							self.appDelegate.saveContext()
+							
+							// Send the data to the Watch
+							do {
+								try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["key": "notes", "value": jsonData, "type": "coreData"])
+							} catch {
+								print("[!] (Notes) Error updating context: \(error).")
+							}
+						}
+					}
+				} catch {
+					print("[!] (Notes) Error serializing JSON: \(error.localizedDescription)")
+					print(value.base64EncodedString())
+					completionHandler(false, error)
+				}
+			})
+			.store(in: &cancellableSet)
+	}
+	
 	// MARK: - (Public) getTasks
-	/// <#Description#>
+	/// Gets current user's tasks.
 	/// - Parameters:
-	///   - startDate: <#startDate description#>
-	///   - endDate: <#endDate description#>
-	///   - completionHandler: <#completionHandler description#>
-	public func getTasks(tag: Vulcan.TaskTag, startDate: Date = Date(), endDate: Date = Date(), completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+	///   - tag: Selected category
+	///   - persistentData: Should data be preserved?
+	///   - startDate: From this date
+	///   - endDate: To this date
+	///   - completionHandler: Callback
+	public func getTasks(tag: Vulcan.TaskTag, persistentData: Bool = true, startDate: Date = Date().startOfWeek ?? Date(), endDate: Date = Date().endOfWeek ?? Date(), completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
 		// Return if no user
 		guard let user: Vulcan.User = self.selectedUser else {
 			completionHandler(false, APIError.error(reason: "Not logged in"))
@@ -1037,21 +1188,6 @@ class VulcanAPIModel: ObservableObject {
 							)
 							
 							tempTasks.append(newExam)
-							/* if (exam["PodzialSkrot"].string == nil) {
-								// Not grouped
-								tempExams.append(newExam)
-							} else {
-								// Grouped
-								if (UserDefaults.user.userGroup != 0) {
-									// User specified group - show only user group
-									if (exam["PodzialSkrot"].stringValue == "\(UserDefaults.user.userGroup)/2" ) {
-										tempExams.append(newExam)
-									}
-								} else {
-									// Not specified - don't show grouped
-									tempExams.append(newExam)
-								}
-							} */
 						}
 						
 						tempTasks = tempTasks.sorted(by: { $0.date < $1.date })
@@ -1061,11 +1197,20 @@ class VulcanAPIModel: ObservableObject {
 						}
 						self.dataState.tasks.lastFetched = Date()
 						
-						// Save to VulcanStored
-						let jsonEncoder = JSONEncoder()
-						let jsonData = try jsonEncoder.encode(self.tasks)
-						self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "tasks", value: jsonData)
-						self.appDelegate.saveContext()
+						if (persistentData) {
+							// Save to VulcanStored
+							let jsonEncoder = JSONEncoder()
+							let jsonData = try jsonEncoder.encode(self.tasks)
+							self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "tasks", value: jsonData)
+							self.appDelegate.saveContext()
+							
+							// Send the data to the Watch
+							do {
+								try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["key": "tasks", "value": jsonData, "type": "coreData"])
+							} catch {
+								print("[!] (Tasks) Error updating context: \(error).")
+							}
+						}
 					}
 				} catch {
 					print("[!] (Tasks) Error serializing JSON: \(error.localizedDescription)")
@@ -1077,13 +1222,14 @@ class VulcanAPIModel: ObservableObject {
 	}
 	
 	// MARK: - (Public) getMessages
-	/// <#Description#>
+	/// Gets current user's messages.
 	/// - Parameters:
-	///   - tag: <#tag description#>
-	///   - startDate: <#startDate description#>
-	///   - endDate: <#endDate description#>
-	///   - completionHandler: <#completionHandler description#>
-	public func getMessages(tag: Vulcan.MessageTag, startDate: Date, endDate: Date, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+	///   - tag: Selected folder
+	///   - persistentData: Should data be preserved?
+	///   - startDate: From this date
+	///   - endDate: To this date
+	///   - completionHandler: Callback
+	public func getMessages(tag: Vulcan.MessageTag, persistentData: Bool = true, startDate: Date, endDate: Date, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
 		// Return if no user
 		guard let user: Vulcan.User = self.selectedUser else {
 			completionHandler(false, APIError.error(reason: "Not logged in"))
@@ -1211,16 +1357,24 @@ class VulcanAPIModel: ObservableObject {
 							case .sent:		self.messages.sent = tempMessages; break
 						}
 						self.dataState.messages.lastFetched = Date()
-												
-						// Save to VulcanStored
-						let jsonEncoder = JSONEncoder()
-						let jsonData = try jsonEncoder.encode(self.messages)
-						self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "messages", value: jsonData)
-						self.appDelegate.saveContext()
+						
+						if (persistentData) {
+							// Save to VulcanStored
+							let jsonEncoder = JSONEncoder()
+							let jsonData = try jsonEncoder.encode(self.messages)
+							self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "messages", value: jsonData)
+							self.appDelegate.saveContext()
+							
+							// Send the data to the Watch
+							/* do {
+								try WatchSessionManager.shared.updateApplicationContext(applicationContext: ["key": "messages", "value": jsonData, "type": "coreData"])
+							} catch {
+								print("[!] (Messages) Error updating context: \(error).")
+							} */
+						}
 					}
 				} catch {
 					print("[!] (Messages) Error serializing JSON: \(error.localizedDescription)")
-					print(value.base64EncodedString())
 					completionHandler(false, error)
 				}
 			})
@@ -1306,7 +1460,7 @@ class VulcanAPIModel: ObservableObject {
 	///   - messageID: <#messageID description#>
 	///   - folder: <#folder description#>
 	///   - completionHandler: <#completionHandler description#>
-	public func moveMessage(messageID: Int, folder: Vulcan.MessageFolder, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
+	public func moveMessage(messageID: Int, tag: Vulcan.MessageTag, folder: Vulcan.MessageFolder, completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
 		// Return if no user
 		guard let user: Vulcan.User = self.selectedUser else {
 			completionHandler(false, APIError.error(reason: "Not logged in"))
@@ -1346,11 +1500,31 @@ class VulcanAPIModel: ObservableObject {
 					let json = try JSON(data: value)
 					if (json["Status"].stringValue == "Ok") {
 						// Modify the local message
-						if let index = self.messages.received.firstIndex(where: {$0.id == messageID}) {
-							switch (folder) {
-								case .deleted:	self.messages.received.remove(at: index); break
-								case .read:		self.messages.received[index].hasBeenRead = true; break
-							}
+						switch (tag) {
+							case .deleted:
+								if let index = self.messages.deleted.firstIndex(where: { $0.id == messageID }) {
+									switch (folder) {
+										case .deleted:	self.messages.deleted.remove(at: index); break
+										case .read:		self.messages.deleted[index].hasBeenRead = true; break
+									}
+								}
+								break
+							case .sent:
+								if let index = self.messages.sent.firstIndex(where: { $0.id == messageID }) {
+									switch (folder) {
+										case .deleted:	self.messages.sent.remove(at: index); break
+										case .read:		self.messages.sent[index].hasBeenRead = true; break
+									}
+								}
+								break
+							case .received:
+								if let index = self.messages.received.firstIndex(where: { $0.id == messageID }) {
+									switch (folder) {
+										case .deleted:	self.messages.received.remove(at: index); break
+										case .read:		self.messages.received[index].hasBeenRead = true; break
+									}
+								}
+								break
 						}
 						
 						completionHandler(true, nil)
@@ -1359,114 +1533,6 @@ class VulcanAPIModel: ObservableObject {
 					}
 				} catch {
 					print("[!] (Messages) Error serializing JSON: \(error.localizedDescription)")
-					print(value.base64EncodedString())
-					completionHandler(false, error)
-				}
-			})
-			.store(in: &cancellableSet)
-	}
-	
-	// MARK: - (Public) getNotes
-	/// <#Description#>
-	/// - Parameter completionHandler: <#completionHandler description#>
-	public func getNotes(completionHandler: @escaping (Bool, Error?) -> () = { _, _  in }) {
-		// Return if no user
-		guard let user: Vulcan.User = self.selectedUser else {
-			completionHandler(false, APIError.error(reason: "Not logged in"))
-			return
-		}
-		
-		// Return if already pending
-		if (self.dataState.notes.loading) {
-			completionHandler(true, nil)
-			return
-		}
-		
-		print("[*] (Notes) Getting notes of userID \(user.id)...")
-		self.dataState.notes.loading = true
-		var request: URLRequest = URLRequest(url: URL(string: "\(self.endpointURL)\(user.JednostkaSprawozdawczaSymbol)/mobile-api/Uczen.v3.Uczen/UwagiUcznia")!)
-		let body: [String: Any] = [
-			"IdOkresKlasyfikacyjny": user.IdOkresKlasyfikacyjny,
-			"IdUczen": user.id,
-		]
-		
-		let bodyJson = try? JSONSerialization.data(withJSONObject: body)
-		request.httpBody = bodyJson
-		
-		self.request(request)
-			.map { $0 }
-			.sink(receiveCompletion: { completion in
-				print("[*] (Notes) Completion: \(completion)")
-				self.dataState.notes.loading = false
-				switch (completion) {
-					case .failure(let error):
-						print("[!] (Notes) Error: \(error.localizedDescription)")
-						completionHandler(false, error)
-						break
-					case .finished:
-						self.dataState.notes.fetched = true
-						completionHandler(true, nil)
-						break
-				}
-			}, receiveValue: { value in
-				do {
-					let json: JSON = try JSON(data: value)
-					
-					// Check for error
-					if (json["IsError"].boolValue) {
-						print("[!] (Notes) IsError!")
-						print(json)
-						throw APIError.error(reason: json["Message"].stringValue)
-					}
-					
-					// Parse
-					if (json["Status"].stringValue == "Ok") {
-						var tempNotes: [Vulcan.Note] = []
-						
-						let notes = json["Data"].arrayValue
-						for note in notes {
-							let date: Date = Date(timeIntervalSince1970: TimeInterval(note["DataWpisu"].intValue))
-							
-							// Teacher
-							var teacher: Vulcan.Teacher
-							guard let eventTeacher: JSON = self.parseDictionary(tag: .teachers, id: note["IdPracownik"].intValue) else {
-								print("[!] (Notes) No teacher with id \(note["IdPracownik"].intValue) found!")
-								return
-							}
-							teacher = Vulcan.Teacher(id: eventTeacher["Id"].intValue, name: eventTeacher["Imie"].stringValue, surname: eventTeacher["Nazwisko"].stringValue, code: eventTeacher["Kod"].stringValue, active: eventTeacher["Aktywny"].boolValue, teacher: eventTeacher["Nauczyciel"].boolValue, loginID: eventTeacher["LoginId"].intValue)
-							
-							// Note Category
-							var noteCategory: Vulcan.NoteCategory
-							guard let eventNoteCategory: JSON = self.parseDictionary(tag: .noteCategories, id: note["IdKategoriaUwag"].intValue, key: "Id") else {
-								print("[!] (Notes) No noteCategory with id \(note["IdKategoriaUwag"].intValue) found!")
-								return
-							}
-							noteCategory = Vulcan.NoteCategory(id: eventNoteCategory["Id"].intValue, name: eventNoteCategory["Nazwa"].stringValue, active: eventNoteCategory["Aktywny"].boolValue)
-							
-							let newNote: Vulcan.Note = Vulcan.Note(
-								id: note["Id"].intValue,
-								content: note["TrescUwagi"].stringValue,
-								date: date,
-								userID: note["IdUczen"].intValue,
-								teacher: teacher,
-								category: noteCategory
-							)
-							tempNotes.append(newNote)
-						}
-						
-						// Sort
-						tempNotes = tempNotes.sorted(by: { $0.date < $1.date })
-						self.notes = tempNotes
-						self.dataState.notes.lastFetched = Date()
-						
-						// Save to VulcanStored
-						let jsonEncoder = JSONEncoder()
-						let jsonData = try jsonEncoder.encode(self.notes)
-						self.appDelegate.createOrUpdate(forEntityName: "VulcanStored", forKey: "notes", value: jsonData)
-						self.appDelegate.saveContext()
-					}
-				} catch {
-					print("[!] (Notes) Error serializing JSON: \(error.localizedDescription)")
 					print(value.base64EncodedString())
 					completionHandler(false, error)
 				}

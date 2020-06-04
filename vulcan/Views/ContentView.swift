@@ -21,8 +21,8 @@ enum ScreenPage {
 struct ContentView: View {
 	@EnvironmentObject var VulcanAPI: VulcanAPIModel
 	@EnvironmentObject var Settings: SettingsModel
-	@State var shouldPresentOnboarding: Bool = !UserDefaults.user.launchedBefore
-	@State var currentTab: ScreenPage
+	@State public var currentTab: ScreenPage = .home
+	@State public var shouldPresentOnboarding: Bool = !UserDefaults.user.launchedBefore
 	@State var isNotificationVisible: Bool = false
 	
 	var body: some View {

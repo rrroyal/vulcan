@@ -8,6 +8,47 @@
 
 import SwiftUI
 
+struct LegalView: View {
+	let SwiftyJSONLicense: String = "The MIT License (MIT)\nCopyright (c) 2017 Ruoyu Fu\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+	let SwiftyJSONURL: URL? = URL(string: "https://github.com/SwiftyJSON/SwiftyJSON")!
+	
+	let KeychainAccessLicense: String = "The MIT License (MIT)\nCopyright (c) 2014 kishikawa katsumi\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+	let KeychainAccessURL: URL? = URL(string: "https://github.com/kishikawakatsumi/KeychainAccess")!
+		
+	var body: some View {
+		ScrollView {
+			VStack(alignment: .leading) {
+				// SwiftyJSON
+				Section(header: Text("SwiftyJSON").font(.headline)) {
+					Text(SwiftyJSONLicense)
+						.font(.system(size: 14, weight: .regular, design: .monospaced))
+						.padding(.bottom)
+				}
+				.onTapGesture {
+					guard let url = self.SwiftyJSONURL else { return }
+					generateHaptic(.light)
+					UIApplication.shared.open(url)
+				}
+				
+				// KeychainAccess
+				Section(header: Text("KeychainAccess").font(.headline)) {
+					Text(KeychainAccessLicense)
+						.font(.system(size: 14, weight: .regular, design: .monospaced))
+						.padding(.bottom)
+				}
+				.onTapGesture {
+					guard let url = self.KeychainAccessURL else { return }
+					generateHaptic(.light)
+					UIApplication.shared.open(url)
+				}
+			}
+			.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
+			.padding()
+		}
+		.navigationBarTitle(Text("Libraries"))
+	}
+}
+
 /// List view, containing list with options and NavigationBar NavigationLink to user list
 struct SettingsView: View {
 	@EnvironmentObject var VulcanAPI: VulcanAPIModel
@@ -140,6 +181,21 @@ struct SettingsView: View {
 			
 			// MARK: - Other
 			SettingsSection(header: "Other", isLast: true) {
+				// Legal
+				NavigationLink(destination: LegalView()) {
+					Text("Libraries")
+						.font(.body)
+						.bold()
+				}
+				
+				#if DEBUG
+				NavigationLink(destination: DebugView().environmentObject(self.VulcanAPI).environmentObject(self.Settings)) {
+					Text("🤫")
+						.font(.body)
+						.bold()
+				}
+				#endif
+				
 				// Reset button
 				Button(action: {
 					generateHaptic(.warning)

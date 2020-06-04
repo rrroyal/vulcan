@@ -23,7 +23,7 @@ enum FeedbackStyle {
 }
 
 func generateHaptic(_ style: FeedbackStyle) {
-	if (!UserDefaults.standard.bool(forKey: "hapticFeedback")) {
+	if (!UserDefaults.group.bool(forKey: "hapticFeedback")) {
 		return
 	}
 	
