@@ -1,0 +1,175 @@
+/* 
+ Localizable.strings
+ vulcan
+ en_US
+ 
+ Created by royal on 31/05/2020.
+ Copyright © 2020 shameful. All rights reserved.
+*/
+
+"Error!" = "Error!";
+"Not reachable" = "Not reachable";
+
+// MARK: Vulcan.swift
+"No endpoint URL found" = "No endpoint URL found. Make sure the provided token is correct.";
+"Tomorrow: %@" = "Tomorrow: %@";
+
+// MARK: ContentView.swift
+"Home" = "Home";
+"Grades" = "Grades";
+"Schedule" = "Schedule";
+"Tasks" = "Tasks";
+"Messages" = "Messages";
+"NO_CONNECTION_TITLE" = "No internet connection!";
+"NO_CONNECTION_SUBTITLE" = "Only cached data is available.";
+"Nothing selected" = "Nothing selected";
+
+// MARK: OnboardingView.swift
+"Welcome to" = "Welcome to";
+"ONBOARDING_FUNCTION1_TITLE" = "Make use of the platform";
+"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgets, Watch app, dark mode - you name it.";
+"ONBOARDING_FUNCTION2_TITLE" = "Get reminded";
+"ONBOARDING_FUNCTION2_DESCRIPTION" = "App will remind you about the next classes, new messages, grades, etc.";
+"ONBOARDING_FUNCTION3_TITLE" = "Made by a student";
+"ONBOARDING_FUNCTION3_DESCRIPTION" = "Us, scholars, know better what we need.";
+"Continue" = "Continue";
+
+// MARK: SetupView.swift
+"Log in" = "Log in";
+"SETUP_TITLE" = "Setup";
+"Token" = "Token";
+"Symbol" = "Symbol";
+"PIN" = "PIN";
+"Fill all fields!" = "Fill all fields!";
+"Logging in..." = "Logging in...";
+"Error logging in" = "Error logging in";
+"Go back" = "Go back";
+"Nevermind" = "Nevermind";
+
+// MARK: HomeView.swift
+"User" = "User";
+"HELLO : %s" = "Hi, %@!";
+"GOOD_MORNING : %@" = "Good morning, %@!";
+"GOOD_AFTERNOON : %@" = "Good afternoon, %@!";
+"GOOD_EVENING : %@" = "Good evening, %@!";
+"DATE_CURRENTLY : %@" = "It's currently %@.";
+
+"Current lesson" = "Current lesson";
+"Next lesson" = "Next lesson";
+"No lessons for now ☺️" = "No lessons for now ☺️";
+"New grades" = "New grades";
+"Exams" = "Exams";
+"Homework" = "Homework";
+"New messages" = "New messages";
+
+"User details" = "User details";
+"Not logged in" = "Not logged in";
+
+"No grades" = "No grades";
+
+// MARK: ScheduleView.swift
+"No lessons for this week 😊" = "No lessons for this week 😊";
+"No lessons for this day 😊" = "No lessons for this day 😊";
+
+// MARK: TasksView.swift
+"No tasks" = "No tasks";
+"TASKS_FOLDER_TITLE" = "Choose a category";
+"Add to reminders" = "Add to reminders";
+"Add to calendar" = "Add to calendar";
+"TAG_EXAM" = "Exam";
+"TAG_HOMEWORK" = "Homework";
+"No exams for this month 😊" = "No exams for this month 😊";
+"No homework for this month 😊" = "No homework for this month 😊";
+
+// MARK: MessagesView.swift
+"No messages found" = "No messages found";
+"Unknown" = "Unknown";
+"Reply" = "Reply";
+"Mark as read" = "Mark as read";
+"Copy" = "Copy";
+"Delete" = "Delete";
+"MESSAGES_FOLDER_TITLE" = "Choose a folder";
+"Received" = "Received";
+"Sent" = "Sent";
+"Deleted" = "Deleted";
+"MESSAGES : %@" = "Messages (%@)";
+"Filter" = "Filter";
+"All" = "All";
+"New" = "New";
+
+// MARK: SettingsView.swift
+"General" = "General";
+"Settings" = "Settings";
+"Libraries" = "Libraries";
+"Default" = "Default";
+
+"SETTINGS_LOGGEDIN : %@" = "Logged in as %@";
+"Log out" = "Log out";
+"User group" = "User group";
+"Show all" = "Show all";
+"SETTINGS_READMESSAGEONOPEN" = "Read messages on open";
+"SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Messages will be marked as read after they were opened.";
+"SETTINGS_ENABLENOTIFICATIONS" = "Enable notifications";
+"SETTINGS_ENABLENOTIFICATIONS_TOOLTIP" = "App will remind you about the important events (i.e. an exam or the next lesson).";
+
+"Interface" = "Interface";
+"SETTINGS_FILTERSCHEDULE" = "Filter schedule";
+"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Schedule will only show the selected day.";
+"SETTINGS_COLORIZEGRADES" = "Colorize grades";
+"SETTINGS_COLORIZEGRADES_TOOLTIP" = "Grade labels will be colored.";
+"SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
+"SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "If you don't like Haptic Feedback as much as I do, you might want to turn this off.";
+"SETTINGS_AUTOMATICREFRESH" = "Realtime data";
+"SETTINGS_AUTOMATICREFRESH_TOOLTIP" = "App data will be refreshed in realtime, but battery usage will be higher too. This doesn't work with Low Power mode enabled.";
+
+"Other" = "Other";
+"Reset user settings" = "Reset user settings";
+"SETTINGS_RESET" = "Are you sure you want to reset?";
+"SETTINGS_RESET_TOOLTIP" = "All of your app data will be removed!";
+"SETTINGS_RESETTED" = "Resetted! Restart?";
+"Done!" = "Done!";
+"Yes" = "Yes";
+"No" = "No";
+"Reset" = "Reset";
+"New update available!" = "New update available!";
+
+"Color Scheme" = "Color Scheme";
+"App Icon" = "App Icon";
+"AppIcon" = "Default";
+
+"Made with ❤️ (and ☕️) by @rrroyal" = "Made with ❤️ (and ☕️) by @rrroyal";
+"Version %@ (Build %@)" = "Version %@ (Build %@)";
+
+// MARK: GradesDetailView.swift
+"No description" = "No description";
+"Average" = "Average";
+"Anticipated" = "Anticipated";
+"Final" = "Final";
+
+// MARK: ComposeMessageView.swift
+"Title" = "Title";
+"Choose a recipient..." = "Choose a recipient...";
+"Message content..." = "Message content...";
+"Recipients" = "Recipients";
+"Done" = "Done";
+
+// MARK: MessageDetailView.swift
+"Links" = "Links";
+
+// MARK: UsersView.swift
+"Users" = "Users";
+
+// MARK: UserDetailView.swift
+"About" = "About";
+"Name" = "Name";
+"Second name" = "Second name";
+"Surname" = "Surname";
+"Nick" = "Nick";
+"Login ID" = "Login ID";
+"Department Code" = "Department Code";
+"Branch Name" = "Branch Name";
+"Branch Name (short)" = "Branch Name (short)";
+"Nothing found" = "Nothing found";
+"Anticipated grades" = "Anticipated grades";
+"Final grades" = "Final grades";
+"Notes" = "Notes";

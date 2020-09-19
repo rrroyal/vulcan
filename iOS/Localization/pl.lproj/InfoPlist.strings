@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  vulcan
+  pl_PL
+
+  Created by royal on 19/09/2020.
+  
+*/
+
+NSCalendarsUsageDescription = "Aplikacja będzie używać kalendarza aby dodawać wydarzenia z nowymi zadaniami.";
+NSRemindersUsageDescription = "Aplikacja będzie używać przypomnień aby dodawać przypomnienia z nowymi zadaniami.";

@@ -1,0 +1,54 @@
+# Xcode & macOS
+
+# OS X temporary files that should never be committed
+.DS_Store
+*.swp
+*.lock
+profile
+
+# Xcode temporary files that should never be committed
+*~.nib
+
+# Xcode build files
+DerivedData/
+build/
+.build/
+
+# Xcode private settings (window sizes, bookmarks, breakpoints, custom executables, smart groups)
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+xcuserdata
+xcuserdata/**/*
+
+# Cocoapods: cocoapods.org
+Pods/
+Podfile.lock
+
+## Obj-C/Swift specific
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+Packages/
+Package.pins
+Package.resolved
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output

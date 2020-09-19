@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  vulcan
+  pl_PL
+
+  Created by royal on 08/09/2020.
+  
+*/
+
+"Nothing found" = "Nic nie znaleziono";
+
+// MARK: ContentView.swift
+"Not logged in" = "Nie zalogowano";
+"Refresh" = "Odśwież";
+"Schedule" = "Plan Lekcji";
+"Grades" = "Oceny";
+"Final Grades" = "Oceny Semestralne";
+"Tasks" = "Zadania";
+"Messages" = "Wiadomości";
+
+// MARK: - ComplicationController.swift
+"Nothing left for now ☺️" = "Nic w najbliższym czasie ☺️";
+"Nothing left for now" = "Nic w najbliższym czasie";
+"Room %@" = "Sala %@";
+
+// MARK: - GradesView.swift
+"No grades" = "Brak ocen";
+
+// MARK: - FinalGradesView.swift
+"Anticipated" = "Proponowane";
+"Final" = "Ostateczne";
+
+// MARK: - TasksView.swift
+"Homework" = "Zadania domowe";
+"Exams" = "Sprawdziany";

@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  vulcan
+  en_US
+
+  Created by royal on 08/09/2020.
+  
+*/
+
+"Nothind found" = "Nothing found";
+
+// MARK: ContentView.swift
+"Not logged in" = "Not logged in";
+"Refresh" = "Refresh";
+"Schedule" = "Schedule";
+"Grades" = "Grades";
+"Final Grades" = "Final Grades";
+"Tasks" = "Tasks";
+"Messages" = "Messages";
+
+// MARK: - ComplicationController.swift
+"Nothing left for now ☺️" = "Nothing left for now ☺️";
+"Nothing left for now" = "Nothing left for now";
+"Room %@" = "Room %@";
+
+// MARK: - GradesView.swift
+"No grades" = "No grades";
+
+// MARK: - FinalGradesView.swift
+"Anticipated" = "Anticipated";
+"Final" = "Final";
+
+// MARK: - TasksView.swift
+"Homework" = "Homework";
+"Exams" = "Exams";
