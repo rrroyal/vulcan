@@ -52,7 +52,7 @@ struct TasksView: View {
 			Section(header: Text("Exams").textCase(.none)) {
 				if (vulcan.tasks.exams.count > 0) {
 					ForEach(vulcan.tasks.exams) { (task) in
-						TaskCell(task: task)
+						TaskCell(task: task, type: task.type)
 					}
 				} else {
 					Text("No exams for this month 😊")
@@ -66,7 +66,7 @@ struct TasksView: View {
 			Section(header: Text("Homework").textCase(.none)) {
 				if (vulcan.tasks.homework.count > 0) {
 					ForEach(vulcan.tasks.homework) { (task) in
-						TaskCell(task: task)
+						TaskCell(task: task, type: nil)
 					}
 				} else {
 					Text("No homework for this month 😊")

@@ -140,6 +140,7 @@
 		E7F1B3E0251619B70044F1BC /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E7F1B3E3251619B70044F1BC /* Widget.intentdefinition */; };
 		E7F1B3E1251619B70044F1BC /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E7F1B3E3251619B70044F1BC /* Widget.intentdefinition */; };
 		E7F1B40925161BB50044F1BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7F1B40B25161BB50044F1BC /* InfoPlist.strings */; };
+		E7F47EA6251768D50075E5E4 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F47EA5251768D50075E5E4 /* TaskCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -304,6 +305,7 @@
 		E7F1B3F1251619BA0044F1BC /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Widget.strings; sourceTree = "<group>"; };
 		E7F1B40A25161BB50044F1BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E7F1B41125161BB60044F1BC /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E7F47EA5251768D50075E5E4 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -564,6 +566,7 @@
 			children = (
 				E722C3F425020EDB0087C007 /* HomeCardCell.swift */,
 				E74F54A4250924EF003F8066 /* ScheduleEventCell.swift */,
+				E7F47EA5251768D50075E5E4 /* TaskCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1004,6 +1007,7 @@
 				E78FC1C525161DB700478AC1 /* GradesDetailView.swift in Sources */,
 				E78FC1F9251626AE00478AC1 /* MessageDetailView.swift in Sources */,
 				E7C144E9250123F600363BD3 /* NotificationController.swift in Sources */,
+				E7F47EA6251768D50075E5E4 /* TaskCell.swift in Sources */,
 				E783D3A12502918200514060 /* FinalGradesView.swift in Sources */,
 				E7C144E7250123F600363BD3 /* ContentView.swift in Sources */,
 				E783D3A32502918A00514060 /* TasksView.swift in Sources */,

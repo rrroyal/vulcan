@@ -156,7 +156,7 @@ struct ComposeMessageView: View {
 			if let message: Vulcan.Message = message {
 				messageTitle = "RE: \(message.title)".trimmingCharacters(in: .whitespacesAndNewlines)
 				
-				#warning("Why the fuck is senderID different than DictionaryEmployee.id?")
+				// Why the fuck is `senderID` different than `DictionaryEmployee.id`?
 				switch (message.tag) {
 					case .received, .deleted, .none:
 						messageRecipients = [Vulcan.Recipient(id: message.senderID, name: message.sender ?? "")]

@@ -32,4 +32,11 @@
 
 // MARK: - TasksView.swift
 "Homework" = "Zadania domowe";
-"Exams" = "Sprawdziany";
+"Exams" = "Testy";
+
+// MARK: - TaskCell.swift
+"No entry" = "Brak wpisu";
+"TAG_EXAM" = "Test";
+"TAG_HOMEWORK" = "Zadanie domowe";
+"EXAM_BIG" = "Sprawdzian";
+"EXAM_SMALL" = "Kartkówka";

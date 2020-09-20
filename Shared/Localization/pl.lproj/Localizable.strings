@@ -9,6 +9,7 @@
 
 "Error!" = "Błąd!";
 "Not reachable" = "Brak połączenia z serwerem.";
+"Tomorrow" = "Jutro";
 
 // MARK: Vulcan.swift
 "No endpoint URL found" = "Nie znaleziono adresu URL. Sprawdź swój token.";
@@ -176,3 +177,5 @@
 
 // MARK: - TaskCell.swift
 "No entry" = "Brak wpisu";
+"EXAM_BIG" = "Sprawdzian";
+"EXAM_SMALL" = "Kartkówka";

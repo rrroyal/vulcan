@@ -78,6 +78,142 @@ struct HomeView: View {
 		}
 	}
 	
+	/// Section containing greeting and current/next schedule events.
+	private var generalSection: some View {
+		Section {
+			VStack(alignment: .leading) {
+				// Welcome message
+				VStack(alignment: .leading, spacing: 4) {
+					Text(helloString)
+						.font(.title2)
+						.bold()
+						.allowsTightening(true)
+						.minimumScaleFactor(0.9)
+					
+					Text("DATE_CURRENTLY : \(Date().formattedDateString(timeStyle: .none, dateStyle: .full))")
+						.font(.headline)
+						.foregroundColor(.secondary)
+						.allowsTightening(true)
+						.minimumScaleFactor(0.9)
+				}
+				
+				// Lessons
+				Group {
+					// Current lesson
+					if let lesson = currentLesson {
+						divider
+						
+						VStack(alignment: .leading, spacing: 0) {
+							Text("Current lesson")
+								.font(.headline)
+								.foregroundColor(.secondary)
+								.padding(.bottom, 2)
+							Text("\(lesson.subjectName) (\(lesson.room))")
+								.font(.headline)
+								.lineLimit(2)
+								.padding(.bottom, 2)
+							Text("\((lesson.dateStarts ?? lesson.date).localizedTime) - \((lesson.dateEnds ?? lesson.date).localizedTime) • \(lesson.employee?.name ?? "Unknown employee") \(lesson.employee?.surname ?? "")")
+								.font(.callout)
+								.foregroundColor(.secondary)
+								.lineLimit(2)
+						}
+					}
+					
+					// Next lesson
+					if let lesson = nextLesson {
+						divider
+						
+						VStack(alignment: .leading, spacing: 0) {
+							Text("Next lesson")
+								.font(.headline)
+								.foregroundColor(.secondary)
+								.padding(.bottom, 2)
+							
+							Text("\(lesson.subjectName) (\(lesson.room))")
+								.font(.headline)
+								.lineLimit(2)
+								.padding(.bottom, 2)
+							
+							Group {
+								if (Calendar.autoupdatingCurrent.isDateInToday(lesson.date)) {
+									Text("\((lesson.dateStarts ?? lesson.date).localizedTime) - \((lesson.dateEnds ?? lesson.date).localizedTime) • \(lesson.employee?.name ?? "Unknown employee") \(lesson.employee?.surname ?? "")")
+								} else {
+									Text("\((lesson.dateStarts ?? lesson.date).formattedString(format: "EEEE").capitalingFirstLetter()), \((lesson.dateStarts ?? lesson.date).localizedTime) - \((lesson.dateEnds ?? lesson.date).localizedTime) • \(lesson.employee?.name ?? "Unknown employee") \(lesson.employee?.surname ?? "")")
+								}
+							}
+							.font(.callout)
+							.foregroundColor(.secondary)
+							.lineLimit(2)
+						}
+					}
+					
+					// No lessons
+					if (currentLesson == nil && nextLesson == nil) {
+						divider
+						Text("No lessons for now ☺️")
+							.font(.headline)
+							.opacity(0.35)
+							.padding(.vertical, 5)
+					}
+				}
+			}
+			.padding(.vertical, 5)
+		}
+	}
+	
+	/// Section containing new exams.
+	private var examsSection: some View {
+		Section(header: Text("Exams").textCase(.none)) {
+			if (newExams.count > 0) {
+				ForEach(newExams) { (task) in
+					TaskCell(task: task, type: task.type)
+				}
+			} else {
+				Text("Nothing found")
+					.opacity(0.5)
+					.multilineTextAlignment(.center)
+					.fullWidth()
+			}
+		}
+
+	}
+	
+	/// Section containing new homework tasks.
+	private var homeworkSection: some View {
+		Section(header: Text("Homework").textCase(.none)) {
+			if (newHomework.count > 0) {
+				ForEach(newHomework) { (task) in
+					TaskCell(task: task, type: nil)
+				}
+			} else {
+				Text("Nothing found")
+					.opacity(0.5)
+					.multilineTextAlignment(.center)
+					.fullWidth()
+			}
+		}
+
+	}
+	
+	/// Section containing unread messages.
+	private var messagesSection: some View {
+		Section(header: Text("New messages").textCase(.none)) {
+			if (newMessages.count > 0) {
+				ForEach(newMessages) { message in
+					NavigationLink(destination: MessageDetailView(message: message)) {
+						MessageCell(message: message, isComposeSheetPresented: $isComposeSheetPresented, messageToReply: $messageToReply)
+					}
+				}
+			} else {
+				Text("Nothing found")
+					.opacity(0.5)
+					.multilineTextAlignment(.center)
+					.fullWidth()
+			}
+		}
+
+	}
+	
 	/// Section containing anticipated grades.
 	private var anticipatedGradesSection: some View {
 		Section(header: Text("Anticipated grades").textCase(.none)) {
@@ -168,122 +304,24 @@ struct HomeView: View {
 	private var loggedInView: some View {
 		List {
 			// General
-			Section {
-				VStack(alignment: .leading) {
-					// Welcome message
-					VStack(alignment: .leading, spacing: 4) {
-						Text(helloString)
-							.font(.title2)
-							.bold()
-							.allowsTightening(true)
-							.minimumScaleFactor(0.9)
-						
-						Text("DATE_CURRENTLY : \(Date().formattedDateString(timeStyle: .none, dateStyle: .full))")
-							.font(.headline)
-							.foregroundColor(.secondary)
-							.allowsTightening(true)
-							.minimumScaleFactor(0.9)
-					}
-					
-					// Lessons
-					Group {
-						// Current lesson
-						if let lesson = currentLesson {
-							divider
-							
-							VStack(alignment: .leading, spacing: 0) {
-								Text("Current lesson")
-									.font(.headline)
-									.foregroundColor(.secondary)
-									.padding(.bottom, 2)
-								Text("\(lesson.subjectName) (\(lesson.room))")
-									.font(.headline)
-									.lineLimit(2)
-									.padding(.bottom, 2)
-								Text("\((lesson.dateStarts ?? lesson.date).localizedTime) - \((lesson.dateEnds ?? lesson.date).localizedTime) • \(lesson.employee?.name ?? "Unknown employee") \(lesson.employee?.surname ?? "")")
-									.font(.callout)
-									.foregroundColor(.secondary)
-									.lineLimit(2)
-							}
-						}
-						
-						// Next lesson
-						if let lesson = nextLesson {
-							divider
-							
-							VStack(alignment: .leading, spacing: 0) {
-								Text("Next lesson")
-									.font(.headline)
-									.foregroundColor(.secondary)
-									.padding(.bottom, 2)
-								
-								Text("\(lesson.subjectName) (\(lesson.room))")
-									.font(.headline)
-									.lineLimit(2)
-									.padding(.bottom, 2)
-								
-								Group {
-									if (Calendar.autoupdatingCurrent.isDateInToday(lesson.date)) {
-										Text("\((lesson.dateStarts ?? lesson.date).localizedTime) - \((lesson.dateEnds ?? lesson.date).localizedTime) • \(lesson.employee?.name ?? "Unknown employee") \(lesson.employee?.surname ?? "")")
-									} else {
-										Text("\((lesson.dateStarts ?? lesson.date).formattedString(format: "EEEE").capitalingFirstLetter()), \((lesson.dateStarts ?? lesson.date).localizedTime) - \((lesson.dateEnds ?? lesson.date).localizedTime) • \(lesson.employee?.name ?? "Unknown employee") \(lesson.employee?.surname ?? "")")
-									}
-								}
-								.font(.callout)
-								.foregroundColor(.secondary)
-								.lineLimit(2)
-							}
-						}
-						
-						// No lessons
-						if (currentLesson == nil && nextLesson == nil) {
-							divider
-							Text("No lessons for now ☺️")
-								.font(.headline)
-								.opacity(0.35)
-								.padding(.vertical, 5)
-						}
-					}
-				}
-				.padding(.vertical, 5)
-			}
+			generalSection
 			
-			// MARK: Tasks - Exams
-			if (newExams.count > 0) {
-				Section(header: Text("Exams").textCase(.none)) {
-					ForEach(newExams) { (task) in
-						TaskCell(task: task)
-					}
-				}
-			}
+			// Tasks - Exams
+			examsSection
 			
-			// MARK: Tasks - Homework
-			if (newHomework.count > 0) {
-				Section(header: Text("Homework").textCase(.none)) {
-					ForEach(newHomework) { (task) in
-						TaskCell(task: task)
-					}
-				}
-			}
+			// Tasks - Homework
+			homeworkSection
 			
-			// MARK: Messages
-			if (newMessages.count > 0) {
-				Section(header: Text("New messages").textCase(.none)) {
-					ForEach(newMessages) { message in
-						NavigationLink(destination: MessageDetailView(message: message)) {
-							MessageCell(message: message, isComposeSheetPresented: $isComposeSheetPresented, messageToReply: $messageToReply)
-						}
-					}
-				}
-			}
+			// Messages
+			messagesSection
 			
-			// MARK: Anticipated grades
+			// Anticipated grades
 			anticipatedGradesSection
 			
-			// MARK: Final grades
+			// Final grades
 			finalGradesSection
 			
-			// MARK: Notes
+			// Notes
 			notesSection
 		}
 		.listStyle(InsetGroupedListStyle())
@@ -313,23 +351,6 @@ struct HomeView: View {
 				}
 			}
 		}
-		/* .onReceive(vulcan.userLoggedIn) { (loggedIn) in
-			if (!loggedIn) {
-				return
-			}
-			
-			vulcan.getNotes() { (success, error) in
-				if (!success) {
-					generateHaptic(.error)
-				}
-			}
-			
-			vulcan.getEOTGrades() { (success, error) in
-				if (!success) {
-					generateHaptic(.error)
-				}
-			}
-		} */
 	}
 	
 	var body: some View {
@@ -347,7 +368,7 @@ struct HomeView: View {
 }
 
 struct HomeView_Previews: PreviewProvider {
-  static var previews: some View {
-    HomeView()
-  }
+	static var previews: some View {
+		HomeView()
+	}
 }

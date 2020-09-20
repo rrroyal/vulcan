@@ -15,18 +15,7 @@ struct TasksView: View {
 			Section(header: Text("Homework")) {
 				if (vulcanStore.tasks.homework.count > 0) {
 					ForEach(vulcanStore.tasks.homework) { task in
-						VStack(alignment: .leading) {
-							Text(task.entry)
-								.font(.headline)
-							
-							if let subjectName = task.subject?.name {
-								Text("\(subjectName), \(task.date.formattedString(format: "dd/MM/yyyy"))")
-							} else {
-								Text(task.date.formattedString(format: "dd/MM/yyyy"))
-							}
-						}
-						.opacity(task.date > Date() ? 1 : 0.5)
-						.padding(.vertical)
+						TaskCell(task: task, type: nil)
 					}
 				} else {
 					Text("Nothing found")
@@ -38,18 +27,7 @@ struct TasksView: View {
 			Section(header: Text("Exams")) {
 				if (vulcanStore.tasks.exams.count > 0) {
 					ForEach(vulcanStore.tasks.exams) { task in
-						VStack(alignment: .leading) {
-							Text(task.entry)
-								.font(.headline)
-							
-							if let subjectName = task.subject?.name {
-								Text("\(subjectName), \(task.date.formattedString(format: "dd/MM/yyyy"))")
-							} else {
-								Text(task.date.formattedString(format: "dd/MM/yyyy"))
-							}
-						}
-						.opacity(task.date > Date() ? 1 : 0.5)
-						.padding(.vertical)
+						TaskCell(task: task, type: task.type)
 					}
 				} else {
 					Text("Nothing found")

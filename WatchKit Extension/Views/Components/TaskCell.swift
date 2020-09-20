@@ -1,8 +1,8 @@
 //
 //  TaskCell.swift
-//  vulcan
+//  WatchKit Extension
 //
-//  Created by royal on 26/06/2020.
+//  Created by Kacper on 20/09/2020.
 //
 
 import SwiftUI
@@ -12,8 +12,8 @@ struct TaskCell: View {
 	let task: VulcanTask
 	let type: Bool?
 	
-    var body: some View {
-		VStack(alignment: .leading, spacing: 4) {
+	var body: some View {
+		VStack(alignment: .leading) {
 			Group {
 				if !task.entry.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
 					Text(task.entry)
@@ -25,20 +25,18 @@ struct TaskCell: View {
 			.font(.headline)
 			.multilineTextAlignment(.leading)
 			.allowsTightening(true)
-			.lineLimit(nil)
+			.lineLimit(5)
 			
 			Group {
-				if let subjectName = task.subject?.name,
-				   let employeeName = task.employee?.name,
-				   let employeeSurname = task.employee?.surname {
-					Text("\(subjectName) - \(employeeName) \(employeeSurname)")
+				if let subjectName = task.subject?.name {
+					Text(subjectName)
 				}
 				
 				if let type = type {
 					Text("\(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")) • \(task.date.formattedDateString(timeStyle: .none, dateStyle: .full, context: .beginningOfSentence))")
 				} else {
 					Text(task.date.formattedDateString(timeStyle: .none, dateStyle: .full, context: .beginningOfSentence))
-				}				
+				}
 			}
 			.font(.callout)
 			.foregroundColor(.secondary)
@@ -48,22 +46,12 @@ struct TaskCell: View {
 		}
 		.padding(.vertical, 10)
 		.opacity(task.date >= Date() ? 1 : 0.75)
-		.contextMenu {
-			// Reminders
-			Button(action: {
-				generateHaptic(.light)
-				task.addToReminders(type: type)
-			}) {
-				Label("Add to reminders", systemImage: "bell.fill")
-			}
-			
-			// Calendar
-			Button(action: {
-				generateHaptic(.light)
-				task.addToCalendar(type: type)
-			}) {
-				Label("Add to calendar", systemImage: "calendar.badge.plus")
-			}
-		}
-    }
+	}
 }
+
+
+/* struct TaskCell_Previews: PreviewProvider {
+    static var previews: some View {
+        TaskCell()
+    }
+} */

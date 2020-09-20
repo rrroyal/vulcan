@@ -33,12 +33,6 @@ struct ContentView: View {
 	@ViewBuilder var body: some View {
 		Group {
 			#if os(iOS)
-			/* if (horizontalSizeClass == .compact) {
-				AppTabNavigation(currentTab: $currentTab)
-			} else {
-				AppSidebarNavigation()
-			} */
-			#warning("Use sidebar navigation when Apple adds dynamic 2/3 column layout")
 			AppTabNavigation(currentTab: $currentTab)
 			#else
 			AppSidebarNavigation()

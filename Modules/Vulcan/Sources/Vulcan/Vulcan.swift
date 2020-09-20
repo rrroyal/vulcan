@@ -1513,7 +1513,13 @@ public final class Vulcan: ObservableObject {
 					tempTasks = Vulcan.Tasks(exams: exams, homework: homework)
 					
 					if (self.ud.bool(forKey: UserDefaults.AppKeys.enableNotifications.rawValue)) {
-						self.tasks.combined
+						self.tasks.exams
+							.filter { $0.date >= Date() }
+							.forEach { task in
+								self.addTaskNotification(task, type: task.type)
+							}
+						
+						self.tasks.homework
 							.filter { $0.date >= Date() }
 							.forEach { task in
 								self.addTaskNotification(task)
@@ -1814,14 +1820,20 @@ public final class Vulcan: ObservableObject {
 	
 	/// Schedules a task for supplied event.
 	/// - Parameter task: Task to be notified about
-	public func addTaskNotification(_ task: VulcanTask) {
+	/// - Parameter type: Type of exam
+	public func addTaskNotification(_ task: VulcanTask, type: Bool? = nil) {
 		let logger = Logger(subsystem: "Vulcan", category: "Notifications")
 		logger.debug("Registering a new notification of task with entry \"\(task.entry)\".")
 		
 		let content = UNMutableNotificationContent()
 		
 		switch (task.tag) {
-			case .exam:		content.title = NSLocalizedString("TASK_TOMORROW : TAG_EXAM", comment: "")
+			case .exam:
+				if let type = type {
+					content.title = "\(NSLocalizedString("Tomorrow", comment: "")): \(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: ""))"
+				} else {
+					content.title = "\(NSLocalizedString("Tomorrow", comment: "")): \(NSLocalizedString(task.tag.rawValue, comment: ""))"
+				}
 			case .homework:	content.title = NSLocalizedString("TASK_TOMORROW : TAG_HOMEWORK", comment: "")
 		}
 		

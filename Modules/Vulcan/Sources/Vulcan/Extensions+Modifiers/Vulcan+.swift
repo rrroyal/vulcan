@@ -11,15 +11,20 @@ import Foundation
 import EventKit
 
 public extension VulcanTask {
-	func addToReminders() {
+	func addToReminders(type: Bool? = nil) {
 		let eventStore: EKEventStore = EKEventStore()
 		eventStore.requestAccess(to: .reminder) {
 			granted, error in
 			if (granted && error == nil) {
-				var tag: String = ""
-				switch (self.tag) {
-					case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
-					case .homework:	tag = NSLocalizedString("TAG_HOMEWORK", comment: "")
+				let tag: String
+				
+				if let type = type {
+					tag = NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
+				} else {
+					switch (self.tag) {
+						case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
+						case .homework:	tag = NSLocalizedString("TAG_HOMEWORK", comment: "")
+					}
 				}
 				
 				let event: EKReminder = EKReminder(eventStore: eventStore)
@@ -46,15 +51,20 @@ public extension VulcanTask {
 		}
 	}
 	
-	func addToCalendar() {
+	func addToCalendar(type: Bool? = nil) {
 		let eventStore: EKEventStore = EKEventStore()
 		eventStore.requestAccess(to: .event) {
 			granted, error in
 			if (granted && error == nil) {
-				var tag: String = ""
-				switch (self.tag) {
-					case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
-					case .homework:	tag = NSLocalizedString("TAG_HOMEWORK", comment: "")
+				let tag: String
+				
+				if let type = type {
+					tag = NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
+				} else {
+					switch (self.tag) {
+						case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
+						case .homework:	tag = NSLocalizedString("TAG_HOMEWORK", comment: "")
+					}
 				}
 				
 				let event: EKEvent = EKEvent(eventStore: eventStore)
