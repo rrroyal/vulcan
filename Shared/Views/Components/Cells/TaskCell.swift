@@ -12,20 +12,34 @@ struct TaskCell: View {
 	let task: VulcanTask
 	
     var body: some View {
-		VStack(alignment: .leading) {
-			Text(task.entry)
-				.font(.headline)
-				.multilineTextAlignment(.leading)
-				.allowsTightening(true)
-				.lineLimit(nil)
-				.padding(.bottom, 2)
+		VStack(alignment: .leading, spacing: 4) {
+			Group {
+				if !task.entry.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+					Text(task.entry)
+				} else {
+					Text("No entry")
+						.foregroundColor(.secondary)
+				}
+			}
+			.font(.headline)
+			.multilineTextAlignment(.leading)
+			.allowsTightening(true)
+			.lineLimit(nil)
 			
-			Text("\(task.subject?.name ?? "Unknown subject") • \(task.date.formattedDateString(timeStyle: .none, dateStyle: .full, context: .beginningOfSentence))")
-				.font(.callout)
-				.foregroundColor(.secondary)
-				.multilineTextAlignment(.leading)
-				.allowsTightening(true)
-				.lineLimit(3)
+			Group {
+				if let subjectName = task.subject?.name,
+				   let employeeName = task.employee?.name,
+				   let employeeSurname = task.employee?.surname {
+					Text("\(subjectName) - \(employeeName) \(employeeSurname)")
+				}
+				
+				Text("\(NSLocalizedString(task.tag.rawValue, comment: "")) • \(task.date.formattedDateString(timeStyle: .none, dateStyle: .full, context: .beginningOfSentence))")
+			}
+			.font(.callout)
+			.foregroundColor(.secondary)
+			.multilineTextAlignment(.leading)
+			.allowsTightening(true)
+			.lineLimit(3)
 		}
 		.padding(.vertical, 10)
 		.opacity(task.date >= Date() ? 1 : 0.75)

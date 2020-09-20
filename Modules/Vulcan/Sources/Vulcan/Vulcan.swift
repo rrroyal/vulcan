@@ -237,6 +237,12 @@ public final class Vulcan: ObservableObject {
 					.compactMap { exam in
 						Exam(from: exam)
 					}
+					.map { exam in
+						exam.subject = dictionarySubjects.first(where: { $0.id == exam.subjectID })
+						exam.employee = dictionaryEmployees.first(where: { $0.id == exam.employeeID })
+						
+						return exam
+					}
 					.sorted { $0.dateEpoch < $1.dateEpoch }
 			}
 			
@@ -245,6 +251,12 @@ public final class Vulcan: ObservableObject {
 				self.tasks.homework = storedHomework
 					.compactMap { task in
 						Homework(from: task)
+					}
+					.map { task in
+						task.subject = dictionarySubjects.first(where: { $0.id == task.subjectID })
+						task.employee = dictionaryEmployees.first(where: { $0.id == task.employeeID })
+						
+						return task
 					}
 					.sorted { $0.dateEpoch < $1.dateEpoch }
 			}
@@ -1419,7 +1431,7 @@ public final class Vulcan: ObservableObject {
 		let body: [String: Any] = [
 			"DataPoczatkowa": startDate.formattedString(format: "yyyy-MM-dd"),
 			"DataKoncowa": endDate.formattedString(format: "yyyy-MM-dd"),
-			"IdOddzial": user.unitID,
+			"IdOddzial": user.branchID,
 			"IdOkresKlasyfikacyjny": user.classificationPeriodID,
 			"IdUczen": user.id,
 		]
@@ -1440,7 +1452,7 @@ public final class Vulcan: ObservableObject {
 				.tryMap { examsResponse, homeworkResponse -> ([Vulcan.Exam], [Vulcan.Homework]) in
 					let decoder: JSONDecoder = JSONDecoder()
 					let error = APIError.error(reason: "Error serializing JSON")
-										
+					
 					// Exams
 					guard let examsJSON = try JSONSerialization.jsonObject(with: examsResponse, options: []) as? [String: Any],
 						  let examsObject = examsJSON["Data"] as? [[String: Any]],
@@ -1471,7 +1483,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { exams, homework in
-					logger.debug("Received \(exams.count) exams and \(homework.count) homework tasks.")
+					logger.debug("Received \(exams.count) exam and \(homework.count) homework tasks.")
 					
 					let context = self.persistentContainer.viewContext
 					guard let dictionarySubjects: [DictionarySubject] = try? context.fetch(DictionarySubject.fetchRequest()),

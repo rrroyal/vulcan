@@ -173,3 +173,6 @@
 "Anticipated grades" = "Anticipated grades";
 "Final grades" = "Final grades";
 "Notes" = "Notes";
+
+// MARK: - TaskCell.swift
+"No entry" = "No entry";

@@ -58,7 +58,7 @@
 "Next lesson" = "Następna lekcja";
 "No lessons for now ☺️" = "Brak lekcji w najbliższym czasie ☺️";
 "New grades" = "Nowe oceny";
-"Exams" = "Sprawdziany";
+"Exams" = "Testy";
 "Homework" = "Zadania domowe";
 "New messages" = "Nowe wiadomości";
 
@@ -76,7 +76,7 @@
 "TASKS_FOLDER_TITLE" = "Wybierz kategorię";
 "Add to reminders" = "Dodaj do przypomnień";
 "Add to calendar" = "Dodaj do kalendarza";
-"TAG_EXAM" = "Sprawdzian";
+"TAG_EXAM" = "Test";
 "TAG_HOMEWORK" = "Zadanie domowe";
 "No exams for this month 😊" = "Brak testów w tym miesiącu 😊";
 "No homework for this month 😊" = "Brak zadań domowych w tym miesiącu 😊";
@@ -173,3 +173,6 @@
 "Anticipated grades" = "Oceny proponowane";
 "Final grades" = "Oceny ostateczne";
 "Notes" = "Uwagi";
+
+// MARK: - TaskCell.swift
+"No entry" = "Brak wpisu";

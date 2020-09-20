@@ -46,8 +46,8 @@ public extension Vulcan {
 	}
 	
 	enum TaskTag: String {
-		case exam = "Exams"
-		case homework = "Homework"
+		case exam = "TAG_EXAM"
+		case homework = "TAG_HOMEWORK"
 	}
 	
 	enum MessageTag: String {
