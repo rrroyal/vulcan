@@ -988,7 +988,7 @@ public final class Vulcan: ObservableObject {
 						}
 						.sorted { $0.date < $1.date }
 					
-					if self.ud.bool(forKey: UserDefaults.AppKeys.enableNotifications.rawValue) {
+					if self.ud.bool(forKey: UserDefaults.AppKeys.enableScheduleNotifications.rawValue) {
 						let userGroup: Int = self.ud.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue)
 						
 						self.schedule
@@ -1128,13 +1128,8 @@ public final class Vulcan: ObservableObject {
 								.filter { $0.subjectID == subject.id }
 							
 							let subjectGrades = Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
-							if let currentSubjectGradesCount = self.grades.first(where: { $0.subject.id == subject.id })?.grades.count {
-								if grades.count != currentSubjectGradesCount {
-									subjectGrades.hasNewItems = true
-								} else {
-									subjectGrades.hasNewItems = false
-								}
-							}
+							let currentSubjectGradesCount: Int? = self.grades.first(where: { $0.subject.id == subject.id })?.grades.count
+							subjectGrades.hasNewItems = grades.count != (currentSubjectGradesCount ?? -1)
 							
 							return subjectGrades
 						}
@@ -1512,14 +1507,14 @@ public final class Vulcan: ObservableObject {
 					
 					tempTasks = Vulcan.Tasks(exams: exams, homework: homework)
 					
-					if (self.ud.bool(forKey: UserDefaults.AppKeys.enableNotifications.rawValue)) {
-						self.tasks.exams
+					if self.ud.bool(forKey: UserDefaults.AppKeys.enableTaskNotifications.rawValue) {
+						exams
 							.filter { $0.date >= Date() }
 							.forEach { task in
 								self.addTaskNotification(task, type: task.type)
 							}
 						
-						self.tasks.homework
+						homework
 							.filter { $0.date >= Date() }
 							.forEach { task in
 								self.addTaskNotification(task)
@@ -1767,7 +1762,7 @@ public final class Vulcan: ObservableObject {
 	/// - Parameter event: Event to be notified about
 	public func addScheduleEventNotification(_ event: Vulcan.ScheduleEvent) {
 		let logger = Logger(subsystem: "Vulcan", category: "Notifications")
-		logger.debug("Registering a new notification of event with title \"\(event.subjectName)\".")
+		logger.debug("Registering a new notification of event with title \"\(event.subjectName, privacy: .sensitive)\".")
 		
 		guard let dateStarts = event.dateStarts else {
 			return
@@ -1794,7 +1789,7 @@ public final class Vulcan: ObservableObject {
 		
 		let identifier: String = "\(content.categoryIdentifier):\(event.dateStarts?.timeIntervalSinceReferenceDate ?? event.date.timeIntervalSinceReferenceDate):\(event.group ?? -1):\(event.subjectID)"
 		
-		var triggerDate: DateComponents
+		let triggerDate: DateComponents
 		let userGroup = UserDefaults.group.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue)
 		let schedule = self.schedule.flatMap(\.events).filter({ $0.dateStarts ?? $0.date >= Date() }).filter({ $0.group ?? userGroup == userGroup })
 		
@@ -1813,7 +1808,7 @@ public final class Vulcan: ObservableObject {
 		
 		UNUserNotificationCenter.current().add(request) { error in
 			if let error = error {
-				logger.warning("Couldn't add a notification with ID \(identifier): \(error.localizedDescription)")
+				logger.warning("Couldn't add a notification with ID \(identifier, privacy: .sensitive): \(error.localizedDescription)")
 			}
 		}
 	}
@@ -1823,7 +1818,7 @@ public final class Vulcan: ObservableObject {
 	/// - Parameter type: Type of exam
 	public func addTaskNotification(_ task: VulcanTask, type: Bool? = nil) {
 		let logger = Logger(subsystem: "Vulcan", category: "Notifications")
-		logger.debug("Registering a new notification of task with entry \"\(task.entry)\".")
+		logger.debug("Registering a new notification of task with entry \"\(task.entry, privacy: .sensitive)\".")
 		
 		let content = UNMutableNotificationContent()
 		
@@ -1846,19 +1841,26 @@ public final class Vulcan: ObservableObject {
 		
 		content.body = task.entry
 		content.sound = UNNotificationSound.default
-		content.categoryIdentifier = "taskNotification"
+		content.categoryIdentifier = "TaskNotification"
 		content.targetContentIdentifier = content.categoryIdentifier
 		content.threadIdentifier = content.categoryIdentifier
 		
-		let date: Date = Calendar.autoupdatingCurrent.date(byAdding: .day, value: -1, to: task.date) ?? task.date
+		let date: Date
+		if let dayBefore: Date = Calendar.autoupdatingCurrent.date(byAdding: .day, value: -1, to: task.date),
+		   let finalDate: Date = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 9, to: dayBefore) {
+			date = finalDate
+		} else {
+			date = task.date
+		}
+		
 		let triggerDate: DateComponents = Calendar.autoupdatingCurrent.dateComponents([.year, .month, .day, .hour, .minute], from: date)
 		let trigger: UNCalendarNotificationTrigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-		let identifier: String = "taskNotification:\(task.date.timeIntervalSinceReferenceDate):\(task.entry)"
+		let identifier: String = "\(content.categoryIdentifier):\(task.date.timeIntervalSinceReferenceDate):\(task.entry)"
 		let request: UNNotificationRequest = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 		
 		UNUserNotificationCenter.current().add(request) { error in
 			if let error = error {
-				logger.warning("Couldn't add a notification with ID \(identifier): \(error.localizedDescription)")
+				logger.warning("Couldn't add a notification with ID \(identifier, privacy: .sensitive): \(error.localizedDescription)")
 			}
 		}
 	}

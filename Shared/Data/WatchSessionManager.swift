@@ -117,9 +117,9 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 	/// - Parameter data: Data to send
 	/// - Throws: Error
 	public func sendData(_ data: [String: Any]) throws {
-		self.logger.info("Sending data...")
-		
 		if let session = validSession {
+			self.logger.info("Sending data...")
+
 			do {
 				if (session.isReachable) {
 					self.logger.info("Sending message! Reachable: \(session.isReachable).")

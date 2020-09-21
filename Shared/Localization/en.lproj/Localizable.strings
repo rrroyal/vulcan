@@ -110,8 +110,10 @@
 "Show all" = "Show all";
 "SETTINGS_READMESSAGEONOPEN" = "Read messages on open";
 "SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Messages will be marked as read after they were opened.";
-"SETTINGS_ENABLENOTIFICATIONS" = "Enable notifications";
-"SETTINGS_ENABLENOTIFICATIONS_TOOLTIP" = "App will remind you about the important events (i.e. an exam or the next lesson).";
+"SETTINGS_SCHEDULENOTIFICATIONS" = "Schedule notifications";
+"SETTINGS_SCHEDULENOTIFICATIONS_TOOLTIP" = "App will remind you about the next lesson at the end of the previous one.";
+"SETTINGS_TASKNOTIFICATIONS" = "Tasks notifications";
+"SETTINGS_TASKNOTIFICATIONS_TOOLTIP" = "App will remind you about tasks day before.";
 
 "Interface" = "Interface";
 "SETTINGS_FILTERSCHEDULE" = "Filter schedule";

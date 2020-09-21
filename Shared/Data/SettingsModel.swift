@@ -22,7 +22,10 @@ final class SettingsModel: ObservableObject {
 	// MARK: User
 	@AppStorage(UserDefaults.AppKeys.userGroup.rawValue, store: .group) public var userGroup: Int = 1
 	@AppStorage(UserDefaults.AppKeys.readMessageOnOpen.rawValue, store: .group) public var readMessageOnOpen: Bool = true
-	@AppStorage(UserDefaults.AppKeys.enableNotifications.rawValue, store: .group) public var enableNotifications: Bool = false
+	
+	// MARK: Notifications
+	@AppStorage(UserDefaults.AppKeys.enableScheduleNotifications.rawValue, store: .group) public var enableScheduleNotifications: Bool = false
+	@AppStorage(UserDefaults.AppKeys.enableTaskNotifications.rawValue, store: .group) public var enableTaskNotifications: Bool = false
 	
 	// MARK: Interface
 	@AppStorage(UserDefaults.AppKeys.filterSchedule.rawValue, store: .group) public var filterSchedule: Bool = false

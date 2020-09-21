@@ -17,7 +17,7 @@ struct ScheduleView: View {
 	var events: [Vulcan.ScheduleEvent]? {
 		vulcanStore.schedule
 			.first(where: {
-				Calendar.autoupdatingCurrent.isDate($0.date, inSameDayAs: date)
+				$0.events.contains { $0.dateStarts ?? $0.date >= Date() }
 			})?
 			.events
 			.filter { $0.group ?? userGroup == userGroup }

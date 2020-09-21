@@ -34,6 +34,7 @@ struct FinalGradesView: View {
 					Text("No grades")
 						.multilineTextAlignment(.center)
 						.opacity(0.3)
+						.fullWidth()
 				}
 			}
 			
@@ -55,6 +56,7 @@ struct FinalGradesView: View {
 					Text("No grades")
 						.multilineTextAlignment(.center)
 						.opacity(0.3)
+						.fullWidth()
 				}
 			}
 		}

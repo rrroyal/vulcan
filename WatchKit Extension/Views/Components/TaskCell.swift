@@ -33,9 +33,9 @@ struct TaskCell: View {
 				}
 				
 				if let type = type {
-					Text("\(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")) • \(task.date.formattedDateString(timeStyle: .none, dateStyle: .full, context: .beginningOfSentence))")
+					Text("\(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")) • \(task.date.relativeString)")
 				} else {
-					Text(task.date.formattedDateString(timeStyle: .none, dateStyle: .full, context: .beginningOfSentence))
+					Text(task.date.relativeString)
 				}
 			}
 			.font(.callout)
