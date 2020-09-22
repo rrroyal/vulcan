@@ -11,8 +11,8 @@ import AppNotifications
 
 /// View containing current user tasks.
 struct TasksView: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
+	@ObservedObject var settings: SettingsModel = SettingsModel.shared
 	#if os(iOS)
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	#endif

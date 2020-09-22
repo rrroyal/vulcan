@@ -9,8 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct ScheduleView: View {
-	@EnvironmentObject var vulcanStore: VulcanStore
-	@AppStorage(UserDefaults.AppKeys.userGroup.rawValue, store: .group) public var userGroup: Int = 1
+	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
 	
 	let date: Date = Date()
 	
@@ -20,7 +19,7 @@ struct ScheduleView: View {
 				$0.events.contains { $0.dateStarts ?? $0.date >= Date() }
 			})?
 			.events
-			.filter { $0.group ?? userGroup == userGroup }
+			.filter { $0.userSchedule }
 	}
 	
     var body: some View {
@@ -28,7 +27,7 @@ struct ScheduleView: View {
 			if ((events ?? []).count > 0) {
 				List {
 					ForEach(events ?? []) { event in
-						ScheduleEventCell(event: event, group: userGroup)
+						ScheduleEventCell(event: event)
 					}
 				}
 				.listStyle(CarouselListStyle())

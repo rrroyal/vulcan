@@ -20,7 +20,7 @@ final class SettingsModel: ObservableObject {
 	@AppStorage(UserDefaults.AppKeys.isLoggedIn.rawValue, store: .group) public var isLoggedIn: Bool = false
 	
 	// MARK: User
-	@AppStorage(UserDefaults.AppKeys.userGroup.rawValue, store: .group) public var userGroup: Int = 1
+	@AppStorage(UserDefaults.AppKeys.showAllScheduleEvents.rawValue, store: .group) public var showAllScheduleEvents: Bool = false
 	@AppStorage(UserDefaults.AppKeys.readMessageOnOpen.rawValue, store: .group) public var readMessageOnOpen: Bool = true
 	
 	// MARK: Notifications

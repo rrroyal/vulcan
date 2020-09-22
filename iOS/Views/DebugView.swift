@@ -14,7 +14,7 @@ import Vulcan
 
 /// Debug view
 struct DebugView: View {
-	@EnvironmentObject var vulcan: Vulcan
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
 	@State private var pendingTaskRequests: [BGTaskRequest] = []
 	private let logger: Logger = Logger(subsystem: "Debug", category: "Debug")
 	

@@ -287,7 +287,7 @@ public extension Vulcan {
 	}
 	
 	/// Holds the events for the date.
-	struct Schedule: Identifiable, Codable {
+	struct Schedule: Identifiable, Codable, Hashable {
 		public init(date: Date, events: [Vulcan.ScheduleEvent]) {
 			self.date = date
 			self.events = events
@@ -885,7 +885,7 @@ public extension Vulcan {
 		/// - Returns: CoreData entity
 		public func entity(context: NSManagedObjectContext) -> StoredExam {
 			let entity: StoredExam = StoredExam(context: context)
-			entity.id = Int16(self.id)
+			entity.id = Int32(self.id)
 			entity.subjectID = Int16(self.subjectID)
 			entity.employeeID = Int16(self.employeeID)
 			entity.branchID = Int16(self.branchID)
@@ -955,7 +955,7 @@ public extension Vulcan {
 		/// - Returns: CoreData entity
 		public func entity(context: NSManagedObjectContext) -> StoredHomework {
 			let entity: StoredHomework = StoredHomework(context: context)
-			entity.id = Int16(self.id)
+			entity.id = Int32(self.id)
 			entity.studentID = Int16(self.studentID)
 			entity.dateEpoch = Int64(self.dateEpoch)
 			entity.employeeID = Int16(self.employeeID)

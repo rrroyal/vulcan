@@ -8,9 +8,7 @@
 import SwiftUI
 
 /// View showing list of available app icons.
-struct AppIconView: View {
-	@EnvironmentObject var settings: SettingsModel
-	
+struct AppIconView: View {	
 	var body: some View {
 		List(Bundle.main.appIcons, id: \.self) { (icon) in
 			HStack {

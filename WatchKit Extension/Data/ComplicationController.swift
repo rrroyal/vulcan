@@ -12,7 +12,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 	var schedule: [Vulcan.ScheduleEvent] {
 		VulcanStore.shared.schedule
 			.flatMap(\.events)
-			.filter { $0.group ?? UserDefaults.group.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue) == UserDefaults.group.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue) }
+			.filter { $0.userSchedule }
 	}
 	
     // MARK: - Complication Configuration

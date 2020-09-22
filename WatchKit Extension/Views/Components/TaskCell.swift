@@ -45,7 +45,7 @@ struct TaskCell: View {
 			.lineLimit(3)
 		}
 		.padding(.vertical, 10)
-		.opacity(task.date >= Date() ? 1 : 0.75)
+		.opacity(task.date.endOfDay >= Date() ? 1 : 0.75)
 	}
 }
 

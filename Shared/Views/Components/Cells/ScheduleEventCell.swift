@@ -11,10 +11,8 @@ import Vulcan
 
 struct ScheduleEventCell: View {
 	let event: Vulcan.ScheduleEvent
-	let group: Int
-	
-	let secondaryTextOpacity: Double = 0.6
-	
+	let showAllScheduleEvents: Bool
+		
     var body: some View {
 		VStack(alignment: .center, spacing: 4) {
 			// First row: Subject name and room
@@ -31,11 +29,18 @@ struct ScheduleEventCell: View {
 				Spacer()
 				
 				// Room
-				Text(event.room)
-					.font(.body)
-					.allowsTightening(true)
-					.minimumScaleFactor(0.75)
-					.lineLimit(1)
+				Group {
+					if let division = event.divisionShort,
+					   showAllScheduleEvents {
+						Text("\(event.room) (\(division))")
+					} else {
+						Text(event.room)
+					}
+				}
+				.font(.body)
+				.allowsTightening(true)
+				.minimumScaleFactor(0.75)
+				.lineLimit(1)
 			}
 			
 			// Second row: Time and teacher
@@ -43,7 +48,7 @@ struct ScheduleEventCell: View {
 				// Time, teacher
 				Text("\(event.dateStarts?.localizedTime ?? "") - \(event.dateEnds?.localizedTime ?? "") • \(event.employee?.name ?? "Unknown employee") \(event.employee?.surname ?? "")")
 					.font(.callout)
-					.foregroundColor(.secondary)
+					.foregroundColor((event.dateStarts ?? Date(timeIntervalSince1970: 0) < Date() && event.dateEnds ?? Date(timeIntervalSince1970: 0) > Date()) ? Color.accentColor : Color.secondary)
 					.allowsTightening(true)
 					.minimumScaleFactor(0.75)
 					.lineLimit(1)
@@ -56,7 +61,7 @@ struct ScheduleEventCell: View {
 				HStack(alignment: .center, spacing: 0) {
 					Text(note)
 						.font(.callout)
-						.foregroundColor(.secondary)
+						.foregroundColor((event.dateStarts ?? Date(timeIntervalSince1970: 0) < Date() && event.dateEnds ?? Date(timeIntervalSince1970: 0) > Date()) ? Color.accentColor : Color.secondary)
 						.allowsTightening(true)
 						.minimumScaleFactor(0.75)
 						.lineLimit(3)
@@ -67,7 +72,7 @@ struct ScheduleEventCell: View {
 		}
 		.padding(.vertical, 10)
 		.foregroundColor((event.dateStarts ?? Date(timeIntervalSince1970: 0) < Date() && event.dateEnds ?? Date(timeIntervalSince1970: 0) > Date()) ? Color.accentColor : Color.primary)
-		.opacity((event.dateEnds ?? event.date < Date()) ? 0.6 : 1)
+		.opacity((event.dateEnds ?? event.date < Date()) ? 0.5 : 1)
 		.id(event.id)
     }
 }

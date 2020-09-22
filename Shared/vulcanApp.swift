@@ -23,9 +23,6 @@ struct vulcanApp: App {
     @SceneBuilder var body: some Scene {
         WindowGroup {
             ContentView(currentTab: $currentTab)
-				.environmentObject(appState)
-				.environmentObject(vulcan)
-				.environmentObject(settings)
 				.environment(\.managedObjectContext, CoreDataModel.shared.persistentContainer.viewContext)
 				.defaultAppStorage(.group)
 				.notificationOverlay($appNotifications.notificationData)
@@ -55,8 +52,6 @@ struct vulcanApp: App {
 		#if os(macOS)
 		Settings {
 			MacSettingsView()
-				.environmentObject(vulcan)
-				.environmentObject(settings)
 				.environment(\.managedObjectContext, CoreDataModel.shared.persistentContainer.viewContext)
 				.defaultAppStorage(.group)
 		}

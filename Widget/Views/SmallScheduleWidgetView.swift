@@ -85,6 +85,6 @@ struct SmallScheduleWidgetView: View {
 
 struct SmallScheduleWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-		SmallScheduleWidgetView(entry: .init(date: Date(), configuration: .init(), event: nil))
+		SmallScheduleWidgetView(entry: .init(date: Date(), event: nil))
     }
 }

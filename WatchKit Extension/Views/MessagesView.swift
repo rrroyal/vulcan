@@ -9,7 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct MessagesView: View {
-	@EnvironmentObject var vulcanStore: VulcanStore
+	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
 	
     var body: some View {
 		List {

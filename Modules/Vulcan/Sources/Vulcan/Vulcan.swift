@@ -542,7 +542,7 @@ public final class Vulcan: ObservableObject {
 		// Variables
 		ud.removeObject(forKey: UserDefaults.AppKeys.isLoggedIn.rawValue)
 		ud.removeObject(forKey: UserDefaults.AppKeys.userID.rawValue)
-		ud.removeObject(forKey: UserDefaults.AppKeys.userGroup.rawValue)
+		ud.removeObject(forKey: UserDefaults.AppKeys.showAllScheduleEvents.rawValue)
 		ud.removeObject(forKey: UserDefaults.AppKeys.readMessageOnOpen.rawValue)
 		ud.removeObject(forKey: UserDefaults.AppKeys.dictionaryLastFetched.rawValue)
 		
@@ -943,8 +943,18 @@ public final class Vulcan: ObservableObject {
 							self.schedule = tempSchedule
 							self.dataState.schedule.lastFetched = Date()
 							self.scheduleDidChange.send(isPersistent)
-							
 							completionHandler(nil)
+
+							if self.ud.bool(forKey: UserDefaults.AppKeys.enableScheduleNotifications.rawValue) {
+								
+								self.schedule
+									.flatMap(\.events)
+									.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
+									.filter { $0.userSchedule }
+									.forEach { event in
+										self.addScheduleEventNotification(event)
+									}
+							}
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
 							completionHandler(error)
@@ -987,18 +997,6 @@ public final class Vulcan: ObservableObject {
 							return Vulcan.Schedule(date: date, events: events)
 						}
 						.sorted { $0.date < $1.date }
-					
-					if self.ud.bool(forKey: UserDefaults.AppKeys.enableScheduleNotifications.rawValue) {
-						let userGroup: Int = self.ud.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue)
-						
-						self.schedule
-							.flatMap(\.events)
-							.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
-							.filter { $0.group ?? userGroup == userGroup }
-							.forEach { event in
-								self.addScheduleEventNotification(event)
-							}
-					}
 					
 					if (isPersistent) {
 						let context = self.persistentContainer.viewContext
@@ -1790,8 +1788,10 @@ public final class Vulcan: ObservableObject {
 		let identifier: String = "\(content.categoryIdentifier):\(event.dateStarts?.timeIntervalSinceReferenceDate ?? event.date.timeIntervalSinceReferenceDate):\(event.group ?? -1):\(event.subjectID)"
 		
 		let triggerDate: DateComponents
-		let userGroup = UserDefaults.group.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue)
-		let schedule = self.schedule.flatMap(\.events).filter({ $0.dateStarts ?? $0.date >= Date() }).filter({ $0.group ?? userGroup == userGroup })
+		let schedule = self.schedule
+			.flatMap(\.events)
+			.filter { $0.dateStarts ?? $0.date >= Date() }
+			.filter { $0.userSchedule }
 		
 		if let itemIndex = schedule.firstIndex(of: event),
 		   (itemIndex - 1) >= 0,

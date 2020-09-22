@@ -9,7 +9,6 @@ import SwiftUI
 import Vulcan
 
 struct ComposeMessageView: View {
-	@EnvironmentObject var vulcan: Vulcan
 	@Binding var isPresented: Bool
 	@Binding var message: Vulcan.Message?
 	
@@ -44,7 +43,7 @@ struct ComposeMessageView: View {
 		loading = true
 		generateHaptic(.light)
 		
-		vulcan.sendMessage(to: messageRecipients, title: messageTitle, content: messageContent) { error in
+		Vulcan.shared.sendMessage(to: messageRecipients, title: messageTitle, content: messageContent) { error in
 			loading = false
 			
 			if error == nil {

@@ -9,8 +9,6 @@ import SwiftUI
 import Vulcan
 
 struct MessageDetailView: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
 	var message: Vulcan.Message
 
 	@State private var isComposeSheetPresented: Bool = false
@@ -80,11 +78,11 @@ struct MessageDetailView: View {
 			}
 		}
 		.sheet(isPresented: $isComposeSheetPresented) {
-			ComposeMessageView(isPresented: $isComposeSheetPresented, message: .constant(message)).environmentObject(vulcan)
+			ComposeMessageView(isPresented: $isComposeSheetPresented, message: .constant(message))
 		}
 		.onAppear {
-			if (settings.readMessageOnOpen && vulcan.currentUser != nil && !message.hasBeenRead) {
-				vulcan.moveMessage(messageID: message.id, tag: message.tag ?? .received, folder: .read) { error in
+			if (SettingsModel.shared.readMessageOnOpen && Vulcan.shared.currentUser != nil && !message.hasBeenRead) {
+				Vulcan.shared.moveMessage(messageID: message.id, tag: message.tag ?? .received, folder: .read) { error in
 					if error != nil {
 						generateHaptic(.error)
 					}

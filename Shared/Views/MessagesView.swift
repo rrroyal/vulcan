@@ -11,7 +11,7 @@ import AppNotifications
 
 /// View containing the received, sent and deleted messages.
 struct MessagesView: View {
-	@EnvironmentObject var vulcan: Vulcan
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
 	#if os(iOS)
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	#endif

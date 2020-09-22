@@ -9,8 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct UsersView: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
 	
 	private func refresh() {
 		vulcan.getUsers() { error in

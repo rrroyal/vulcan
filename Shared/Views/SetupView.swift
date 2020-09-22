@@ -11,7 +11,6 @@ import Vulcan
 
 /// View allowing user to log in
 struct SetupView: View {
-	@EnvironmentObject var vulcan: Vulcan
 	@Binding var isPresented: Bool
 	@Binding var isParentPresented: Bool
 	let hasParent: Bool
@@ -106,7 +105,7 @@ struct SetupView: View {
 				} else {
 					generateHaptic(.light)
 					setButton(text: "Logging in...")
-					vulcan.login(token: token.trimmingCharacters(in: .whitespacesAndNewlines), symbol: symbol.trimmingCharacters(in: .whitespacesAndNewlines), pin: Int(pin) ?? 0) { success, error in
+					Vulcan.shared.login(token: token.trimmingCharacters(in: .whitespacesAndNewlines), symbol: symbol.trimmingCharacters(in: .whitespacesAndNewlines), pin: Int(pin) ?? 0) { success, error in
 						isParentPresented = !success
 						if (!success) {
 							setButton(color: Color(UIColor.systemRed), text: error?.localizedDescription ?? "Error logging in")
@@ -137,9 +136,6 @@ struct SetupView: View {
 		}
 		.padding(.vertical)
 		.contentShape(Rectangle())
-		.onAppear {
-			isParentPresented = vulcan.currentUser == nil
-		}
     }
 }
 

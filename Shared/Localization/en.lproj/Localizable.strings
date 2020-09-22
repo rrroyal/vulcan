@@ -106,8 +106,10 @@
 
 "SETTINGS_LOGGEDIN : %@" = "Logged in as %@";
 "Log out" = "Log out";
-"User group" = "User group";
 "Show all" = "Show all";
+"Notifications" = "Notifications";
+"SETTINGS_SCHEDULEALLEVENTS" = "Show all groups";
+"SETTINGS_SCHEDULEALLEVENTS_TOOLTIP" = "If disabled, you will be only able to see your schedule.";
 "SETTINGS_READMESSAGEONOPEN" = "Read messages on open";
 "SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Messages will be marked as read after they were opened.";
 "SETTINGS_SCHEDULENOTIFICATIONS" = "Schedule notifications";

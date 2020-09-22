@@ -36,8 +36,8 @@ fileprivate struct SettingsOption: View {
 
 /// List view, containing list with options and NavigationBar NavigationLink to user list.
 struct SettingsView: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
+	@ObservedObject var settings: SettingsModel = SettingsModel.shared
 	
 	@State private var showingSetupView: Bool = false
 	@State private var showingResetSheet: Bool = false
@@ -58,7 +58,7 @@ struct SettingsView: View {
 		vulcan.schedule
 			.flatMap(\.events)
 			.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
-			.filter { $0.group ?? settings.userGroup == settings.userGroup }
+			.filter { $0.userSchedule }
 			.forEach { event in
 				vulcan.addScheduleEventNotification(event)
 			}
@@ -145,18 +145,6 @@ struct SettingsView: View {
 				}
 			}
 			
-			// User group
-			VStack(alignment: .leading) {
-				Text("User group")
-					.font(.body)
-					.bold()
-				Picker("User group", selection: $settings.userGroup) {
-					Text("1").tag(1)
-					Text("2").tag(2)
-				}
-				.pickerStyle(SegmentedPickerStyle())
-			}
-			
 			// Mark message as read on open
 			SettingsOption(setting: $settings.readMessageOnOpen, title: "SETTINGS_READMESSAGEONOPEN", subtitle: "SETTINGS_READMESSAGEONOPEN_TOOLTIP")
 		}
@@ -178,6 +166,9 @@ struct SettingsView: View {
 	
 	private var interfaceSection: some View {
 		Section(header: Text("Interface").sectionTitle()) {
+			// Show all schedule events
+			SettingsOption(setting: $settings.showAllScheduleEvents, title: "SETTINGS_SCHEDULEALLEVENTS", subtitle: "SETTINGS_SCHEDULEALLEVENTS_TOOLTIP")
+			
 			// Filter schedule
 			SettingsOption(setting: $settings.filterSchedule, title: "SETTINGS_FILTERSCHEDULE", subtitle: "SETTINGS_FILTERSCHEDULE_TOOLTIP")
 			
@@ -295,7 +286,6 @@ struct SettingsView: View {
 		)
 		.sheet(isPresented: $showingSetupView) {
 			SetupView(isPresented: $showingSetupView, isParentPresented: $showingSetupView, hasParent: false)
-				.environmentObject(vulcan)
 		}
 	}
 }

@@ -10,7 +10,6 @@ import Vulcan
 
 struct ScheduleEntry: TimelineEntry {
 	let date: Date
-	let configuration: GroupIntent
 	let event: Vulcan.ScheduleEvent?
 	
 	var relevance: TimelineEntryRelevance? {

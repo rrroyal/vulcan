@@ -80,6 +80,6 @@ struct MediumScheduleWidgetView: View {
 
 struct MediumScheduleWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-		MediumScheduleWidgetView(entry: .init(date: Date(), configuration: .init(), event: nil))
+		MediumScheduleWidgetView(entry: .init(date: Date(), event: nil))
     }
 }

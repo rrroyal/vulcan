@@ -74,7 +74,6 @@ fileprivate struct InformationContainerView: View {
 
 /// Onboarding, displayed on first launch, hosting SetupView
 struct OnboardingView: View {
-	@EnvironmentObject var vulcan: Vulcan
 	@Binding var isPresented: Bool
 	@State private var showSetup: Bool = false
 	

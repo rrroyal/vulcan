@@ -9,7 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct ContentView: View {
-	@EnvironmentObject var vulcanStore: VulcanStore
+	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
 		
 	var messagesEmoji: String {
 		(vulcanStore.receivedMessages).contains(where: { !$0.hasBeenRead }) ? "📫" : "📪"
@@ -17,19 +17,19 @@ struct ContentView: View {
 	
 	var loggedInView: some View {
 		List {
-			NavigationLink(destination: ScheduleView().environmentObject(vulcanStore)) {
+			NavigationLink(destination: ScheduleView()) {
 				HomeCardCell(title: "Schedule", emoji: "📆")
 			}
-			NavigationLink(destination: GradesView().environmentObject(vulcanStore)) {
+			NavigationLink(destination: GradesView()) {
 				HomeCardCell(title: "Grades", emoji: "🏅")
 			}
-			NavigationLink(destination: FinalGradesView().environmentObject(vulcanStore)) {
+			NavigationLink(destination: FinalGradesView()) {
 				HomeCardCell(title: "Final Grades", emoji: "🎉")
 			}
-			NavigationLink(destination: TasksView().environmentObject(vulcanStore)) {
+			NavigationLink(destination: TasksView()) {
 				HomeCardCell(title: "Tasks", emoji: "📚")
 			}
-			NavigationLink(destination: MessagesView().environmentObject(vulcanStore)) {
+			NavigationLink(destination: MessagesView()) {
 				HomeCardCell(title: "Messages", emoji: messagesEmoji)
 			}
 			

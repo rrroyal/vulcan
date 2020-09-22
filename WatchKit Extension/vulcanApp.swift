@@ -18,8 +18,6 @@ struct vulcanApp: App {
             NavigationView {
                 ContentView()
 					.navigationTitle(Text("vulcan"))
-					.environmentObject(vulcanStore)
-					.environment(\.managedObjectContext, CoreDataModel.shared.persistentContainer.viewContext)
             }
         }
 

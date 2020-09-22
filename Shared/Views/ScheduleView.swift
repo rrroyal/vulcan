@@ -11,10 +11,9 @@ import AppNotifications
 
 /// View containing schedule for the current week.
 struct ScheduleView: View {
-	@EnvironmentObject var appState: AppState
-	@EnvironmentObject var vulcan: Vulcan
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
 	
-	@AppStorage(UserDefaults.AppKeys.userGroup.rawValue, store: .group) public var userGroup: Int = 1
+	@AppStorage(UserDefaults.AppKeys.showAllScheduleEvents.rawValue, store: .group) public var showAllScheduleEvents: Bool = false
 	@AppStorage(UserDefaults.AppKeys.filterSchedule.rawValue, store: .group) private var filterSchedule: Bool = false
 	
 	@State private var date: Date = Date()
@@ -52,8 +51,8 @@ struct ScheduleView: View {
 		ForEach(vulcan.schedule) { day in
 			if (filterSchedule ? Calendar.autoupdatingCurrent.isDate(day.date, inSameDayAs: date) : true) {
 				Section(header: Text(day.date.formattedDateString(dateStyle: .full, context: .beginningOfSentence)).textCase(.none)) {
-					ForEach(day.events.filter { $0.group ?? userGroup == userGroup }) { event in
-						ScheduleEventCell(event: event, group: userGroup)
+					ForEach(day.events.filter({ showAllScheduleEvents ? true : $0.userSchedule })) { event in
+						ScheduleEventCell(event: event, showAllScheduleEvents: showAllScheduleEvents)
 					}
 				}
 			}

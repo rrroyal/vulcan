@@ -9,7 +9,6 @@ import SwiftUI
 
 /// View showing list of available color schemes.
 struct ColorSchemeSettingsView: View {
-	@EnvironmentObject var settings: SettingsModel
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) var colorScheme: String = "Default"
 	
 	var body: some View {

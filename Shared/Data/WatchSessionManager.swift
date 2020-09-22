@@ -20,19 +20,20 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 		super.init()
 	}
 	
+	#if os(iOS)
 	var initData: [String: Any] {
 		get {
 			[
 				"type": "UserDefaults",
 				"data": [
 					UserDefaults.AppKeys.isLoggedIn.rawValue: ud.bool(forKey: UserDefaults.AppKeys.isLoggedIn.rawValue),
-					UserDefaults.AppKeys.userGroup.rawValue: ud.integer(forKey: UserDefaults.AppKeys.userGroup.rawValue),
 					UserDefaults.AppKeys.colorScheme.rawValue: ud.string(forKey: UserDefaults.AppKeys.colorScheme.rawValue) ?? "Default",
 					UserDefaults.AppKeys.colorizeGrades.rawValue: ud.bool(forKey: UserDefaults.AppKeys.colorizeGrades.rawValue),
 				]
 			]
 		}
 	}
+	#endif
 	
 	// MARK: - Delegate functions
 	
@@ -177,6 +178,16 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 		}
 		
 		switch type {
+			#if os(iOS)
+			// Request
+			case "Request":
+				if let requestedData = message["requestedData"] as? String,
+				   requestedData == "initData" {
+					try? self.sendData(initData)
+				}
+			#endif
+				
+			#if os(watchOS)
 			// UserDefaults
 			case "UserDefaults":
 				if let data = message["data"] as? [String: Any] {
@@ -185,21 +196,14 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 						ud.setValue(value, forKey: key)
 					}
 				}
-				
-			// Request
-			case "Request":
-				if let requestedData = message["requestedData"] as? String,
-				   requestedData == "initData" {
-					try? self.sendData(initData)
-				}
-				
+			
+			// Vulcan
 			case "Vulcan":
 				guard let data = message["data"] as? [String: Any] else {
 					return
 				}
 				
 				// Current user
-				#if os(watchOS)
 				if let data = data["currentUser"] as? Data,
 				   let user = try? JSONDecoder().decode(Vulcan.Student.self, from: data) {
 					VulcanStore.shared.setUser(user)
@@ -234,9 +238,9 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 				   let messages = try? JSONDecoder().decode([Vulcan.Message].self, from: data) {
 					VulcanStore.shared.setMessages(messages, tag: .received)
 				}
-				#endif
+			#endif
 				
-			// default
+			// Default
 			default: break
 		}
 	}

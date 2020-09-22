@@ -11,9 +11,8 @@ import AppNotifications
 
 /// Home view, containing dashboard for user
 struct HomeView: View {
-	@EnvironmentObject private var vulcan: Vulcan
+	@ObservedObject private var vulcan: Vulcan = Vulcan.shared
 	
-	@AppStorage(UserDefaults.AppKeys.userGroup.rawValue, store: .group) public var userGroup: Int = 0
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) private var colorScheme: String = "Default"
 	@AppStorage(UserDefaults.AppKeys.colorizeGrades.rawValue, store: .group) private var colorizeGrades: Bool = true
 	
@@ -39,14 +38,14 @@ struct HomeView: View {
 	var currentLesson: Vulcan.ScheduleEvent? {
 		vulcan.schedule
 			.flatMap(\.events)
-			.filter { $0.group ?? userGroup == userGroup }
+			.filter { $0.userSchedule }
 			.first(where: { $0.isCurrent ?? false })
 	}
 	
 	var nextLesson: Vulcan.ScheduleEvent? {
 		vulcan.schedule
 			.flatMap(\.events)
-			.filter { $0.group ?? userGroup == userGroup }
+			.filter { $0.userSchedule }
 			.first(where: {
 				guard let dateStarts = $0.dateStarts else {
 					return false
@@ -325,7 +324,7 @@ struct HomeView: View {
 			notesSection
 		}
 		.listStyle(InsetGroupedListStyle())
-		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply).environmentObject(vulcan) })
+		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply) })
 		.onAppear {
 			if vulcan.currentUser == nil {
 				return

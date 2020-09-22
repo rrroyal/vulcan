@@ -10,7 +10,6 @@ import Vulcan
 
 struct ScheduleEventCell: View {
 	let event: Vulcan.ScheduleEvent
-	let group: Int
 	
     var body: some View {
 		VStack(alignment: .leading) {

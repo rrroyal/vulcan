@@ -68,7 +68,7 @@
         <attribute name="divisionShort" optional="YES" attributeType="String"/>
         <attribute name="employeeID" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="entry" attributeType="String" spotlightIndexingEnabled="YES"/>
-        <attribute name="id" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="subjectID" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="type" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
@@ -96,7 +96,7 @@
         <attribute name="dateEpoch" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="employeeID" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="entry" attributeType="String" spotlightIndexingEnabled="YES"/>
-        <attribute name="id" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="studentID" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="subjectID" attributeType="Integer 16" usesScalarValueType="YES"/>
     </entity>
@@ -194,9 +194,9 @@
         <element name="DictionarySubject" positionX="-254.2734375" positionY="122.9296875" width="128" height="118"/>
         <element name="StoredEndOfTermGrade" positionX="-103.3046875" positionY="-77.24609375" width="128" height="74"/>
         <element name="StoredEndOfTermPoints" positionX="-108" positionY="36" width="128" height="74"/>
-        <element name="StoredExam" positionX="-103.98828125" positionY="-125.1015625" width="128" height="179"/>
+        <element name="StoredExam" positionX="-103.98828125" positionY="-125.1015625" width="128" height="193"/>
         <element name="StoredGrade" positionX="-102.76171875" positionY="-27.13671875" width="128" height="299"/>
-        <element name="StoredHomework" positionX="-104.8828125" positionY="21.89453125" width="128" height="119"/>
+        <element name="StoredHomework" positionX="-104.8828125" positionY="21.89453125" width="128" height="133"/>
         <element name="StoredMessage" positionX="-108" positionY="36" width="128" height="194"/>
         <element name="StoredNote" positionX="-104.33203125" positionY="71.1640625" width="128" height="223"/>
         <element name="StoredPresence" positionX="-104.53515625" positionY="121.52734375" width="128" height="104"/>

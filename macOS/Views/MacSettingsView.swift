@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct MacSettingsView: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
-	
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }

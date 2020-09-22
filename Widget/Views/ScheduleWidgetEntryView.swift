@@ -26,6 +26,6 @@ struct ScheduleWidgetEntryView: View {
 
 struct ScheduleWidgetEntryView_Previews: PreviewProvider {
     static var previews: some View {
-		ScheduleWidgetEntryView(entry: .init(date: Date(), configuration: .init(), event: nil))
+		ScheduleWidgetEntryView(entry: .init(date: Date(), event: nil))
     }
 }

@@ -17,6 +17,6 @@ struct LargeScheduleWidgetView: View {
 
 struct LargeScheduleWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-        LargeScheduleWidgetView(entry: .init(date: Date(), configuration: .init(), event: nil))
+        LargeScheduleWidgetView(entry: .init(date: Date(), event: nil))
     }
 }

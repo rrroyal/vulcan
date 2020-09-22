@@ -16,7 +16,7 @@ public extension UserDefaults {
 		case enableTaskNotifications = "enableTaskNotifications"
 		case colorizeGrades = "colorizeGrades"
 		case hapticFeedback = "hapticFeedback"
-		case userGroup = "userGroup"
+		case showAllScheduleEvents = "showAllScheduleEvents"
 		case colorScheme = "colorScheme"
 		case dictionaryLastFetched = "dictionaryLastFetched"
 		case userID = "userID"

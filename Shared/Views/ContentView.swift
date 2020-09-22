@@ -10,10 +10,6 @@ import Vulcan
 
 /// Main view
 struct ContentView: View {
-	@EnvironmentObject var appState: AppState
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
-	
 	@Binding var currentTab: Tab
 	
 	#if os(iOS)
@@ -25,7 +21,7 @@ struct ContentView: View {
 	
 	/// Runs after the view displays (which is shortly after the initialization) and displays the onboarding.
 	private func loadView() {
-		if (!settings.launchedBefore) {
+		if (!SettingsModel.shared.launchedBefore) {
 			isOnboardingVisible = true
 		}
 	}
@@ -39,18 +35,11 @@ struct ContentView: View {
 			#endif
 		}
 		.sheet(isPresented: $isOnboardingVisible, onDismiss: {
-			settings.launchedBefore = true
+			SettingsModel.shared.launchedBefore = true
 		}) {
 			OnboardingView(isPresented: $isOnboardingVisible)
-				.environmentObject(vulcan)
 		}
 		.onAppear(perform: loadView)
-		/* .onReceive(appDelegate?.notificationPublisher) { (data) in
-			self.isNotificationVisible = data
-			/* if (data && notificationData.autodismisses) {
-				instantiateTimer()
-			} */
-		} */
 	}
 }
 

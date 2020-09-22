@@ -9,8 +9,8 @@ import SwiftUI
 import Vulcan
 
 struct AppSidebarNavigation: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
+	@ObservedObject var vulcan: Vulcan = Vulcan.shared
+	@ObservedObject var settings: SettingsModel = SettingsModel.shared
 	@State private var currentTab: Set<Tab> = [.home]
 	
 	private var sidebar: some View {
