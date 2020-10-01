@@ -9,7 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct ScheduleView: View {
-	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
+	@EnvironmentObject var vulcanStore: VulcanStore
 	
 	let date: Date = Date()
 	

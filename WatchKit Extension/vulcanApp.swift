@@ -18,6 +18,7 @@ struct vulcanApp: App {
             NavigationView {
                 ContentView()
 					.navigationTitle(Text("vulcan"))
+					.environmentObject(vulcanStore)
             }
         }
 

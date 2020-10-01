@@ -9,7 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct ContentView: View {
-	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
+	@EnvironmentObject var vulcanStore: VulcanStore
 		
 	var messagesEmoji: String {
 		(vulcanStore.receivedMessages).contains(where: { !$0.hasBeenRead }) ? "📫" : "📪"

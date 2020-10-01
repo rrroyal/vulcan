@@ -11,7 +11,7 @@ import AppNotifications
 
 /// Home view, containing dashboard for user
 struct HomeView: View {
-	@ObservedObject private var vulcan: Vulcan = Vulcan.shared
+	@EnvironmentObject private var vulcan: Vulcan
 	
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) private var colorScheme: String = "Default"
 	@AppStorage(UserDefaults.AppKeys.colorizeGrades.rawValue, store: .group) private var colorizeGrades: Bool = true
@@ -57,12 +57,12 @@ struct HomeView: View {
 	
 	var newExams: [Vulcan.Exam] {
 		vulcan.tasks.exams
-			.filter { $0.date >= Date().startOfWeek ?? Date().startOfMonth && $0.date <= Date().endOfWeek ?? Date().endOfMonth }
+			.filter { $0.date.endOfDay >= Date() }
 	}
 	
 	var newHomework: [Vulcan.Homework] {
 		vulcan.tasks.homework
-			.filter { $0.date >= Date().startOfWeek ?? Date().startOfMonth && $0.date <= Date().endOfWeek ?? Date().endOfMonth }
+			.filter { $0.date.endOfDay >= Date() }
 	}
 	
 	var newMessages: [Vulcan.Message] {

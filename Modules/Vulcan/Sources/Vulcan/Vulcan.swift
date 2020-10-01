@@ -946,14 +946,11 @@ public final class Vulcan: ObservableObject {
 							completionHandler(nil)
 
 							if self.ud.bool(forKey: UserDefaults.AppKeys.enableScheduleNotifications.rawValue) {
-								
 								self.schedule
 									.flatMap(\.events)
 									.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
 									.filter { $0.userSchedule }
-									.forEach { event in
-										self.addScheduleEventNotification(event)
-									}
+									.forEach(self.addScheduleEventNotification)
 							}
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
@@ -1126,8 +1123,11 @@ public final class Vulcan: ObservableObject {
 								.filter { $0.subjectID == subject.id }
 							
 							let subjectGrades = Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
-							let currentSubjectGradesCount: Int? = self.grades.first(where: { $0.subject.id == subject.id })?.grades.count
-							subjectGrades.hasNewItems = grades.count != (currentSubjectGradesCount ?? -1)
+							if let currentSubjectGrades = self.grades.first(where: { $0.subject.id == subject.id })?.grades {
+								subjectGrades.hasNewItems = grades.map(\.entry) != currentSubjectGrades.map(\.entry)
+							} else {
+								subjectGrades.hasNewItems = true
+							}
 							
 							return subjectGrades
 						}
@@ -1471,6 +1471,20 @@ public final class Vulcan: ObservableObject {
 							self.tasks = tempTasks
 							self.dataState.tasks.lastFetched = Date()
 							completionHandler(nil)
+							
+							if self.ud.bool(forKey: UserDefaults.AppKeys.enableTaskNotifications.rawValue) {
+								tempTasks.exams
+									.filter { $0.date >= Date() }
+									.forEach { task in
+										self.addTaskNotification(task, type: task.type)
+									}
+								
+								tempTasks.homework
+									.filter { $0.date >= Date() }
+									.forEach { task in
+										self.addTaskNotification(task)
+									}
+							}
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
 							completionHandler(error)
@@ -1504,20 +1518,6 @@ public final class Vulcan: ObservableObject {
 						}
 					
 					tempTasks = Vulcan.Tasks(exams: exams, homework: homework)
-					
-					if self.ud.bool(forKey: UserDefaults.AppKeys.enableTaskNotifications.rawValue) {
-						exams
-							.filter { $0.date >= Date() }
-							.forEach { task in
-								self.addTaskNotification(task, type: task.type)
-							}
-						
-						homework
-							.filter { $0.date >= Date() }
-							.forEach { task in
-								self.addTaskNotification(task)
-							}
-					}
 					
 					if (isPersistent) {
 						do {
@@ -1665,12 +1665,81 @@ public final class Vulcan: ObservableObject {
 	
 	/// Moves a message to specified folder.
 	/// - Parameters:
-	///   - messageID: Message ID
-	///   - tag: Message tag
+	///   - message: Message
 	///   - folder: Folder to move the message to
 	///   - completionHandler: Callback
-	public func moveMessage(messageID: Int, tag: Vulcan.MessageTag, folder: Vulcan.MessageFolder, completionHandler: @escaping (Error?) -> () = { _  in }) {
+	public func moveMessage(message: Vulcan.Message, to folder: Vulcan.MessageFolder, completionHandler: @escaping (Error?) -> () = { _  in }) {
+		// Return if no user
+		guard let user: Vulcan.Student = self.currentUser else {
+			completionHandler(APIError.error(reason: "Not logged in"))
+			return
+		}
 		
+		// Return if no endpoint URL
+		guard let endpointURL: String = self.endpointURL else {
+			completionHandler(APIError.error(reason: "No endpoint"))
+			return
+		}
+		
+		let logger: Logger = Logger(subsystem: "Vulcan", category: "Messages")
+		logger.debug("Moving a message with ID \(message.id, privacy: .sensitive) to folder \"\(folder.rawValue)\"...")
+		
+		var request: URLRequest = URLRequest(url: URL(string: "\(endpointURL)\(user.reportingUnitSymbol)/mobile-api/Uczen.v3.Uczen/ZmienStatusWiadomosci")!)
+		
+		let body: [String: Any] = [
+			"WiadomoscId": message.id,
+			"FolderWiadomosci": message.folder,
+			"Status": folder.rawValue,
+			"LoginId": user.userLoginID,
+			"IdUczen": user.id,
+		]
+		
+		let bodyData = try? JSONSerialization.data(withJSONObject: body)
+		request.httpBody = bodyData
+		
+		do {
+			try self.request(request)
+				.receive(on: DispatchQueue.main)
+				.tryMap { data -> [String: Any] in
+					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+						throw APIError.error(reason: "Error serializing JSON")
+					}
+										
+					return json
+				}
+				.sink(receiveCompletion: { completion in
+					switch completion {
+						case .finished:
+							completionHandler(nil)
+						case .failure(let error):
+							logger.error("\(error.localizedDescription)")
+							completionHandler(error)
+					}
+				}, receiveValue: { response in
+					let success: Bool = (response["Status"] as? String ?? "").lowercased() == "ok"
+					logger.debug("Received a response with status \"\(response["Status"] as? String ?? "<none>")\".")
+					
+					if success {
+						switch folder {
+							case .deleted:
+								self.messages[message.tag ?? .received]?.removeAll(where: { $0.id == message.id })
+								let message = message
+								message.folder = folder.rawValue
+								message.tag = .deleted
+								self.messages[.deleted]?.append(message)
+							case .read:		self.messages.flatMap(\.value).first(where: { $0.id == message.id })?.hasBeenRead = true
+						}
+						
+						completionHandler(nil)
+					} else {
+						completionHandler(APIError.error(reason: response["Status"] as? String ?? "Unknown error"))
+					}
+				})
+				.store(in: &cancellableSet)
+		} catch {
+			logger.error("\(error.localizedDescription)")
+			completionHandler(error)
+		}
 	}
 	
 	/// Sends a new message to specified recipients.
@@ -1680,7 +1749,70 @@ public final class Vulcan: ObservableObject {
 	///   - content: Message content
 	///   - completionHandler: Callback
 	public func sendMessage(to recipients: [Vulcan.Recipient], title: String, content: String, completionHandler: @escaping (Error?) -> () = { _  in }) {
+		// Return if no user
+		guard let user: Vulcan.Student = self.currentUser else {
+			completionHandler(APIError.error(reason: "Not logged in"))
+			return
+		}
 		
+		// Return if no endpoint URL
+		guard let endpointURL: String = self.endpointURL else {
+			completionHandler(APIError.error(reason: "No endpoint"))
+			return
+		}
+		
+		let logger: Logger = Logger(subsystem: "Vulcan", category: "Messages")
+		logger.debug("Sending a message with title \(title, privacy: .sensitive) to recipients with ID(s) \(recipients.map(\.id))...")
+		
+		var request: URLRequest = URLRequest(url: URL(string: "\(endpointURL)\(user.reportingUnitSymbol)/mobile-api/Uczen.v3.Uczen/DodajWiadomosc")!)
+		
+		let body: [String: Any] = [
+			"NadawcaWiadomosci": "\(user.surname) \(user.name)",
+			"Tytul": title,
+			"Tresc": content,
+			"Adresaci": recipients.map { recipient in
+				[
+					"LoginId": recipient.id,
+					"Nazwa": recipient.name
+				]
+			},
+			"LoginId": user.userLoginID,
+			"IdUczen": user.id,
+
+		]
+		
+		let bodyData = try? JSONSerialization.data(withJSONObject: body)
+		request.httpBody = bodyData
+		
+		do {
+			try self.request(request)
+				.receive(on: DispatchQueue.main)
+				.tryMap { data -> [String: Any] in
+					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+						throw APIError.error(reason: "Error serializing JSON")
+					}
+					
+					return json
+				}
+				.sink(receiveCompletion: { completion in
+					switch completion {
+						case .finished:
+							completionHandler(nil)
+						case .failure(let error):
+							logger.error("\(error.localizedDescription)")
+							completionHandler(error)
+					}
+				}, receiveValue: { response in
+					let success: Bool = (response["Status"] as? String ?? "").lowercased() == "ok"
+					logger.debug("Received a response with status \"\(response["Status"] as? String ?? "<none>")\".")
+					
+					completionHandler(success ? nil : APIError.error(reason: response["Status"] as? String ?? "Unknown error"))
+				})
+				.store(in: &cancellableSet)
+		} catch {
+			logger.error("\(error.localizedDescription)")
+			completionHandler(error)
+		}
 	}
 		
 	// MARK: - Utilities
@@ -1690,7 +1822,7 @@ public final class Vulcan: ObservableObject {
 	///   - request: URLRequest, modified inside
 	///   - sign: Should we sign the data?
 	/// - Returns: AnyPublisher<Data, Error>
-	public func request(_ request: URLRequest, sign: Bool = true) throws -> AnyPublisher<Data, Error> {
+	private func request(_ request: URLRequest, sign: Bool = true) throws -> AnyPublisher<Data, Error> {
 		let logger: Logger = Logger(subsystem: "Vulcan", category: "Request")
 		
 		// Check reachability

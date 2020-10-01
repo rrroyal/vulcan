@@ -28,7 +28,7 @@
 // MARK: OnboardingView.swift
 "Welcome to" = "Welcome to";
 "ONBOARDING_FUNCTION1_TITLE" = "Make use of the platform";
-"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgets, Watch app, dark mode - you name it.";
+"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgets,  Watch app, dark mode - you name it.";
 "ONBOARDING_FUNCTION2_TITLE" = "Get reminded";
 "ONBOARDING_FUNCTION2_DESCRIPTION" = "App will remind you about the next classes, new messages, grades, etc.";
 "ONBOARDING_FUNCTION3_TITLE" = "Made by a student";
@@ -116,10 +116,9 @@
 "SETTINGS_SCHEDULENOTIFICATIONS_TOOLTIP" = "App will remind you about the next lesson at the end of the previous one.";
 "SETTINGS_TASKNOTIFICATIONS" = "Tasks notifications";
 "SETTINGS_TASKNOTIFICATIONS_TOOLTIP" = "App will remind you about tasks day before.";
-
 "Interface" = "Interface";
-"SETTINGS_FILTERSCHEDULE" = "Filter schedule";
-"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Schedule will only show the selected day.";
+"SETTINGS_FILTERSCHEDULE" = "Show only the selected day";
+"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Schedule will only show the selected day, not the whole week.";
 "SETTINGS_COLORIZEGRADES" = "Colorize grades";
 "SETTINGS_COLORIZEGRADES_TOOLTIP" = "Grade labels will be colored.";
 "SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";

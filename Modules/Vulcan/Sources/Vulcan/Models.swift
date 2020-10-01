@@ -1129,10 +1129,10 @@ public extension Vulcan {
 		public let title: String
 		public let content: String
 		public let dateSentEpoch: Int
-		public let dateReadEpoch: Int?
+		public var dateReadEpoch: Int?
 		public let status: String
-		public let folder: String
-		public let read: String?	// Int?
+		public var folder: String
+		public var read: String?	// Int?
 		
 		public var tag: Vulcan.MessageTag?
 		
@@ -1141,23 +1141,38 @@ public extension Vulcan {
 		}
 		
 		public var dateRead: Date? {
-			guard let date = dateReadEpoch else {
-				return nil
+			get {
+				guard let date = dateReadEpoch else {
+					return nil
+				}
+				
+				return Date(timeIntervalSince1970: TimeInterval(date))
 			}
 			
-			return Date(timeIntervalSince1970: TimeInterval(date))
+			set(value) {
+				if let timeInterval = value?.timeIntervalSince1970 {
+					self.dateReadEpoch = Int(timeInterval)
+				}
+			}
 		}
 		
-		public var hasBeenRead: Bool {			
-			switch self.read ?? "" {
-				case "0":	return false
-				case "1":	return true
-				default:	break
+		public var hasBeenRead: Bool {
+			get {
+				switch self.read ?? "" {
+					case "0":	return false
+					case "1":	return true
+					default:	break
+				}
+				
+				switch self.dateRead {
+					case nil:	return false
+					default:	return true
+				}
 			}
 			
-			switch self.dateRead {
-				case nil:	return false
-				default:	return true
+			set(value) {
+				self.read = "1"
+				self.dateRead = Date()
 			}
 		}
 		

@@ -37,7 +37,7 @@ struct TaskCell: View {
 				if let type = type {
 					Text("\(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")) • \(task.date.relativeString)")
 				} else {
-					Text(task.date.relativeString)
+					Text(task.date, style: .relative)
 				}				
 			}
 			.font(.callout)

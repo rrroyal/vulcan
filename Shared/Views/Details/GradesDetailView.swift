@@ -11,8 +11,8 @@ import Vulcan
 import CoreData
 
 struct GradesDetailView: View {
-	@ObservedObject var vulcan: Vulcan = Vulcan.shared
-	@ObservedObject var settings: SettingsModel = SettingsModel.shared
+	@EnvironmentObject var vulcan: Vulcan
+	@EnvironmentObject var settings: SettingsModel
 	let subject: Vulcan.SubjectGrades
 		
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) var colorScheme: String = "Default"

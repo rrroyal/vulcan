@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Vulcan
+import AppNotifications
 
 struct MessageCell: View {
 	var message: Vulcan.Message
@@ -90,9 +91,10 @@ struct MessageCell: View {
 			if (!message.hasBeenRead && message.tag != .sent) {
 				Button(action: {
 					generateHaptic(.light)
-					Vulcan.shared.moveMessage(messageID: message.id, tag: message.tag ?? .received, folder: .read) { error in
-						if error != nil {
+					Vulcan.shared.moveMessage(message: message, to: .read) { error in
+						if let error = error {
 							generateHaptic(.error)
+							AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
 						}
 					}
 				}) {
@@ -124,9 +126,10 @@ struct MessageCell: View {
 			if (message.tag == .received || message.tag == .sent) {
 				Button(action: {
 					generateHaptic(.medium)
-					Vulcan.shared.moveMessage(messageID: message.id, tag: message.tag ?? .received, folder: .deleted) { error in
-						if error != nil {
+					Vulcan.shared.moveMessage(message: message, to: .deleted) { error in
+						if let error = error {
 							generateHaptic(.error)
+							AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
 						}
 					}
 				}) {

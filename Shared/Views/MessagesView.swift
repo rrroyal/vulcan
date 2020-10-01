@@ -11,7 +11,7 @@ import AppNotifications
 
 /// View containing the received, sent and deleted messages.
 struct MessagesView: View {
-	@ObservedObject var vulcan: Vulcan = Vulcan.shared
+	@EnvironmentObject var vulcan: Vulcan
 	#if os(iOS)
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	#endif
@@ -49,9 +49,10 @@ struct MessagesView: View {
 		for index in indexSet {
 			if (index <= vulcan.messages.combined.filter({ $0.tag == self.tag }).count) {
 				let message: Vulcan.Message = vulcan.messages.combined.filter({ $0.tag == self.tag })[index]
-				vulcan.moveMessage(messageID: message.id, tag: message.tag ?? tag, folder: .deleted) { error in
-					if error != nil {
+				vulcan.moveMessage(message: message, to: .deleted) { error in
+					if let error = error {
 						generateHaptic(.error)
+						AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
 					}
 				}
 			}
@@ -90,17 +91,26 @@ struct MessagesView: View {
 			
 			Section(header: Text("Folders")) {
 				// Received
-				Button(action: { tag = .received }) {
+				Button(action: {
+					tag = .received
+					fetch()
+				}) {
 					Label("Received", systemImage: tag == .received ? "tray.fill" : "tray")
 				}
 				
 				// Sent
-				Button(action: { tag = .sent }) {
+				Button(action: {
+					tag = .sent
+					fetch()
+				}) {
 					Label("Sent", systemImage: tag == .sent ? "paperplane.fill" : "paperplane")
 				}
 				
 				// Deleted
-				Button(action: { tag = .deleted }) {
+				Button(action: {
+					tag = .deleted
+					fetch()
+				}) {
 					Label("Deleted", systemImage: tag == .deleted ? "trash.fill" : "trash")
 				}
 			}

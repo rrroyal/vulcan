@@ -9,7 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct FinalGradesView: View {
-	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
+	@EnvironmentObject var vulcanStore: VulcanStore
 	
 	let colorizeGrades: Bool = UserDefaults.group.bool(forKey: UserDefaults.AppKeys.colorizeGrades.rawValue)
 	let scheme: String = UserDefaults.group.string(forKey: UserDefaults.AppKeys.colorScheme.rawValue) ?? "Default"

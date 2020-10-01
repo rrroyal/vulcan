@@ -11,7 +11,7 @@ import AppNotifications
 
 /// View containing schedule for the current week.
 struct ScheduleView: View {
-	@ObservedObject var vulcan: Vulcan = Vulcan.shared
+	@EnvironmentObject var vulcan: Vulcan
 	
 	@AppStorage(UserDefaults.AppKeys.showAllScheduleEvents.rawValue, store: .group) public var showAllScheduleEvents: Bool = false
 	@AppStorage(UserDefaults.AppKeys.filterSchedule.rawValue, store: .group) private var filterSchedule: Bool = false

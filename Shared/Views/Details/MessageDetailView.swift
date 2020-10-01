@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Vulcan
+import AppNotifications
 
 struct MessageDetailView: View {
 	var message: Vulcan.Message
@@ -82,9 +83,10 @@ struct MessageDetailView: View {
 		}
 		.onAppear {
 			if (SettingsModel.shared.readMessageOnOpen && Vulcan.shared.currentUser != nil && !message.hasBeenRead) {
-				Vulcan.shared.moveMessage(messageID: message.id, tag: message.tag ?? .received, folder: .read) { error in
-					if error != nil {
+				Vulcan.shared.moveMessage(message: message, to: .read) { error in
+					if let error = error {
 						generateHaptic(.error)
+						AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
 					}
 				}
 			}

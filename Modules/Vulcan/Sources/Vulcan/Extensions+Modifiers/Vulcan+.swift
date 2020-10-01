@@ -36,14 +36,15 @@ public extension VulcanTask {
 				event.notes = self.entry
 				event.calendar = eventStore.defaultCalendarForNewReminders()
 				
-				let alarm = EKAlarm(absoluteDate: self.date)
+				let date: Date = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 9, to: self.date) ?? self.date
+				let alarm = EKAlarm(absoluteDate: date)
 				event.addAlarm(alarm)
 				
 				let predicate = eventStore.predicateForReminders(in: [event.calendar])
 				eventStore.fetchReminders(matching: predicate) { events in
-					let eventAlreadyExists: Bool = events?.contains(where: { $0.title == event.title && $0.notes == event.notes }) ?? false
+					let eventAlreadyExists: Bool = events?.contains(where: { $0.title == event.title && $0.notes == event.notes && $0.alarms == event.alarms }) ?? false
 					
-					if (!eventAlreadyExists) {
+					if !eventAlreadyExists {
 						try? eventStore.save(event, commit: true)
 					}
 				}
@@ -83,7 +84,7 @@ public extension VulcanTask {
 				let existingEvents = eventStore.events(matching: predicate)
 				let eventAlreadyExists = existingEvents.contains(where: { $0.title == event.title && $0.notes == event.notes && $0.startDate == event.startDate && $0.endDate == event.endDate })
 				
-				if (!eventAlreadyExists) {
+				if !eventAlreadyExists {
 					try? eventStore.save(event, span: .thisEvent)
 				}
 			}

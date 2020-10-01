@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TasksView: View {
-	@ObservedObject var vulcanStore: VulcanStore = VulcanStore.shared
+	@EnvironmentObject var vulcanStore: VulcanStore
 	
     var body: some View {
 		List {

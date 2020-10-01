@@ -36,8 +36,8 @@ fileprivate struct SettingsOption: View {
 
 /// List view, containing list with options and NavigationBar NavigationLink to user list.
 struct SettingsView: View {
-	@ObservedObject var vulcan: Vulcan = Vulcan.shared
-	@ObservedObject var settings: SettingsModel = SettingsModel.shared
+	@EnvironmentObject var vulcan: Vulcan
+	@EnvironmentObject var settings: SettingsModel
 	
 	@State private var showingSetupView: Bool = false
 	@State private var showingResetSheet: Bool = false

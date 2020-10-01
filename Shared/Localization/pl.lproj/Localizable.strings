@@ -117,8 +117,8 @@
 "SETTINGS_TASKNOTIFICATIONS" = "Powiadomienia o zadaniach";
 "SETTINGS_TASKNOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o zadaniach dzień wcześniej.";
 "Interface" = "Interfejs";
-"SETTINGS_FILTERSCHEDULE" = "Filtruj plan lekcji";
-"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Plan lekcji będzie pokazywał tylko wybrany dzień.";
+"SETTINGS_FILTERSCHEDULE" = "Pokazuj tylko wybrany dzień";
+"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Plan lekcji zamiast pokazywać całego tygodnia będzie pokazywał tylko wybrany dzień.";
 "SETTINGS_COLORIZEGRADES" = "Koloruj oceny";
 "SETTINGS_COLORIZEGRADES_TOOLTIP" = "Etykiety ocen będą kolorowe.";
 "SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";

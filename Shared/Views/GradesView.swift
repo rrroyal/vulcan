@@ -11,8 +11,8 @@ import AppNotifications
 
 /// Grades view, showing subject NavigationLinks to grades.
 struct GradesView: View {
-	@ObservedObject var vulcan: Vulcan = Vulcan.shared
-	@ObservedObject var settings: SettingsModel = SettingsModel.shared
+	@EnvironmentObject var vulcan: Vulcan
+	@EnvironmentObject var settings: SettingsModel
 	#if os(iOS)
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	#endif

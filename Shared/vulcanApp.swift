@@ -13,7 +13,6 @@ import AppNotifications
 struct vulcanApp: App {
 	@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 	@Environment(\.scenePhase) private var scenePhase
-	@StateObject private var appState: AppState = AppState.shared
 	@StateObject private var vulcan: Vulcan = Vulcan.shared
 	@StateObject private var settings: SettingsModel = SettingsModel.shared
 	@StateObject private var appNotifications: AppNotifications = AppNotifications.shared
@@ -24,6 +23,9 @@ struct vulcanApp: App {
         WindowGroup {
             ContentView(currentTab: $currentTab)
 				.environment(\.managedObjectContext, CoreDataModel.shared.persistentContainer.viewContext)
+				.environmentObject(vulcan)
+				.environmentObject(settings)
+				.environmentObject(appNotifications)
 				.defaultAppStorage(.group)
 				.notificationOverlay($appNotifications.notificationData)
 				.onChange(of: scenePhase) { (newPhase) in
