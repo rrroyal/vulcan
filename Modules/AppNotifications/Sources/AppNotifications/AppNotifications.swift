@@ -64,7 +64,11 @@ public struct NotificationData: Identifiable, Equatable {
 	
 	var backgroundColor: Color {
 		switch (self.style) {
+			#if os(macOS)
+			case .normal:		return Color(NSColor.controlBackgroundColor)
+			#else
 			case .normal:		return Color(UIColor.tertiarySystemBackground)
+			#endif
 			case .information:	return Color.blue.opacity(0.1)
 			case .warning:		return Color.orange.opacity(0.1)
 			case .error:		return Color.red.opacity(0.1)

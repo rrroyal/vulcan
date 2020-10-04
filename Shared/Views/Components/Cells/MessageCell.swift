@@ -67,7 +67,7 @@ struct MessageCell: View {
 				.foregroundColor(Color(UIColor.gray))
 		}
 		.padding(.vertical, 10)
-		.opacity(message.hasBeenRead ? 0.75 : 1)
+		.opacity(message.hasBeenRead ? 0.5 : 1)
 		.onDrag {
 			var string: String = ""
 			string += "Od: \(message.sender ?? "Unknown sender")\n"

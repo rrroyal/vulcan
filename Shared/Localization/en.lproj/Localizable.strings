@@ -123,8 +123,6 @@
 "SETTINGS_COLORIZEGRADES_TOOLTIP" = "Grade labels will be colored.";
 "SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
 "SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "If you don't like Haptic Feedback as much as I do, you might want to turn this off.";
-"SETTINGS_AUTOMATICREFRESH" = "Realtime data";
-"SETTINGS_AUTOMATICREFRESH_TOOLTIP" = "App data will be refreshed in realtime, but battery usage will be higher too. This doesn't work with Low Power mode enabled.";
 
 "Other" = "Other";
 "Reset user settings" = "Reset user settings";

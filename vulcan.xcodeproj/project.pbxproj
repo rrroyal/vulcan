@@ -92,6 +92,7 @@
 		E704C12D24F9A1F90036073F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E704C12C24F9A1F90036073F /* LaunchScreen.storyboard */; };
 		E704C12E24F9A1F90036073F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E704C12C24F9A1F90036073F /* LaunchScreen.storyboard */; };
 		E71374932501825D000EA663 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E71374952501825D000EA663 /* Localizable.strings */; };
+		E71A45D225263492003176B3 /* AppNotifications in Frameworks */ = {isa = PBXBuildFile; productRef = E71A45D125263492003176B3 /* AppNotifications */; };
 		E722C3F525020EDB0087C007 /* HomeCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E722C3F425020EDB0087C007 /* HomeCardCell.swift */; };
 		E723FAC92518F02700DD8184 /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E723FAC82518F02700DD8184 /* AppIconView.swift */; };
 		E723FAD02518F05500DD8184 /* ColorSchemeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E723FACF2518F05500DD8184 /* ColorSchemeSettingsView.swift */; };
@@ -325,6 +326,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E71A45D225263492003176B3 /* AppNotifications in Frameworks */,
 				00FAC9D924A3D8F300ACAC83 /* KeychainAccess in Frameworks */,
 				E7A419AC24FA5A7400FC55D6 /* Vulcan in Frameworks */,
 			);
@@ -741,6 +743,7 @@
 			packageProductDependencies = (
 				00FAC9D824A3D8F300ACAC83 /* KeychainAccess */,
 				E7A419AB24FA5A7400FC55D6 /* Vulcan */,
+				E71A45D125263492003176B3 /* AppNotifications */,
 			);
 			productName = macOS;
 			productReference = 0088EB6724A37BB7006F044E /* vulcan.app */;
@@ -1246,9 +1249,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan;
 				PRODUCT_NAME = vulcan;
 				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -1274,9 +1278,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan;
 				PRODUCT_NAME = vulcan;
 				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1299,7 +1304,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan;
 				PRODUCT_NAME = vulcan;
@@ -1326,7 +1331,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan;
 				PRODUCT_NAME = vulcan;
@@ -1568,6 +1573,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 00FAC9D324A3D8E800ACAC83 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		E71A45D125263492003176B3 /* AppNotifications */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppNotifications;
 		};
 		E7518A3125012D5500135D55 /* Vulcan */ = {
 			isa = XCSwiftPackageProductDependency;

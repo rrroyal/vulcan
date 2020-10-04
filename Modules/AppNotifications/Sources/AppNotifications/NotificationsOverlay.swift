@@ -46,6 +46,14 @@ public struct NotificationOverlay: View {
 		return translation.height
 	}
 	
+	private var backgroundColor: Color {
+		#if os(macOS)
+		return Color(NSColor.windowBackgroundColor)
+		#else
+		return Color(UIColor.systemBackground)
+		#endif
+	}
+	
 	@ViewBuilder public var body: some View {
 		if let notificationData: NotificationData = notificationData {
 			VStack {
@@ -101,7 +109,7 @@ public struct NotificationOverlay: View {
 				.padding(.vertical, 5)
 				.mask(RoundedRectangle(cornerRadius: 14, style: .circular))
 				.background(notificationData.backgroundColor)
-				.background(Color(UIColor.systemBackground))
+				.background(backgroundColor)
 				.mask(RoundedRectangle(cornerRadius: 14, style: .circular))
 				.shadow(color: notificationData.primaryColor == .primary ? Color.black.opacity(0.1) : notificationData.backgroundColor, radius: 20, x: 0, y: 0)
 				.gesture(
@@ -113,7 +121,9 @@ public struct NotificationOverlay: View {
 							if (value.translation.height > 20) {
 								// Expand
 								if (notificationData.expandedText != nil) {
+									#if os(iOS)
 									UIImpactFeedbackGenerator(style: .light).impactOccurred()
+									#endif
 									isExpanded.toggle()
 								}
 							} else if (value.translation.height < -20) {
@@ -127,7 +137,9 @@ public struct NotificationOverlay: View {
 				)
 				.onTapGesture {
 					if (notificationData.expandedText != nil) {
+						#if os(iOS)
 						UIImpactFeedbackGenerator(style: .light).impactOccurred()
+						#endif
 						isExpanded.toggle()
 						if (notificationData.autodismisses) {
 							if (isExpanded) {
@@ -144,7 +156,8 @@ public struct NotificationOverlay: View {
 			}
 			.padding(.horizontal, 10)
 			.padding(.top)
-			.offset(x: 0, y: isPresented ? yOffset : -(UIScreen.main.bounds.height / 4.75))
+			.offset(x: 0, y: isPresented ? yOffset : -200)
+			.opacity(isPresented ? 1 : 0)
 			.animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 10, initialVelocity: 0))
 			.transition(.slide)
 			.frame(maxWidth: 500)

@@ -118,13 +118,11 @@
 "SETTINGS_TASKNOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o zadaniach dzień wcześniej.";
 "Interface" = "Interfejs";
 "SETTINGS_FILTERSCHEDULE" = "Pokazuj tylko wybrany dzień";
-"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Plan lekcji zamiast pokazywać całego tygodnia będzie pokazywał tylko wybrany dzień.";
+"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Plan lekcji zamiast pokazywać cały tydzień będzie pokazywał tylko wybrany dzień.";
 "SETTINGS_COLORIZEGRADES" = "Koloruj oceny";
 "SETTINGS_COLORIZEGRADES_TOOLTIP" = "Etykiety ocen będą kolorowe.";
 "SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
 "SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "Jeśli nie lubisz Haptic Feedback'u tak bardzo jak ja, możesz go wyłączyć.";
-"SETTINGS_AUTOMATICREFRESH" = "Dane w czasie rzeczywistym";
-"SETTINGS_AUTOMATICREFRESH_TOOLTIP" = "Dane aplikacji będą odświeżane w czasie rzeczywistym, ale zużycie baterii wzrośnie. Ta funkcja nie działa kiedy włączony jest tryb niskiego zużycia energii.";
 
 "Other" = "Inne";
 "Reset user settings" = "Resetuj";

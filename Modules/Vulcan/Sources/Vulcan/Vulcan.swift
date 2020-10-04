@@ -234,31 +234,33 @@ public final class Vulcan: ObservableObject {
 			// Exams
 			if let storedExams = try? context.fetch(StoredExam.fetchRequest()) as? [StoredExam] {
 				self.tasks.exams = storedExams
-					.compactMap { exam in
-						Exam(from: exam)
-					}
-					.map { exam in
+					.compactMap { storedExam in
+						guard let exam = Exam(from: storedExam) else {
+							return nil
+						}
+						
 						exam.subject = dictionarySubjects.first(where: { $0.id == exam.subjectID })
 						exam.employee = dictionaryEmployees.first(where: { $0.id == exam.employeeID })
 						
 						return exam
 					}
-					.sorted { $0.dateEpoch < $1.dateEpoch }
+					.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
 			}
 			
 			// Homework
 			if let storedHomework = try? context.fetch(StoredHomework.fetchRequest()) as? [StoredHomework] {
 				self.tasks.homework = storedHomework
-					.compactMap { task in
-						Homework(from: task)
-					}
-					.map { task in
-						task.subject = dictionarySubjects.first(where: { $0.id == task.subjectID })
-						task.employee = dictionaryEmployees.first(where: { $0.id == task.employeeID })
+					.compactMap { storedHomework in
+						guard let homework = Homework(from: storedHomework) else {
+							return nil
+						}
 						
-						return task
+						homework.subject = dictionarySubjects.first(where: { $0.id == homework.subjectID })
+						homework.employee = dictionaryEmployees.first(where: { $0.id == homework.employeeID })
+						
+						return homework
 					}
-					.sorted { $0.dateEpoch < $1.dateEpoch }
+					.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
 			}
 			
 			// Messages
@@ -1500,26 +1502,26 @@ public final class Vulcan: ObservableObject {
 					}
 					
 					let exams: [Vulcan.Exam] = exams
-						.sorted { $0.dateEpoch < $1.dateEpoch }
 						.map { exam in
 							exam.subject = dictionarySubjects.first(where: { $0.id == exam.subjectID })
 							exam.employee = dictionaryEmployees.first(where: { $0.id == exam.employeeID })
 							
 							return exam
 						}
+						.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
 					
 					let homework: [Vulcan.Homework] = homework
-						.sorted { $0.dateEpoch < $1.dateEpoch }
 						.map { task in
 							task.subject = dictionarySubjects.first(where: { $0.id == task.subjectID })
 							task.employee = dictionaryEmployees.first(where: { $0.id == task.employeeID })
 							
 							return task
 						}
+						.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
 					
 					tempTasks = Vulcan.Tasks(exams: exams, homework: homework)
 					
-					if (isPersistent) {
+					if isPersistent {
 						do {
 							try context.execute(NSBatchDeleteRequest(fetchRequest: StoredExam.fetchRequest()))
 							try context.execute(NSBatchDeleteRequest(fetchRequest: StoredHomework.fetchRequest()))
