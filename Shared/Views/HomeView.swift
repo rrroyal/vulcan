@@ -326,12 +326,13 @@ struct HomeView: View {
 		.listStyle(InsetGroupedListStyle())
 		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply) })
 		.onAppear {
-			if vulcan.currentUser == nil {
+			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
 				return
 			}
 			
 			// Notes
-			if (vulcan.dataState.notes.lastFetched ?? Date(timeIntervalSince1970: 0)) > (Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: Date()) ?? Date()) {
+			let notesNextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.notes.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
+			if notesNextFetch <= Date() {
 				vulcan.getNotes() { error in
 					if let error = error {
 						generateHaptic(.error)
@@ -341,7 +342,8 @@ struct HomeView: View {
 			}
 			
 			// EOT Grades
-			if (vulcan.dataState.eotGrades.lastFetched ?? Date(timeIntervalSince1970: 0)) > (Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: Date()) ?? Date()) {
+			let eotGradesNextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.eotGrades.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
+			if eotGradesNextFetch <= Date() {
 				vulcan.getEndOfTermGrades() { error in
 					if let error = error {
 						generateHaptic(.error)

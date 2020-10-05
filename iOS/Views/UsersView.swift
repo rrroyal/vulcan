@@ -33,12 +33,12 @@ struct UsersView: View {
 					
 					Spacer()
 					
-					if (user == vulcan.currentUser) {
+					if user == vulcan.currentUser {
 						Image(systemName: "checkmark")
+							.foregroundColor(.accentColor)
 					}
 				}
 			}
-			.accentColor(user == vulcan.currentUser ? Color("AccentColor") : .primary)	// Because of God knows why `.accentColor` doesn't work here - so `Color("AccentColor")` it is ¯\_(ツ)_/¯
 			.padding(.vertical, 10)
 		}
 		.listStyle(InsetGroupedListStyle())

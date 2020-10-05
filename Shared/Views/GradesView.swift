@@ -89,11 +89,12 @@ struct GradesView: View {
 			}
 		}
 		.onAppear {
-			if (AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil) {
+			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
 				return
 			}
 			
-			if (!vulcan.dataState.grades.fetched || (vulcan.dataState.grades.lastFetched ?? Date(timeIntervalSince1970: 0)) > (Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: Date()) ?? Date())) {
+			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.grades.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
+			if nextFetch <= Date() {
 				fetch()
 			}
 		}

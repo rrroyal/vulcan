@@ -24,18 +24,28 @@ struct TasksView: View {
 		if (vulcan.dataState.tasks.loading) {
 			return
 		}
-				
+		
 		let previousDate: Date = self.date
 		let startDate: Date = date.startOfMonth
 		let endDate: Date = date.endOfMonth
 		
-		vulcan.getTasks(isPersistent: (date.startOfWeek ?? date.startOfDay) == (Date().startOfWeek ?? Date().startOfDay), from: startDate, to: endDate) { error in
+		vulcan.getTasks(isPersistent: self.date.startOfMonth <= Date() && self.date.endOfMonth >= Date(), from: startDate, to: endDate) { error in
 			if let error = error {
 				generateHaptic(.error)
 				self.date = previousDate
 				AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
 			}
 		}
+	}
+	
+	private var exams: [Vulcan.Exam] {
+		vulcan.tasks.exams
+			.filter { $0.date >= Date().startOfMonth && $0.date <= Date().endOfMonth }
+	}
+	
+	private var homework: [Vulcan.Homework] {
+		vulcan.tasks.homework
+			.filter { $0.date >= Date().startOfMonth && $0.date <= Date().endOfMonth }
 	}
 	
 	/// Date picker
@@ -50,8 +60,8 @@ struct TasksView: View {
 		List {
 			// Exams
 			Section(header: Text("Exams").textCase(.none)) {
-				if (vulcan.tasks.exams.count > 0) {
-					ForEach(vulcan.tasks.exams) { (task) in
+				if (exams.count > 0) {
+					ForEach(exams) { task in
 						TaskCell(task: task, type: task.type)
 					}
 				} else {
@@ -64,8 +74,8 @@ struct TasksView: View {
 			
 			// Homework
 			Section(header: Text("Homework").textCase(.none)) {
-				if (vulcan.tasks.homework.count > 0) {
-					ForEach(vulcan.tasks.homework) { (task) in
+				if (homework.count > 0) {
+					ForEach(homework) { task in
 						TaskCell(task: task, type: nil)
 					}
 				} else {
@@ -100,11 +110,12 @@ struct TasksView: View {
 			}
 		}
 		.onAppear {
-			if (AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil) {
+			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
 				return
 			}
 			
-			if (!vulcan.dataState.tasks.fetched || (vulcan.dataState.tasks.lastFetched ?? Date(timeIntervalSince1970: 0)) > (Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: Date()) ?? Date())) {
+			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.tasks.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
+			if nextFetch <= Date() {
 				fetch()
 			}
 		}

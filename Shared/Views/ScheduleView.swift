@@ -89,7 +89,13 @@ struct ScheduleView: View {
 			}
 		}
 		.onAppear {
-			if (!AppState.networking.monitor.currentPath.isExpensive && vulcan.currentUser != nil && !vulcan.dataState.schedule.fetched || (vulcan.dataState.schedule.lastFetched ?? Date(timeIntervalSince1970: 0)) > (Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: Date()) ?? Date())) {
+			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
+				return
+			}
+			
+			let lastFetched: Date = vulcan.dataState.schedule.lastFetched ?? Date(timeIntervalSince1970: 0)
+			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: lastFetched) ?? Date()
+			if nextFetch <= Date() {
 				fetch()
 			}
 		}

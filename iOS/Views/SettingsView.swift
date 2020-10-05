@@ -55,6 +55,14 @@ struct SettingsView: View {
 			return
 		}
 		
+		UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
+			if let error = error {
+				logger.error("Error granting notification permission: \(error.localizedDescription)")
+			}
+			
+			logger.debug("Granted notification permissions: \(granted)")
+		}
+		
 		vulcan.schedule
 			.flatMap(\.events)
 			.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
@@ -69,6 +77,14 @@ struct SettingsView: View {
 			logger.debug("Removing all notifications with identifier \"TaskNotification\".")
 			UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["TaskNotification"])
 			return
+		}
+		
+		UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
+			if let error = error {
+				logger.error("Error granting notification permission: \(error.localizedDescription)")
+			}
+			
+			logger.debug("Granted notification permissions: \(granted)")
 		}
 		
 		vulcan.tasks.combined

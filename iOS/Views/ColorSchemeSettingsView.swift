@@ -32,9 +32,10 @@ struct ColorSchemeSettingsView: View {
 				
 				Spacer()
 				
-				if (colorScheme == scheme) {
+				if colorScheme == scheme {
 					Image(systemName: "checkmark")
 						.font(.headline)
+						.foregroundColor(.accentColor)
 				}
 			}
 			.id(scheme)

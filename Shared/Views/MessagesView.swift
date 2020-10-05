@@ -158,7 +158,16 @@ struct MessagesView: View {
 			}
 		}
 		.listStyle(InsetGroupedListStyle())
-		.onAppear { fetch() }
+		.onAppear {
+			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
+				return
+			}
+			
+			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.messages[tag]?.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
+			if nextFetch <= Date() {
+				fetch()
+			}
+		}
 	}
 	
 	/// Sidebar ViewBuilder
