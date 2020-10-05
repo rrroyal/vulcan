@@ -191,7 +191,7 @@ public final class Vulcan: ObservableObject {
 								
 								return grade
 							}
-							.sorted { $0.dateCreatedEpoch < $1.dateCreatedEpoch }
+							.sorted { $0.dateCreated < $1.dateCreated }
 							.filter { $0.subjectID == subject.id }
 						
 						return Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
@@ -228,7 +228,7 @@ public final class Vulcan: ObservableObject {
 						
 						return note
 					}
-					.sorted { $0.dateCreatedEpoch < $1.dateCreatedEpoch }
+					.sorted { $0.date < $1.date }
 			}
 			
 			// Exams
@@ -238,13 +238,13 @@ public final class Vulcan: ObservableObject {
 						guard let exam = Exam(from: storedExam) else {
 							return nil
 						}
-						
+												
 						exam.subject = dictionarySubjects.first(where: { $0.id == exam.subjectID })
 						exam.employee = dictionaryEmployees.first(where: { $0.id == exam.employeeID })
 						
 						return exam
 					}
-					.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
+					.sorted { $0.date < $1.date }
 			}
 			
 			// Homework
@@ -254,13 +254,13 @@ public final class Vulcan: ObservableObject {
 						guard let homework = Homework(from: storedHomework) else {
 							return nil
 						}
-						
+												
 						homework.subject = dictionarySubjects.first(where: { $0.id == homework.subjectID })
 						homework.employee = dictionaryEmployees.first(where: { $0.id == homework.employeeID })
 						
 						return homework
 					}
-					.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
+					.sorted { $0.date < $1.date }
 			}
 			
 			// Messages
@@ -273,7 +273,7 @@ public final class Vulcan: ObservableObject {
 						
 						return message
 					}
-					.sorted { $0.dateSentEpoch > $1.dateSentEpoch }
+					.sorted { $0.dateSent > $1.dateSent }
 				
 				let receivedMessages: [Vulcan.Message] = storedMessages
 					.filter { $0.folder == "Odebrane" && $0.status == "Widoczna" }
@@ -283,7 +283,7 @@ public final class Vulcan: ObservableObject {
 						
 						return message
 					}
-					.sorted { $0.dateSentEpoch > $1.dateSentEpoch }
+					.sorted { $0.dateSent > $1.dateSent }
 				
 				let deletedMessages: [Vulcan.Message] = storedMessages
 					.filter { $0.status == "Usunieta" }
@@ -293,7 +293,7 @@ public final class Vulcan: ObservableObject {
 						
 						return message
 					}
-					.sorted { $0.dateSentEpoch > $1.dateSentEpoch }
+					.sorted { $0.dateSent > $1.dateSent }
 				
 				self.messages[.sent] = sentMessages
 				self.messages[.received] = receivedMessages
@@ -997,12 +997,17 @@ public final class Vulcan: ObservableObject {
 						}
 						.sorted { $0.date < $1.date }
 					
-					if (isPersistent) {
+					if isPersistent {
 						let context = self.persistentContainer.viewContext
-						let deleteRequest = NSBatchDeleteRequest(fetchRequest: StoredScheduleEvent.fetchRequest())
 						
 						do {
-							try context.execute(deleteRequest)
+							let oneMonthAgo: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: -1, to: Date()) ?? Date().startOfMonth
+							let oneMonthInFuture: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: 1, to: Date()) ?? Date().endOfMonth
+							
+							let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredScheduleEvent.fetchRequest()
+							fetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+							
+							try context.execute(NSBatchDeleteRequest(fetchRequest: fetchRequest))
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
 						}
@@ -1121,7 +1126,7 @@ public final class Vulcan: ObservableObject {
 									
 									return grade
 								}
-								.sorted { $0.dateCreatedEpoch < $1.dateCreatedEpoch }
+								.sorted { $0.dateCreated < $1.dateCreated }
 								.filter { $0.subjectID == subject.id }
 							
 							let subjectGrades = Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
@@ -1368,7 +1373,7 @@ public final class Vulcan: ObservableObject {
 							
 							return note
 						}
-						.sorted { $0.dateCreatedEpoch < $1.dateCreatedEpoch }
+						.sorted { $0.date < $1.date }
 					
 					let deleteRequest = NSBatchDeleteRequest(fetchRequest: StoredNote.fetchRequest())
 					
@@ -1508,7 +1513,7 @@ public final class Vulcan: ObservableObject {
 							
 							return exam
 						}
-						.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
+						.sorted { $0.date < $1.date }
 					
 					let homework: [Vulcan.Homework] = homework
 						.map { task in
@@ -1517,14 +1522,23 @@ public final class Vulcan: ObservableObject {
 							
 							return task
 						}
-						.sorted { $0.dateEpoch < $1.dateEpoch && $0.subject?.name ?? "" < $1.subject?.name ?? "" }
+						.sorted { $0.date < $1.date }
 					
 					tempTasks = Vulcan.Tasks(exams: exams, homework: homework)
 					
 					if isPersistent {
 						do {
-							try context.execute(NSBatchDeleteRequest(fetchRequest: StoredExam.fetchRequest()))
-							try context.execute(NSBatchDeleteRequest(fetchRequest: StoredHomework.fetchRequest()))
+							let oneMonthAgo: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: -1, to: Date()) ?? Date().startOfMonth
+							let oneMonthInFuture: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: 1, to: Date()) ?? Date().endOfMonth
+							
+							let examsFetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredExam.fetchRequest()
+							examsFetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+							
+							let homeworkFetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredHomework.fetchRequest()
+							homeworkFetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+							
+							try context.execute(NSBatchDeleteRequest(fetchRequest: examsFetchRequest))
+							try context.execute(NSBatchDeleteRequest(fetchRequest: homeworkFetchRequest))
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
 						}
@@ -1629,16 +1643,20 @@ public final class Vulcan: ObservableObject {
 							message.tag = tag
 							return message
 						}
-						.sorted { $0.dateSentEpoch > $1.dateSentEpoch }
+						.sorted { $0.dateSent > $1.dateSent }
 					
 					tempMessages = messages
 					
-					if (isPersistent) {
+					if isPersistent {
 						let context = self.persistentContainer.viewContext
 						
 						do {
-							let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredMessage.fetchRequest()
+							let oneMonthAgo: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: -1, to: Date()) ?? Date().startOfMonth
+							let oneMonthInFuture: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: 1, to: Date()) ?? Date().endOfMonth
 							
+							let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredMessage.fetchRequest()
+							fetchRequest.predicate = NSPredicate(format: "dateSentEpoch <= %i OR dateSentEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+														
 							switch (tag) {
 								case .deleted:	fetchRequest.predicate = NSPredicate(format: "status == %@", "Usunieta")
 								case .received:	fetchRequest.predicate = NSPredicate(format: "status == %@ AND folder == %@", "Widoczna", "Odebrane")

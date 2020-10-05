@@ -29,14 +29,14 @@ public extension Array where Element == Vulcan.ScheduleEvent {
 			.map { index, event in
 				var date: Date {
 					if index - 1 < 0 {
-						return (event.dateStarts ?? event.date).startOfDay
+						return Calendar.autoupdatingCurrent.startOfDay(for: (event.dateStarts ?? event.date))
 					}
 					
 					if let previousEventDateStarts: Date = self[index - 1].dateStarts,
 					   let previousEventDateEnds: Date = self[index - 1].dateEnds {
 						return Date(timeIntervalSinceReferenceDate: (previousEventDateStarts.timeIntervalSinceReferenceDate + previousEventDateEnds.timeIntervalSinceReferenceDate) / 2)
 					} else {
-						return event.dateStarts ?? event.date.startOfDay
+						return event.dateStarts ?? Calendar.autoupdatingCurrent.startOfDay(for: event.date)
 					}
 				}
 				

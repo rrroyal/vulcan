@@ -602,6 +602,7 @@ public extension Vulcan {
 			entity.employeeID = Int16(self.employeeID)
 			entity.userSchedule = self.userSchedule
 			entity.divisionShort = self.divisionShort
+			entity.id = self.id
 			
 			if let dateStartsEpoch = self.dateStartsEpoch { entity.dateStartsEpoch = Int64(dateStartsEpoch) }
 			if let dateEndsEpoch = self.dateEndsEpoch { entity.dateEndsEpoch = Int64(dateEndsEpoch) }

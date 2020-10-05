@@ -20,7 +20,9 @@ public final class CoreDataModel {
 		let groupURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.dev.niepostek.vulcanGroup")!.appendingPathComponent("vulcan.sqlite")
 		let modelURL = Bundle.module.url(forResource: "VulcanStore", withExtension: "momd")
 		let model = NSManagedObjectModel(contentsOf: modelURL!)
+		
 		let container = NSPersistentContainer(name: "VulcanStore", managedObjectModel: model!)
+
 		let description: NSPersistentStoreDescription = NSPersistentStoreDescription()
 		description.url = groupURL
 		description.shouldMigrateStoreAutomatically = true
@@ -29,7 +31,7 @@ public final class CoreDataModel {
 		description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 		
 		container.persistentStoreDescriptions = [description]
-		container.loadPersistentStores { (storeDescription, error) in
+		container.loadPersistentStores { storeDescription, error in
 			if let error = error {
 				self.logger.error("Could not load store: \(error.localizedDescription)")
 				self.logger.debug("\(String(describing: storeDescription))")
@@ -37,6 +39,7 @@ public final class CoreDataModel {
 				return
 			}
 			
+			container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 			self.logger.info("Store loaded!")
 		}
 		

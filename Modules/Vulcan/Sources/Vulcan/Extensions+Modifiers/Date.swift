@@ -83,15 +83,13 @@ public extension Date {
 	}
 	
 	var startOfWeek: Date? {
-		let calendar = Calendar(identifier: .gregorian)
-		guard let sunday = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
-		return calendar.date(byAdding: .day, value: 1, to: sunday)
+		guard let sunday = Calendar.autoupdatingCurrent.date(from: Calendar.autoupdatingCurrent.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
+		return Calendar.autoupdatingCurrent.date(byAdding: .day, value: 1, to: sunday)!
 	}
 	
 	var endOfWeek: Date? {
-		let calendar = Calendar(identifier: .gregorian)
-		guard let sunday = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
-		return calendar.date(byAdding: .day, value: 7, to: sunday)
+		guard let sunday = Calendar.autoupdatingCurrent.date(from: Calendar.autoupdatingCurrent.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
+		return Calendar.autoupdatingCurrent.date(byAdding: .day, value: 7, to: sunday)!
 	}
 	
 	var startOfMonth: Date {
