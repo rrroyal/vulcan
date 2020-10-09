@@ -64,7 +64,7 @@ struct Provider: TimelineProvider {
 	
 	func getTimeline(in context: Context, completion: @escaping (Timeline<ScheduleEntry>) -> Void) {
 		var entries: [ScheduleEntry] = self.schedule
-			.filter { $0.dateStarts ?? $0.date >= Date() }
+			.filter { $0.dateEnds ?? $0.date >= Date().startOfDay }
 			.timeline()
 			.map { date, event in
 				ScheduleEntry(date: date, event: event)

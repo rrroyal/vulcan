@@ -98,7 +98,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getTimelineEntries(for complication: CLKComplication, after date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
         // Call the handler with the timeline entries after the given date
 		var entries: [CLKComplicationTimelineEntry] = self.schedule
-			.filter { $0.dateStarts ?? $0.date >= date }
+			.filter { $0.dateEnds ?? $0.date >= date.startOfDay }
 			.timeline()
 			.map { date, event in
 				CLKComplicationTimelineEntry(date: date, complicationTemplate: templateForEvent(for: complication, event: event))
