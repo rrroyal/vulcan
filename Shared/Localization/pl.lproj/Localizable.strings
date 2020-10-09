@@ -9,7 +9,9 @@
 
 "Error!" = "Błąd!";
 "Not reachable" = "Brak połączenia z serwerem.";
+"Today" = "Dzisiaj";
 "Tomorrow" = "Jutro";
+"Lessons" = "Lekcje";
 
 // MARK: Vulcan.swift
 "No endpoint URL found" = "Nie znaleziono adresu URL. Sprawdź swój token.";
@@ -28,7 +30,7 @@
 // MARK: OnboardingView.swift
 "Welcome to" = "Witaj w";
 "ONBOARDING_FUNCTION1_TITLE" = "Korzystaj z platformy";
-"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgety, aplikacja na Watch, ciemny motyw - jest tutaj wszystko.";
+"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgety, aplikacja na  Watch, ciemny motyw - jest tutaj wszystko.";
 "ONBOARDING_FUNCTION2_TITLE" = "Powiadomienia";
 "ONBOARDING_FUNCTION2_DESCRIPTION" = "Aplikacja przypomni Ci o kolejnych zajęciach, nowych wiadomościach, ocenach, itp.";
 "ONBOARDING_FUNCTION3_TITLE" = "Stworzone przez studenta";

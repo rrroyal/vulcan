@@ -9,7 +9,9 @@
 
 "Error!" = "Error!";
 "Not reachable" = "Not reachable";
+"Today" = "Today";
 "Tomorrow" = "Tomorrow";
+"Lessons" = "Lessons";
 
 // MARK: Vulcan.swift
 "No endpoint URL found" = "No endpoint URL found. Make sure the provided token is correct.";

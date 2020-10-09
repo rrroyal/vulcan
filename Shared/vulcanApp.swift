@@ -46,9 +46,21 @@ struct vulcanApp: App {
 						default: break
 					}
 				}
-				/* .onChange(of: vulcan.currentUser) { user in
-					appDelegate.setShortcuts(visible: user != nil)
-				} */
+				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
+					currentTab = .home
+				}
+				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity") { activity in
+					currentTab = .grades
+				}
+				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").scheduleActivity") { activity in
+					currentTab = .schedule
+				}
+				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity") { activity in
+					currentTab = .tasks
+				}
+				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").messagesActivity") { activity in
+					currentTab = .messages
+				}
         }
 		
 		#if os(macOS)
