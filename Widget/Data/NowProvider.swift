@@ -11,9 +11,25 @@ import Intents
 import Vulcan
 import CoreData
 
-struct Provider: TimelineProvider {
-	typealias Entry = ScheduleEntry
-
+struct NowProvider: TimelineProvider {
+	struct Entry: TimelineEntry {
+		let date: Date
+		let event: Vulcan.ScheduleEvent?
+		
+		var relevance: TimelineEntryRelevance? {
+			guard let event: Vulcan.ScheduleEvent = self.event else {
+				return TimelineEntryRelevance(score: 0.1)
+			}
+			
+			if let dateStarts = event.dateStarts,
+			   let dateEnds = event.dateEnds {
+				return TimelineEntryRelevance(score: 1, duration: dateStarts.timeIntervalSince1970 - dateEnds.timeIntervalSince1970)
+			} else {
+				return TimelineEntryRelevance(score: 0.5)
+			}
+		}
+	}
+	
 	var schedule: [Vulcan.ScheduleEvent] {
 		let context = CoreDataModel.shared.persistentContainer.viewContext
 		let fetchRequest: NSFetchRequest<StoredScheduleEvent> = StoredScheduleEvent.fetchRequest()
@@ -42,6 +58,7 @@ struct Provider: TimelineProvider {
 					
 					return event
 				}
+				.filter { $0.dateStarts != nil && $0.dateEnds != nil }
 				.sorted { $0.dateStarts ?? $0.date < $1.dateStarts ?? $0.date }
 				.filter { $0.userSchedule }
 		} else {
@@ -49,29 +66,29 @@ struct Provider: TimelineProvider {
 		}
 	}
 
-	func placeholder(in context: Context) -> ScheduleEntry {
-		ScheduleEntry(date: Date(), event: nil)
+	func placeholder(in context: Context) -> Entry {
+		Entry(date: Date(), event: nil)
 	}
 	
-	func getSnapshot(in context: Context, completion: @escaping (ScheduleEntry) -> Void) {
+	func getSnapshot(in context: Context, completion: @escaping (Entry) -> Void) {
 		var event: Vulcan.ScheduleEvent = Vulcan.ScheduleEvent(dateEpoch: Int(Date().startOfDay.timeIntervalSince1970), lessonOfTheDay: 1, lessonTimeID: 0, subjectID: 0, subjectName: NSLocalizedString("Spanish", comment: ""), divisionShort: nil, room: "03", employeeID: 1, helpingEmployeeID: nil, oldEmployeeID: nil, oldHelpingEmployeeID: nil, scheduleID: 1, note: nil, labelStrikethrough: false, labelBold: false, userSchedule: false, employeeFullName: "Ben Chang")
 		event.dateStarts = Date()
 		event.dateEnds = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
 		
-		let entry = ScheduleEntry(date: Date(), event: event)
+		let entry = Entry(date: Date(), event: event)
 		completion(entry)
 	}
 	
-	func getTimeline(in context: Context, completion: @escaping (Timeline<ScheduleEntry>) -> Void) {
-		var entries: [ScheduleEntry] = self.schedule
+	func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+		var entries: [Entry] = self.schedule
+			.filter { $0.dateStarts != nil }
 			.filter { $0.dateEnds ?? $0.date >= Date().startOfDay }
-			.timeline()
-			.map { date, event in
-				ScheduleEntry(date: date, event: event)
+			.map { event in
+				Entry(date: event.dateStarts ?? event.date, event: event)
 			}
 			.sorted { $0.date < $1.date }
 		
-		entries.append(ScheduleEntry(date: entries.last?.event?.dateEnds ?? Date(), event: nil))
+		entries.append(Entry(date: entries.last?.event?.dateEnds ?? Date(), event: nil))
 		
 		completion(Timeline(entries: entries, policy: .atEnd))
 	}

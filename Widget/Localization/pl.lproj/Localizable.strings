@@ -7,12 +7,14 @@
   
 */
 
-"Schedule" = "Plan lekcji";
-"Displays your schedule." = "Wyświetla twój plan lekcji.";
-"No events for now 😊" = "Nic w najbliższym czasie 😊";
+"NOW_DESCRIPTION" = "Wyświetla twoją teraźniejszą lekcję. Widget pokaże następne wydarzenie w połowie lekcji.";
+"NEXTUP_DESCRIPTION" = "Wyświetla twoje następne lekcje.";
 
 "Spanish" = "Hiszpański";
 
-"Watermelon is 92% water." = "Arbuz jest w 92% wodą.";
-"The opening scene in \"Friends\" wasn't shot in New York." = "Otwierająca scena w serialu \"Przyjaciele\" nie była nagrana w Nowym Jorku.";
-"You look good today." = "Dobrze dziś wyglądasz.";
+"No events for now 😊" = "Nic w najbliższym czasie 😊";
+
+"Now" = "Teraz";
+"Nothing for now 😊" = "Nic w na teraz 😊";
+"Next up" = "Następnie";
+"Nothing left" = "Nic nie zostało";

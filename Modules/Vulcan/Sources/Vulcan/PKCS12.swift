@@ -71,10 +71,6 @@ class PKCS12 {
 		}
 		signature = signedData.base64EncodedString()
 		
-		if (error != nil) {
-			// AppState.logger.critical("(Crypto) Error: \(String(describing: error))")
-		}
-		
 		return signature
 	}
 }

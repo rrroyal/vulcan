@@ -402,6 +402,7 @@ public final class Vulcan: ObservableObject {
 			.eraseToAnyPublisher()
 		
 		Publishers.Zip(endpointPublisher, firebasePublisher)
+			.receive(on: DispatchQueue.main)
 			.tryMap { (endpoints, firebaseToken) -> String in
 				// Find endpointURL
 				let lines = String(data: endpoints.data, encoding: .utf8)?.split { $0.isNewline }
@@ -472,7 +473,7 @@ public final class Vulcan: ObservableObject {
 				
 				// Send the request and pass it
 				return URLSession.shared.dataTaskPublisher(for: request)
-					.receive(on: DispatchQueue.global(qos: .userInteractive))
+					.receive(on: DispatchQueue.main)
 					.mapError { $0 as Error }
 					.map { $0.data }
 					.eraseToAnyPublisher()
@@ -906,7 +907,7 @@ public final class Vulcan: ObservableObject {
 			completionHandler(APIError.error(reason: "No endpoint"))
 			return
 		}
-		
+				
 		let logger: Logger = Logger(subsystem: "Vulcan", category: "Schedule")
 		logger.debug("Getting schedule of user with ID \(user.userLoginID, privacy: .private) from \(startDate.formattedString(format: "yyyy-MM-dd")) to \(endDate.formattedString(format: "yyyy-MM-dd")) (persistent: \(isPersistent))...")
 		self.dataState.schedule.loading = true

@@ -1,17 +1,18 @@
 //
-//  SmallScheduleWidgetView.swift
+//  EventView.swift
 //  Widget
 //
-//  Created by royal on 03/09/2020.
+//  Created by Kacper on 18/10/2020.
 //
 
 import SwiftUI
+import Vulcan
 
-struct SmallScheduleWidgetView: View {
-	let entry: Provider.Entry
+struct EventView: View {
+	let event: Vulcan.ScheduleEvent?
 	
 	var body: some View {
-		if let event = entry.event {
+		if let event = event {
 			VStack(alignment: .leading) {
 				// Top line: time and room
 				HStack {
@@ -44,7 +45,7 @@ struct SmallScheduleWidgetView: View {
 					if let employeeName = event.employee?.name,
 					   let employeeSurname = event.employee?.surname {
 						Text("\(employeeName) \(employeeSurname)")
-					   } else if let employeeFullName = event.employeeFullName {
+					} else if let employeeFullName = event.employeeFullName {
 						Text(employeeFullName)
 					}
 				}
@@ -55,6 +56,7 @@ struct SmallScheduleWidgetView: View {
 				
 			}
 			.padding()
+			.background(LinearGradient(gradient: Gradient(colors: [Color("Background/Top"), Color("Background/Bottom")]), startPoint: .top, endPoint: .bottom))
 		} else {
 			VStack(alignment: .leading) {
 				Text("vulcan")
@@ -72,19 +74,20 @@ struct SmallScheduleWidgetView: View {
 					.lineLimit(3)
 				
 				/* Text(Provider.noEventSubtitle)
-					.font(.subheadline)
-					.foregroundColor(Color.white.opacity(0.8))
-					.minimumScaleFactor(0.75)
-					.lineLimit(3) */
+				.font(.subheadline)
+				.foregroundColor(Color.white.opacity(0.8))
+				.minimumScaleFactor(0.75)
+				.lineLimit(3) */
 			}
 			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
 			.padding()
+			.background(LinearGradient(gradient: Gradient(colors: [Color("Background/Top"), Color("Background/Bottom")]), startPoint: .top, endPoint: .bottom))
 		}
 	}
 }
 
-struct SmallScheduleWidgetView_Previews: PreviewProvider {
+struct EventView_Previews: PreviewProvider {
     static var previews: some View {
-		SmallScheduleWidgetView(entry: .init(date: Date(), event: nil))
+		EventView(event: nil)
     }
 }

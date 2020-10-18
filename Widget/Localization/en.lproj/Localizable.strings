@@ -7,12 +7,14 @@
   
 */
 
-"Schedule" = "Schedule";
-"Displays your schedule." = "Displays your schedule.";
-"No events for now 😊" = "No events for now 😊";
+"NOW_DESCRIPTION" = "Displays your current event. It will change halfway through the event.";
+"NEXTUP_DESCRIPTION" = "Displays your next events.";
 
 "Spanish" = "Spanish";
 
-"Watermelon is 92% water." = "Watermelon is 92% water.";
-"The opening scene in \"Friends\" wasn't shot in New York." = "The opening scene in \"Friends\" wasn't shot in New York.";
-"You look good today." = "You look good today.";
+"No events for now 😊" = "No events for now 😊";
+
+"Now" = "Now";
+"Nothing for now 😊" = "Nothing for now 😊";
+"Next up" = "Next up";
+"Nothing left" = "Nothing left";
