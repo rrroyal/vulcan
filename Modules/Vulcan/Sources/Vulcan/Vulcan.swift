@@ -191,7 +191,7 @@ public final class Vulcan: ObservableObject {
 								
 								return grade
 							}
-							.sorted { $0.dateCreated < $1.dateCreated }
+							.sorted { ($0.dateCreated, $0.entry ?? "") < ($1.dateCreated, $1.entry ?? "") }
 							.filter { $0.subjectID == subject.id }
 						
 						return Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
@@ -244,7 +244,7 @@ public final class Vulcan: ObservableObject {
 						
 						return exam
 					}
-					.sorted { $0.date < $1.date }
+					.sorted { ($0.date, $0.subject?.name ?? "", $0.entry) < ($1.date, $1.subject?.name ?? "", $1.entry) }
 			}
 			
 			// Homework
@@ -260,7 +260,7 @@ public final class Vulcan: ObservableObject {
 						
 						return homework
 					}
-					.sorted { $0.date < $1.date }
+					.sorted { ($0.date, $0.subject?.name ?? "", $0.entry) < ($1.date, $1.subject?.name ?? "", $1.entry) }
 			}
 			
 			// Messages
@@ -1127,12 +1127,12 @@ public final class Vulcan: ObservableObject {
 									
 									return grade
 								}
-								.sorted { $0.dateCreated < $1.dateCreated }
-								.filter { $0.subjectID == subject.id }
+								.sorted { ($0.dateCreated, $0.entry ?? "") < ($1.dateCreated, $1.entry ?? "") }
 							
 							let subjectGrades = Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
+							
 							if let currentSubjectGrades = self.grades.first(where: { $0.subject.id == subject.id })?.grades {
-								subjectGrades.hasNewItems = grades.map(\.entry) != currentSubjectGrades.map(\.entry)
+								subjectGrades.hasNewItems = grades.sorted(by: { ($0.dateCreated, $0.entry ?? "") < ($1.dateCreated, $1.entry ?? "") }) != currentSubjectGrades.sorted(by: { ($0.dateCreated, $0.entry ?? "") < ($1.dateCreated, $1.entry ?? "") })
 							} else {
 								subjectGrades.hasNewItems = true
 							}
@@ -1141,7 +1141,7 @@ public final class Vulcan: ObservableObject {
 						}
 						.sorted { $0.subject.name < $1.subject.name }
 					
-					if (isPersistent) {
+					if isPersistent {
 						let context = self.persistentContainer.viewContext
 						let deleteRequest = NSBatchDeleteRequest(fetchRequest: StoredGrade.fetchRequest())
 						
@@ -1514,7 +1514,7 @@ public final class Vulcan: ObservableObject {
 							
 							return exam
 						}
-						.sorted { $0.date < $1.date }
+						.sorted { ($0.date, $0.subject?.name ?? "", $0.entry) < ($1.date, $1.subject?.name ?? "", $1.entry) }
 					
 					let homework: [Vulcan.Homework] = homework
 						.map { task in
@@ -1523,20 +1523,20 @@ public final class Vulcan: ObservableObject {
 							
 							return task
 						}
-						.sorted { $0.date < $1.date }
+						.sorted { ($0.date, $0.subject?.name ?? "", $0.entry) < ($1.date, $1.subject?.name ?? "", $1.entry) }
 					
 					tempTasks = Vulcan.Tasks(exams: exams, homework: homework)
 					
 					if isPersistent {
 						do {
-							let oneMonthAgo: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: -1, to: Date()) ?? Date().startOfMonth
-							let oneMonthInFuture: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: 1, to: Date()) ?? Date().endOfMonth
+							// let oneMonthAgo: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: -1, to: Date()) ?? Date().startOfMonth
+							// let oneMonthInFuture: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: 1, to: Date()) ?? Date().endOfMonth
 							
 							let examsFetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredExam.fetchRequest()
-							examsFetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+							// examsFetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
 							
 							let homeworkFetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredHomework.fetchRequest()
-							homeworkFetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+							// homeworkFetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
 							
 							try context.execute(NSBatchDeleteRequest(fetchRequest: examsFetchRequest))
 							try context.execute(NSBatchDeleteRequest(fetchRequest: homeworkFetchRequest))

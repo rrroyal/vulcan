@@ -620,7 +620,7 @@ public extension Vulcan {
 		}
 	}
 	
-	struct Grade: Identifiable, Codable, Hashable {
+	struct Grade: Identifiable, Codable, Hashable, Equatable {
 		public init(id: Int, position: Int, subjectPosition: Int, subjectID: Int, categoryID: Int?, entry: String?, value: Double?, modifierWeight: Double?, gradeWeight: Double?, counter: Double?, denominator: Double?, comment: String?, weight: String?, description: String?, dateCreatedEpoch: Int, dateModifiedEpoch: Int?, dEmployeeID: Int, mEmployeeID: Int?) {
 			self.id = id
 			self.position = position
@@ -646,6 +646,14 @@ public extension Vulcan {
 		/// - Parameter entity: CoreData entity
 		public init(from entity: StoredGrade) {
 			self.init(id: Int(entity.id), position: Int(entity.position), subjectPosition: Int(entity.subjectPosition), subjectID: Int(entity.subjectID), categoryID: Int(entity.categoryID), entry: entity.entry, value: Double(entity.value), modifierWeight: Double(entity.modifierWeight), gradeWeight: Double(entity.gradeWeight), counter: Double(entity.counter), denominator: Double(entity.denominator), comment: entity.comment, weight: entity.weight, description: entity.gradeDescription, dateCreatedEpoch: Int(entity.dateCreatedEpoch), dateModifiedEpoch: Int(entity.dateModifiedEpoch), dEmployeeID: Int(entity.dEmployeeID), mEmployeeID: Int(entity.mEmployeeID))
+		}
+		
+		public static func == (lhs: Vulcan.Grade, rhs: Vulcan.Grade) -> Bool {
+			lhs.entry == rhs.entry &&
+			lhs.categoryID == rhs.categoryID &&
+			lhs.dateCreatedEpoch == rhs.dateCreatedEpoch &&
+			lhs.dateModifiedEpoch == rhs.dateModifiedEpoch &&
+			lhs.weight == rhs.weight
 		}
 		
 		enum CodingKeys: String, CodingKey {
@@ -713,6 +721,7 @@ public extension Vulcan {
 			entity.gradeDescription = self.description
 			entity.id = Int64(self.id)
 			entity.position = Int16(self.position)
+			entity.weight = self.weight
 			
 			if let value = self.categoryID { entity.categoryID = Int16(value) }
 			if let value = self.counter { entity.counter = Float(value) }

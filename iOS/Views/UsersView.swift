@@ -11,7 +11,7 @@ import Vulcan
 struct UsersView: View {
 	@EnvironmentObject var vulcan: Vulcan
 	
-	private func refresh() {
+	private func fetch() {
 		vulcan.getUsers() { error in
 			if error != nil {
 				generateHaptic(.error)
@@ -30,6 +30,7 @@ struct UsersView: View {
 						.padding(.trailing, 5)
 					
 					Text("\(user.username) (\(user.unitCode))")
+						.foregroundColor(.primary)
 					
 					Spacer()
 					
@@ -52,11 +53,11 @@ struct UsersView: View {
 			ToolbarItem(placement: .navigationBarTrailing) {
 				RefreshButton(loading: vulcan.dataState.users.loading, iconName: "arrow.clockwise", edge: .trailing) {
 					generateHaptic(.light)
-					refresh()
+					fetch()
 				}
 			}
 		}
-		.onAppear(perform: refresh)
+		.onAppear(perform: fetch)
 	}
 }
 

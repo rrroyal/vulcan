@@ -93,8 +93,7 @@ struct ScheduleView: View {
 				return
 			}
 			
-			let lastFetched: Date = vulcan.dataState.schedule.lastFetched ?? Date(timeIntervalSince1970: 0)
-			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: lastFetched) ?? Date()
+			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.schedule.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
 			if nextFetch <= Date() {
 				fetch()
 			}
