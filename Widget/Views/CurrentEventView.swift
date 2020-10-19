@@ -12,7 +12,7 @@ struct CurrentEventView: View {
 	let event: Vulcan.ScheduleEvent?
 	
     var body: some View {
-		VStack(alignment: .leading, spacing: 3) {
+		VStack(alignment: .leading, spacing: 2) {
 			Text("Now")
 				.font(.subheadline)
 				.bold()

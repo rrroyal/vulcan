@@ -11,14 +11,14 @@ import Vulcan
 struct NextEventView: View {
 	let event: Vulcan.ScheduleEvent?
 	
-	@Environment(\.colorScheme) var colorScheme
+	@Environment(\.colorScheme) var colorScheme: ColorScheme
 	
 	var foregroundColor: Color {
 		colorScheme == .light ? .accentColor : .white
 	}
 	
 	var body: some View {
-		VStack(alignment: .leading, spacing: 3) {
+		VStack(alignment: .leading, spacing: 2) {
 			Text("Next up")
 				.font(.subheadline)
 				.bold()

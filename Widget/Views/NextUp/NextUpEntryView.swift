@@ -12,6 +12,11 @@ struct NextUpEntryView: View {
 	let entry: NextUpProvider.Entry
 
 	@Environment(\.widgetFamily) private var widgetFamily: WidgetFamily
+	@Environment(\.colorScheme) var colorScheme: ColorScheme
+	
+	var backgroundColor: Color {
+		colorScheme == .light ? .white : Color(UIColor.systemGroupedBackground)
+	}
 	
 	var systemSmallView: some View {
 		CurrentEventView(event: entry.currentEvent)
@@ -25,7 +30,7 @@ struct NextUpEntryView: View {
 			
 			NextEventView(event: entry.nextEvents.first)
 		}
-		.background(Color(UIColor.systemGroupedBackground).opacity(0.5))
+		.background(backgroundColor)
 	}
 	
 	var systemLargeView: some View {
@@ -46,7 +51,7 @@ struct NextUpEntryView: View {
 				.padding(.vertical)
 				.frame(height: geometry.size.height / 2)
 			}
-			.background(Color(UIColor.systemGroupedBackground).opacity(0.5))
+			.background(backgroundColor)
 		}
 	}
 	
