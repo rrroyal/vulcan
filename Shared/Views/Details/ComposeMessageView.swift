@@ -8,6 +8,74 @@
 import SwiftUI
 import Vulcan
 
+fileprivate struct MessageRecipientsListView: View {
+	@Binding var isRecipientsSheetVisible: Bool
+	@Binding var messageRecipients: [Vulcan.Recipient]
+	
+	@State private var searchFilter: String = ""
+	@FetchRequest(entity: DictionaryEmployee.entity(), sortDescriptors: [NSSortDescriptor(key: "surname", ascending: true)]) var employees: FetchedResults<DictionaryEmployee>
+	
+	private func isRecipient(_ recipient: DictionaryEmployee) -> Bool {
+		let code = Int(recipient.id)
+		let recipients = self.messageRecipients.map(\.id)
+		return recipients.contains(code)
+	}
+
+	var body: some View {
+		NavigationView {
+			List {
+				Section {
+					TextField("Search", text: $searchFilter)
+						.labelsHidden()
+				}
+				
+				ForEach(searchFilter.isEmpty ? Array(employees) : employees.filter({ ($0.name ?? "").lowercased().contains(searchFilter.lowercased()) || ($0.surname ?? "").lowercased().contains(searchFilter.lowercased()) || ($0.code ?? "").lowercased().contains(searchFilter.lowercased()) })) { employee in
+					if let employeeSurname = employee.surname,
+					   let employeeName = employee.name,
+					   let employeeCode = employee.code {
+						HStack {
+							Text("\(employeeSurname) \(employeeName) (\(employeeCode))".trimmingCharacters(in: .whitespacesAndNewlines))
+							Spacer()
+							Image(systemName: "checkmark")
+								.opacity(isRecipient(employee) ? 1 : 0)
+								.transition(.opacity)
+								.animation(.easeInOut(duration: 0.1))
+								.foregroundColor(.accentColor)
+						}
+						.contentShape(Rectangle())
+						.onTapGesture {
+							generateHaptic(.selectionChanged)
+							
+							if (isRecipient(employee)) {
+								guard let recipientsIndex = messageRecipients.map(\.id).firstIndex(of: Int(employee.id)) else {
+									return
+								}
+								
+								messageRecipients.remove(at: recipientsIndex)
+								return
+							}
+							
+							let recipient = Vulcan.Recipient(id: Int(employee.id), name: "\(employee.surname ?? "Unknown employee") \(employee.name ?? "") (\(employee.code ?? ""))")
+							messageRecipients.append(recipient)
+						}
+					}
+				}
+			}
+			.listStyle(InsetGroupedListStyle())
+			.navigationTitle(Text("Recipients"))
+			.toolbar {
+				ToolbarItem(placement: .cancellationAction) {
+					Button(action: {
+						isRecipientsSheetVisible = false
+					}) {
+						Text("Done")
+					}
+				}
+			}
+		}
+	}
+}
+
 struct ComposeMessageView: View {
 	@Binding var isPresented: Bool
 	@Binding var message: Vulcan.Message?
@@ -17,18 +85,10 @@ struct ComposeMessageView: View {
 	@State private var messageTitle: String = ""
 	@State private var messageContent: String = ""
 	@State private var messageRecipients: [Vulcan.Recipient] = []
-	
-	@FetchRequest(entity: DictionaryEmployee.entity(), sortDescriptors: [NSSortDescriptor(key: "surname", ascending: true)]) var employees: FetchedResults<DictionaryEmployee>
-	
+		
 	private var messageRecipientsString: [String] {
 		self.messageRecipients
 			.map(\.name)
-	}
-	
-	private func isRecipient(_ recipient: DictionaryEmployee) -> Bool {
-		let code = Int(recipient.id)
-		let recipients = self.messageRecipients.map(\.id)
-		return recipients.contains(code)
 	}
 	
 	/// Sends the message.
@@ -80,7 +140,7 @@ struct ComposeMessageView: View {
 				if (messageRecipientsString.count == 0) {
 					Text("Choose a recipient...")
 				} else {
-					Text(messageRecipientsString.joined(separator: ", "))
+					Text(messageRecipientsString.joined(separator: ", ").trimmingCharacters(in: .whitespacesAndNewlines))
 				}
 				
 				Spacer()
@@ -107,46 +167,7 @@ struct ComposeMessageView: View {
 		.padding()
 		.contentShape(Rectangle())
 		.sheet(isPresented: $isRecipientsSheetVisible) {
-			NavigationView {
-				List(employees) { (employee) in
-					HStack {
-						Text("\(employee.surname ?? "Unknown employee") \(employee.name ?? "") (\(employee.code ?? "unknown code"))".trimmingCharacters(in: .whitespacesAndNewlines))
-						Spacer()
-						Image(systemName: "checkmark")
-							.opacity(isRecipient(employee) ? 1 : 0)
-							.transition(.opacity)
-							.animation(.easeInOut(duration: 0.1))
-							.foregroundColor(.accentColor)
-					}
-					.contentShape(Rectangle())
-					.onTapGesture {
-						generateHaptic(.selectionChanged)
-						
-						if (isRecipient(employee)) {
-							guard let recipientsIndex = messageRecipients.map(\.id).firstIndex(of: Int(employee.id)) else {
-								return
-							}
-							
-							messageRecipients.remove(at: recipientsIndex)
-							return
-						}
-												
-						let recipient = Vulcan.Recipient(id: Int(employee.id), name: "\(employee.surname ?? "Unknown employee") \(employee.name ?? "") (\(employee.code ?? ""))")
-						messageRecipients.append(recipient)
-					}
-				}
-				.listStyle(InsetGroupedListStyle())
-				.navigationTitle(Text("Recipients"))
-				.toolbar {
-					ToolbarItem(placement: .cancellationAction) {
-						Button(action: {
-							isRecipientsSheetVisible = false
-						}) {
-							Text("Done")
-						}
-					}
-				}
-			}
+			MessageRecipientsListView(isRecipientsSheetVisible: $isRecipientsSheetVisible, messageRecipients: $messageRecipients)
 		}
 		.loadingOverlay(loading)
 		.allowsHitTesting(!loading)

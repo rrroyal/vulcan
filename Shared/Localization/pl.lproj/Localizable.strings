@@ -115,7 +115,7 @@
 "SETTINGS_READMESSAGEONOPEN" = "Czytaj wiadomości po otwarciu";
 "SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Wiadomości zostaną oznaczone jako przeczytane po ich otwarciu.";
 "SETTINGS_SCHEDULENOTIFICATIONS" = "Powiadomienia o lekcjach";
-"SETTINGS_SCHEDULENOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o następnej lekcji na końcu wcześniejszej.";
+"SETTINGS_SCHEDULENOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o następnej lekcji na końcu poprzedniej.";
 "SETTINGS_TASKNOTIFICATIONS" = "Powiadomienia o zadaniach";
 "SETTINGS_TASKNOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o zadaniach dzień wcześniej.";
 "Interface" = "Interfejs";
@@ -159,6 +159,7 @@
 
 // MARK: MessageDetailView.swift
 "Links" = "Odnośniki";
+"Search" = "Szukaj";
 
 // MARK: UsersView.swift
 "Users" = "Użytkownicy";

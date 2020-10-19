@@ -1916,6 +1916,7 @@ public final class Vulcan: ObservableObject {
 		logger.debug("Registering a new notification of event with title \"\(event.subjectName, privacy: .sensitive)\".")
 		
 		guard let dateStarts = event.dateStarts else {
+			logger.debug("No `event.dateStarts`! Returning.")
 			return
 		}
 		

@@ -18,10 +18,12 @@ struct MessageDetailView: View {
 		ScrollView {
 			VStack(alignment: .leading) {
 				VStack(alignment: .leading) {
-					Text(message.sender ?? "Unknown sender")
-						.font(.headline)
-						.multilineTextAlignment(.leading)
-						.lineLimit(nil)
+					if let messageSender = message.tag == .sent ? message.recipients?.map(\.name).joined(separator: ",") : message.sender {
+						Text(messageSender)
+							.font(.headline)
+							.multilineTextAlignment(.leading)
+							.lineLimit(nil)
+					}
 					
 					Text(message.dateSent.formattedDateString(timeStyle: .medium, dateStyle: .full, context: .beginningOfSentence))
 						.foregroundColor(.secondary)

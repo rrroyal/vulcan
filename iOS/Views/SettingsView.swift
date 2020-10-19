@@ -51,7 +51,11 @@ struct SettingsView: View {
 	private func manageScheduleNotifications(enabled: Bool) {
 		if !enabled {
 			logger.debug("Removing all notifications with identifier \"ScheduleNotification\".")
-			UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["ScheduleNotification"])
+			UNUserNotificationCenter.current().getPendingNotificationRequests() { notifications in
+				let identifiers = notifications.filter({ $0.content.categoryIdentifier.contains("ScheduleNotification") }).map(\.identifier)
+				UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+			}
+			
 			return
 		}
 		
@@ -75,7 +79,11 @@ struct SettingsView: View {
 	private func manageTaskNotifications(enabled: Bool) {
 		if !enabled {
 			logger.debug("Removing all notifications with identifier \"TaskNotification\".")
-			UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["TaskNotification"])
+			UNUserNotificationCenter.current().getPendingNotificationRequests() { notifications in
+				let identifiers = notifications.filter({ $0.content.categoryIdentifier.contains("TaskNotification") }).map(\.identifier)
+				UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+			}
+			
 			return
 		}
 		

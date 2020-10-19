@@ -159,6 +159,7 @@
 
 // MARK: MessageDetailView.swift
 "Links" = "Links";
+"Search" = "Search";
 
 // MARK: UsersView.swift
 "Users" = "Users";
