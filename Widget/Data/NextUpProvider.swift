@@ -90,14 +90,10 @@ struct NextUpProvider: TimelineProvider {
 		var entries: [Entry] = schedule
 			.map { event in
 				var nextEvents: [Vulcan.ScheduleEvent] = self.schedule
-					.filter { $0.dateStarts ?? $0.date >= event.dateStarts ?? $0.date }
-				
-				let currentEvent: Vulcan.ScheduleEvent? = nextEvents.first(where: { $0.isCurrent ?? false })
-				
-				if let event = currentEvent,
-				   let index = nextEvents.firstIndex(of: event) {
-					nextEvents.remove(at: index)
-				}
+					.filter { $0.dateStarts ?? $0.date >= event.dateStarts ?? event.date }
+								
+				let currentEvent: Vulcan.ScheduleEvent? = nextEvents.first
+				nextEvents.removeFirst()
 				
 				return Entry(date: event.dateStarts ?? event.date, currentEvent: currentEvent, nextEvents: nextEvents)
 			}
