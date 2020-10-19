@@ -642,11 +642,11 @@ public final class Vulcan: ObservableObject {
 							for item in decoded {
 								let object = DictionaryEmployee(context: context)
 								object.code = item.code
-								object.id = Int16(item.id)
+								object.id = Int64(item.id)
 								object.name = item.name
 								object.surname = item.surname
 								
-								if let loginID = item.loginID { object.loginID = Int16(loginID) }
+								if let loginID = item.loginID { object.loginID = Int32(loginID) }
 								if let active = item.active { object.active = active }
 								if let teacher = item.teacher { object.teacher = teacher }
 							}
@@ -670,7 +670,7 @@ public final class Vulcan: ObservableObject {
 								let object = DictionarySubject(context: context)
 								object.active = item.active
 								object.code = item.code
-								object.id = Int16(item.id)
+								object.id = Int64(item.id)
 								object.name = item.name
 								object.position = Int16(item.position)
 							}
@@ -693,7 +693,7 @@ public final class Vulcan: ObservableObject {
 							for item in decoded {
 								let object = DictionaryLessonTime(context: context)
 								object.end = Int32(item.end)
-								object.id = Int16(item.id)
+								object.id = Int64(item.id)
 								object.number = Int16(item.number)
 								object.start = Int32(item.start)
 							}
@@ -716,7 +716,7 @@ public final class Vulcan: ObservableObject {
 							for item in decoded {
 								let object = DictionaryGradeCategory(context: context)
 								object.code = item.code
-								object.id = Int16(item.id)
+								object.id = Int64(item.id)
 								object.name = item.name
 							}
 						}
@@ -738,7 +738,7 @@ public final class Vulcan: ObservableObject {
 							for item in decoded {
 								let object = DictionaryNoteCategory(context: context)
 								object.active = item.active
-								object.id = Int16(item.id)
+								object.id = Int64(item.id)
 								object.name = item.name
 							}
 						}
@@ -761,7 +761,7 @@ public final class Vulcan: ObservableObject {
 								let object = DictionaryPresenceCategory(context: context)
 								object.justified = item.justified
 								object.exempt = item.exempt
-								object.id = Int16(item.id)
+								object.id = Int64(item.id)
 								object.late = item.late
 								object.name = item.name
 								object.position = Int16(item.position)
@@ -787,8 +787,8 @@ public final class Vulcan: ObservableObject {
 							for item in decoded {
 								let object = DictionaryPresenceType(context: context)
 								object.active = item.active
-								object.categoryID = Int16(item.categoryID)
-								object.id = Int16(item.id)
+								object.categoryID = Int32(item.categoryID)
+								object.id = Int64(item.id)
 								object.isDefault = item.isDefault
 								object.name = item.name
 								object.symbol = item.symbol

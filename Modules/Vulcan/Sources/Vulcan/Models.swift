@@ -221,9 +221,9 @@ public extension Vulcan {
 		/// - Returns: CoreData entity
 		public func entity(context: NSManagedObjectContext) -> StoredStudent {
 			let entity: StoredStudent = StoredStudent(context: context)
-			entity.branchID = Int16(self.branchID)
+			entity.branchID = Int32(self.branchID)
 			entity.classificationPeriodID = Int32(self.classificationPeriodID)
-			entity.id = Int32(self.id)
+			entity.id = Int64(self.id)
 			entity.name = self.name
 			entity.nickname = self.nickname
 			entity.periodDateFrom = Int64(self.periodDateFrom)
@@ -248,7 +248,7 @@ public extension Vulcan {
 			entity.userRole = self.userRole
 			entity.username = self.username
 			
-			if let loginID = self.loginID { entity.loginID = Int16(loginID) }
+			if let loginID = self.loginID { entity.loginID = Int32(loginID) }
 			
 			return entity
 		}
@@ -597,18 +597,18 @@ public extension Vulcan {
 			entity.lessonTimeID = Int16(self.lessonTimeID)
 			entity.note = self.note
 			entity.room = self.room
-			entity.subjectID = Int16(self.subjectID)
+			entity.subjectID = Int32(self.subjectID)
 			entity.subjectName = self.subjectName
-			entity.employeeID = Int16(self.employeeID)
+			entity.employeeID = Int32(self.employeeID)
 			entity.userSchedule = self.userSchedule
 			entity.divisionShort = self.divisionShort
 			entity.id = self.id
 			
 			if let dateStartsEpoch = self.dateStartsEpoch { entity.dateStartsEpoch = Int64(dateStartsEpoch) }
 			if let dateEndsEpoch = self.dateEndsEpoch { entity.dateEndsEpoch = Int64(dateEndsEpoch) }
-			if let oldEmployeeID = self.oldEmployeeID { entity.oldEmployeeID = Int16(oldEmployeeID) }
-			if let helpingEmployeeID = self.helpingEmployeeID { entity.helpingEmployeeID = Int16(helpingEmployeeID) }
-			if let oldHelpingEmployeeID = self.oldHelpingEmployeeID { entity.oldHelpingEmployeeID = Int16(oldHelpingEmployeeID) }
+			if let oldEmployeeID = self.oldEmployeeID { entity.oldEmployeeID = Int32(oldEmployeeID) }
+			if let helpingEmployeeID = self.helpingEmployeeID { entity.helpingEmployeeID = Int32(helpingEmployeeID) }
+			if let oldHelpingEmployeeID = self.oldHelpingEmployeeID { entity.oldHelpingEmployeeID = Int32(oldHelpingEmployeeID) }
 			if let employeeName = self.employee?.name,
 			   let employeeSurname = self.employee?.surname {
 				entity.employeeFullName = "\(employeeName) \(employeeSurname)"
@@ -714,8 +714,8 @@ public extension Vulcan {
 		public func entity(context: NSManagedObjectContext) -> StoredGrade {
 			let entity: StoredGrade = StoredGrade(context: context)
 			entity.comment = self.comment
-			entity.subjectID = Int16(self.subjectID)
-			entity.dEmployeeID = Int16(self.dEmployeeID)
+			entity.subjectID = Int32(self.subjectID)
+			entity.dEmployeeID = Int32(self.dEmployeeID)
 			entity.dateCreatedEpoch = Int64(self.dateCreatedEpoch)
 			entity.entry = self.entry
 			entity.gradeDescription = self.description
@@ -723,12 +723,12 @@ public extension Vulcan {
 			entity.position = Int16(self.position)
 			entity.weight = self.weight
 			
-			if let value = self.categoryID { entity.categoryID = Int16(value) }
+			if let value = self.categoryID { entity.categoryID = Int32(value) }
 			if let value = self.counter { entity.counter = Float(value) }
 			if let value = self.dateModifiedEpoch { entity.dateModifiedEpoch = Int64(value) }
 			if let value = self.gradeWeight { entity.gradeWeight = Float(value) }
 			if let value = self.denominator { entity.denominator = Float(value) }
-			if let value = self.mEmployeeID { entity.mEmployeeID = Int16(value) }
+			if let value = self.mEmployeeID { entity.mEmployeeID = Int32(value) }
 			if let value = self.modifierWeight { entity.modifierWeight = Float(value) }
 			
 			return entity
@@ -774,7 +774,7 @@ public extension Vulcan {
 		public func entity(context: NSManagedObjectContext) -> StoredEndOfTermGrade {
 			let entity: StoredEndOfTermGrade = StoredEndOfTermGrade(context: context)
 			entity.entry = self.entry
-			entity.subjectID = Int16(self.subjectID)
+			entity.subjectID = Int32(self.subjectID)
 			entity.type = Int16(self.type?.rawValue ?? 0)
 			
 			return entity
@@ -895,10 +895,10 @@ public extension Vulcan {
 		/// - Returns: CoreData entity
 		public func entity(context: NSManagedObjectContext) -> StoredExam {
 			let entity: StoredExam = StoredExam(context: context)
-			entity.id = Int32(self.id)
-			entity.subjectID = Int16(self.subjectID)
-			entity.employeeID = Int16(self.employeeID)
-			entity.branchID = Int16(self.branchID)
+			entity.id = Int64(self.id)
+			entity.subjectID = Int32(self.subjectID)
+			entity.employeeID = Int32(self.employeeID)
+			entity.branchID = Int32(self.branchID)
 			entity.divisionName = self.divisionName
 			entity.divisionShort = self.divisionShort
 			entity.type = self.type
@@ -965,11 +965,11 @@ public extension Vulcan {
 		/// - Returns: CoreData entity
 		public func entity(context: NSManagedObjectContext) -> StoredHomework {
 			let entity: StoredHomework = StoredHomework(context: context)
-			entity.id = Int32(self.id)
-			entity.studentID = Int16(self.studentID)
+			entity.id = Int64(self.id)
+			entity.studentID = Int32(self.studentID)
 			entity.dateEpoch = Int64(self.dateEpoch)
-			entity.employeeID = Int16(self.employeeID)
-			entity.subjectID = Int16(self.subjectID)
+			entity.employeeID = Int32(self.employeeID)
+			entity.subjectID = Int32(self.subjectID)
 			entity.entry = self.entry
 			
 			return entity
@@ -1049,17 +1049,17 @@ public extension Vulcan {
 			let entity: StoredNote = StoredNote(context: context)
 			entity.entry = self.entry
 			entity.dateCreatedEpoch = Int64(self.dateCreatedEpoch)
-			entity.id = Int32(self.id)
+			entity.id = Int64(self.id)
 			entity.key = self.key
-			entity.employeeID = Int16(self.employeeID)
+			entity.employeeID = Int32(self.employeeID)
 			entity.employeeName = self.employeeName
 			entity.employeeSurname = self.employeeSurname
-			entity.studentID = Int16(self.studentID)
+			entity.studentID = Int32(self.studentID)
 			entity.studentName = self.studentName
 			entity.studentSurname = self.studentSurname
 			
 			if let categoryID = self.categoryID {
-				entity.categoryID = Int16(categoryID)
+				entity.categoryID = Int32(categoryID)
 			}
 			
 			if let dateModified = self.dateModifiedEpoch {
@@ -1205,7 +1205,7 @@ public extension Vulcan {
 			entity.id = Int64(self.id)
 			entity.read = self.read
 			entity.sender = self.sender
-			entity.senderID = Int16(self.senderID)
+			entity.senderID = Int32(self.senderID)
 			entity.status = self.status
 			entity.title = self.title
 			

@@ -42,6 +42,9 @@ struct AppTabNavigation: View {
 			// Grades
 			NavigationView {
 				GradesView()
+				
+				Text("Nothing selected")
+					.opacity(0.3)
 			}
 			.tabItem {
 				Label("Grades", systemImage: "rosette")
@@ -97,6 +100,9 @@ struct AppTabNavigation: View {
 			// Messages
 			NavigationView {
 				MessagesView(tag: $messagesFolder)
+				
+				Text("Nothing selected")
+					.opacity(0.3)
 			}
 			.tabItem {
 				Label("Messages", systemImage: "envelope.fill")
