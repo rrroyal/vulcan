@@ -83,8 +83,9 @@ struct NowProvider: TimelineProvider {
 		var entries: [Entry] = self.schedule
 			.filter { $0.dateStarts != nil }
 			.filter { $0.dateEnds ?? $0.date >= Date().startOfDay }
-			.map { event in
-				Entry(date: event.dateStarts ?? event.date, event: event)
+			.timeline()
+			.map { date, event in
+				Entry(date: date, event: event)
 			}
 			.sorted { $0.date < $1.date }
 		

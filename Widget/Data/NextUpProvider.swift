@@ -60,6 +60,7 @@ struct NextUpProvider: TimelineProvider {
 				.filter { $0.dateStarts != nil && $0.dateEnds != nil }
 				.sorted { $0.dateStarts ?? $0.date < $1.dateStarts ?? $0.date }
 				.filter { $0.userSchedule }
+				.filter { $0.dateStarts ?? $0.date >= Date().startOfDay }
 		} else {
 			return []
 		}
@@ -83,24 +84,35 @@ struct NextUpProvider: TimelineProvider {
 	}
 	
 	func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-		let schedule = self.schedule
-			.filter { $0.dateStarts != nil }
-			.filter { $0.dateEnds ?? $0.date >= Date().startOfDay }
-		
 		var entries: [Entry] = schedule
-			.map { event in
-				var nextEvents: [Vulcan.ScheduleEvent] = self.schedule
-					.filter { $0.dateStarts ?? $0.date >= event.dateStarts ?? event.date }
-								
-				let currentEvent: Vulcan.ScheduleEvent? = nextEvents.first
-				nextEvents.removeFirst()
+			.map { event -> [Entry] in
+				let nextEvents = schedule
+					.filter { $0.dateStarts ?? $0.date > event.dateStarts ?? event.date }
 				
-				return Entry(date: event.dateStarts ?? event.date, currentEvent: currentEvent, nextEvents: nextEvents)
+				var entries: [Entry] = [Entry(date: event.dateStarts ?? event.date, currentEvent: event, nextEvents: nextEvents)]
+				
+				if let nextEventDateStarts = nextEvents.first?.dateStarts,
+				   let currentEventDateEnds = event.dateEnds,
+				   currentEventDateEnds != nextEventDateStarts {
+					entries.append(Entry(date: currentEventDateEnds, currentEvent: nil, nextEvents: nextEvents))
+				} else if event.lessonOfTheDay == 1 {
+					entries.append(Entry(date: Date().startOfDay, currentEvent: nil, nextEvents: nextEvents))
+				}
+				
+				return entries
 			}
-			.sorted { $0.date < $1.date }
+			.flatMap { $0 }
+				
+		entries.append(Entry(date: entries.last?.currentEvent?.dateEnds ?? entries.last?.date.addingTimeInterval(3600) ?? Date().addingTimeInterval(3600), currentEvent: nil, nextEvents: []))
+		entries.sort { $0.date < $1.date }
 		
-		entries.append(Entry(date: entries.last?.date ?? Date(), currentEvent: nil, nextEvents: []))
+		let policy: TimelineReloadPolicy
+		if let lastEventDateEnds = entries.last?.currentEvent?.dateEnds ?? entries.last?.nextEvents.last?.dateEnds {
+			policy = .after(lastEventDateEnds)
+		} else {
+			policy = .atEnd
+		}
 		
-		completion(Timeline(entries: entries, policy: .atEnd))
+		completion(Timeline(entries: entries, policy: policy))
 	}
 }
