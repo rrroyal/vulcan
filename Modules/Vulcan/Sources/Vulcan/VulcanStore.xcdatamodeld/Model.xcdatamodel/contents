@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20B5012d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DictionaryEmployee" representedClassName="DictionaryEmployee" syncable="YES" codeGenerationType="class">
+        <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="code" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="loginID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="surname" attributeType="String"/>
+        <attribute name="teacher" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="DictionaryGradeCategory" representedClassName="DictionaryGradeCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="code" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
+    <entity name="DictionaryLessonTime" representedClassName="DictionaryLessonTime" syncable="YES" codeGenerationType="class">
+        <attribute name="end" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="number" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="start" attributeType="Integer 32" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="DictionaryNoteCategory" representedClassName="DictionaryNoteCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="active" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
+    <entity name="DictionaryPresenceCategory" representedClassName="DictionaryPresenceCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="exempt" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="justified" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="late" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="position" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="present" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="removed" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="DictionaryPresenceType" representedClassName="DictionaryPresenceType" syncable="YES" codeGenerationType="class">
+        <attribute name="active" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="categoryID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="isDefault" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="symbol" attributeType="String"/>
+    </entity>
+    <entity name="DictionarySubject" representedClassName="DictionarySubject" syncable="YES" codeGenerationType="class">
+        <attribute name="active" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="code" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="position" attributeType="Integer 16" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="StoredEndOfTermGrade" representedClassName="StoredEndOfTermGrade" syncable="YES" codeGenerationType="class">
+        <attribute name="entry" attributeType="String"/>
+        <attribute name="subjectID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="StoredEndOfTermPoints" representedClassName="StoredEndOfTermPoints" syncable="YES" codeGenerationType="class">
+        <attribute name="gradeAverage" attributeType="String"/>
+        <attribute name="points" attributeType="String"/>
+        <attribute name="subjectID" attributeType="Integer 32" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="StoredExam" representedClassName="StoredExam" syncable="YES" codeGenerationType="class">
+        <attribute name="branchID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="dateEpoch" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="divisionID" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="divisionName" optional="YES" attributeType="String"/>
+        <attribute name="divisionShort" optional="YES" attributeType="String"/>
+        <attribute name="employeeID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="entry" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="isBigType" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="subjectID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="StoredGrade" representedClassName="StoredGrade" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="counter" optional="YES" attributeType="Float" usesScalarValueType="YES"/>
+        <attribute name="dateCreatedEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="dateModifiedEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="dEmployeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="denominator" optional="YES" attributeType="Float" usesScalarValueType="YES"/>
+        <attribute name="entry" optional="YES" attributeType="String"/>
+        <attribute name="gradeDescription" optional="YES" attributeType="String"/>
+        <attribute name="gradeWeight" optional="YES" attributeType="Float" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="mEmployeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="modifierWeight" optional="YES" attributeType="Float" usesScalarValueType="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="subjectID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="subjectPosition" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="value" optional="YES" attributeType="Float" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="StoredHomework" representedClassName="StoredHomework" syncable="YES" codeGenerationType="class">
+        <attribute name="dateEpoch" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="employeeID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="entry" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="studentID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="subjectID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="StoredMessage" representedClassName="StoredMessage" syncable="YES" codeGenerationType="class">
+        <attribute name="content" attributeType="String"/>
+        <attribute name="dateReadEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="dateSentEpoch" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="folder" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="read" optional="YES" attributeType="String"/>
+        <attribute name="recipients" optional="YES" attributeType="Binary" valueTransformerName="MessageRecipientTransformer"/>
+        <attribute name="sender" optional="YES" attributeType="String"/>
+        <attribute name="senderID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="status" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="StoredNote" representedClassName="StoredNote" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="dateCreatedEpoch" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="dateModifiedEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="employeeID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="employeeName" attributeType="String"/>
+        <attribute name="employeeSurname" attributeType="String"/>
+        <attribute name="entry" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="key" attributeType="String"/>
+        <attribute name="studentID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="studentName" attributeType="String"/>
+        <attribute name="studentSurname" attributeType="String"/>
+    </entity>
+    <entity name="StoredPresence" representedClassName="StoredPresence" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="dateEpoch" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lessonTimeID" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="number" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="subjectID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="StoredScheduleEvent" representedClassName="StoredScheduleEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="dateEndsEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="dateEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="dateStartsEpoch" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="divisionShort" optional="YES" attributeType="String"/>
+        <attribute name="employeeFullName" optional="YES" attributeType="String"/>
+        <attribute name="employeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="helpingEmployeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="isUserSchedule" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="labelBold" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="labelStrikethrough" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lessonOfTheDay" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="lessonTimeID" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="oldEmployeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="oldHelpingEmployeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="room" optional="YES" attributeType="String"/>
+        <attribute name="scheduleID" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="subjectID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="subjectName" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="StoredStudent" representedClassName="StoredStudent" syncable="YES" codeGenerationType="class">
+        <attribute name="branchID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="classificationPeriodID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="loginID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="nickname" optional="YES" attributeType="String"/>
+        <attribute name="periodDateFrom" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="periodDateTo" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="periodLevel" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="periodNumber" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="position" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="reportingUnitID" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="reportingUnitName" attributeType="String"/>
+        <attribute name="reportingUnitShort" attributeType="String"/>
+        <attribute name="reportingUnitSymbol" attributeType="String"/>
+        <attribute name="secondName" optional="YES" attributeType="String"/>
+        <attribute name="surname" attributeType="String"/>
+        <attribute name="unitCode" attributeType="String"/>
+        <attribute name="unitID" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="unitName" attributeType="String"/>
+        <attribute name="unitShort" attributeType="String"/>
+        <attribute name="unitSymbol" attributeType="String"/>
+        <attribute name="userGender" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="userLogin" attributeType="String"/>
+        <attribute name="userLoginID" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="username" attributeType="String"/>
+        <attribute name="userRole" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="DictionaryEmployee" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryGradeCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryLessonTime" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryNoteCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryPresenceCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryPresenceType" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionarySubject" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredEndOfTermGrade" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredEndOfTermPoints" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredExam" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredGrade" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredHomework" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredNote" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredPresence" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredScheduleEvent" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredStudent" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>

@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  vulcan
+  pl_PL
+
+  Created by royal on 03/09/2020.
+  
+*/
+
+"NOW_DESCRIPTION" = "Wyświetla twoją teraźniejszą lekcję. Widget pokaże następne wydarzenie w połowie lekcji.";
+"NEXTUP_DESCRIPTION" = "Wyświetla twoje następne lekcje.";
+
+"Spanish" = "Hiszpański";
+
+"No events for now 😊" = "Nic w najbliższym czasie 😊";
+
+"Now" = "Teraz";
+"Nothing for now" = "Nic w tym momencie";
+
+"Next up" = "Następnie";
+"Nothing left" = "Nic nie zostało";

@@ -1,0 +1,196 @@
+/* 
+ Localizable.strings
+ vulcan
+ pl_PL
+ 
+ Created by royal on 31/05/2020.
+ Copyright © 2020 shameful. All rights reserved.
+*/
+
+"Error!" = "Błąd!";
+"Not reachable" = "Brak połączenia z serwerem.";
+"Today" = "Dzisiaj";
+"Tomorrow" = "Jutro";
+"Lessons" = "Lekcje";
+
+// MARK: Vulcan.swift
+"No endpoint URL found" = "Nie znaleziono adresu URL. Sprawdź swój token.";
+"Tomorrow: %@" = "Jutro: %@";
+
+// MARK: ContentView.swift
+"Home" = "Strona główna";
+"Grades" = "Oceny";
+"Schedule" = "Plan lekcji";
+"Tasks" = "Zadania";
+"Messages" = "Wiadomości";
+"NO_CONNECTION_TITLE" = "Brak połączenia z internetem!";
+"NO_CONNECTION_SUBTITLE" = "Tylko lokalnie zapisane dane są dostępne.";
+"Nothing selected" = "Nic nie wybrano";
+
+// MARK: OnboardingView.swift
+"Welcome to" = "Witaj w";
+"ONBOARDING_FUNCTION1_TITLE" = "Korzystaj z platformy";
+"ONBOARDING_FUNCTION1_DESCRIPTION" = "Widgety, aplikacja na  Watch, ciemny motyw - jest tutaj wszystko.";
+"ONBOARDING_FUNCTION2_TITLE" = "Powiadomienia";
+"ONBOARDING_FUNCTION2_DESCRIPTION" = "Aplikacja przypomni Ci o kolejnych zajęciach, nowych wiadomościach, ocenach, itp.";
+"ONBOARDING_FUNCTION3_TITLE" = "Stworzone przez studenta";
+"ONBOARDING_FUNCTION3_DESCRIPTION" = "My, uczniowie, lepiej wiemy czego potrzebujemy.";
+"Continue" = "Kontynuuj";
+
+// MARK: SetupView.swift
+"Log in" = "Zaloguj";
+"SETUP_TITLE" = "Logowanie";
+"Token" = "Token";
+"Symbol" = "Symbol";
+"PIN" = "PIN";
+"Fill all fields!" = "Wypełnij wszystkie pola!";
+"Logging in..." = "Loguje się...";
+"Error logging in" = "Błąd podczas logowania";
+"Go back" = "Wróć";
+"Nevermind" = "Nieważne";
+
+// MARK: HomeView.swift
+"User" = "Użytkownik";
+"HELLO : %s" = "Cześć, %@!";
+"GOOD_MORNING : %@" = "Dzień dobry, %@!";
+"GOOD_AFTERNOON : %@" = "Dzień dobry, %@!";
+"GOOD_EVENING : %@" = "Dobry wieczór, %@!";
+"DATE_CURRENTLY : %@" = "Jest %@.";
+
+"Current lesson" = "Bieżąca lekcja";
+"Next lesson" = "Następna lekcja";
+"No lessons for now ☺️" = "Brak lekcji w najbliższym czasie ☺️";
+"New grades" = "Nowe oceny";
+"Exams" = "Testy";
+"Homework" = "Zadania domowe";
+"New messages" = "Nowe wiadomości";
+
+"User details" = "Dane użytkownika";
+"Not logged in" = "Nie zalogowano";
+
+"No grades" = "Brak ocen";
+
+"Nothing in the near future" = "Nic w najbliższym czasie";
+"No new messages" = "Brak nowych wiadomości";
+
+"Your summary for today" = "Twoje dzisiejsze podsumowanie";
+
+// MARK: GradesView.swift
+"See your grades" = "Zobacz swoje oceny";
+
+// MARK: ScheduleView.swift
+"No lessons for this week 😊" = "Brak lekcji na ten tydzień 😊";
+"No lessons for this day 😊" = "Brak lekcji na ten dzień 😊";
+"Displays your schedule" = "Pokazuje Twój plan lekcji";
+
+// MARK: TasksView.swift
+"No tasks" = "Brak zadań";
+"TASKS_FOLDER_TITLE" = "Wybierz kategorię";
+"Add to reminders" = "Dodaj do przypomnień";
+"Add to calendar" = "Dodaj do kalendarza";
+"TAG_EXAM" = "Test";
+"TAG_HOMEWORK" = "Zadanie domowe";
+"No exams for this month 😊" = "Brak testów w tym miesiącu 😊";
+"No homework for this month 😊" = "Brak zadań domowych w tym miesiącu 😊";
+"Displays your upcoming exams and homework" = "Pokazuje Twoje najbliższe testy i zadania domowe";
+
+// MARK: MessagesView.swift
+"No messages found" = "Brak wiadomości";
+"Unknown" = "Nieznane";
+"Reply" = "Odpowiedz";
+"Mark as read" = "Przeczytano";
+"Copy" = "Kopiuj";
+"Delete" = "Usuń";
+"MESSAGES_FOLDER_TITLE" = "Wybierz folder";
+"Received" = "Odebrane";
+"Sent" = "Wysłane";
+"Deleted" = "Usunięte";
+"MESSAGES : %@" = "Wiadomości (%@)";
+"Filter" = "Filtrowanie";
+"All" = "Wszystko";
+"New" = "Nowa";
+"See your received messages" = "Zobacz swoje odebrane wiadomości";
+
+// MARK: SettingsView.swift
+"General" = "Ogólne";
+"Settings" = "Ustawienia";
+"Libraries" = "Biblioteki";
+"Default" = "Domyślny";
+
+"SETTINGS_LOGGEDIN : %@" = "Zalogowano jako %@";
+"Log out" = "Wyloguj się";
+"Show all" = "Wszystkie";
+"Notifications" = "Powiadomienia";
+"SETTINGS_SCHEDULEALLEVENTS" = "Pokaż wszystkie grupy";
+"SETTINGS_SCHEDULEALLEVENTS_TOOLTIP" = "Jeśli włączone, będziesz widzieć plan lekcji całej klasy.";
+"SETTINGS_READMESSAGEONOPEN" = "Czytaj wiadomości po otwarciu";
+"SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Wiadomości zostaną oznaczone jako przeczytane po ich otwarciu.";
+"SETTINGS_SCHEDULENOTIFICATIONS" = "Powiadomienia o lekcjach";
+"SETTINGS_SCHEDULENOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o następnej lekcji na końcu poprzedniej.";
+"SETTINGS_TASKNOTIFICATIONS" = "Powiadomienia o zadaniach";
+"SETTINGS_TASKNOTIFICATIONS_TOOLTIP" = "Aplikacja przypomni ci o zadaniach dzień wcześniej.";
+"Interface" = "Interfejs";
+"SETTINGS_FILTERSCHEDULE" = "Pokazuj tylko wybrany dzień";
+"SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Plan lekcji zamiast pokazywać cały tydzień będzie pokazywał tylko wybrany dzień.";
+"SETTINGS_COLORIZEGRADES" = "Koloruj oceny";
+"SETTINGS_COLORIZEGRADES_TOOLTIP" = "Etykiety ocen będą kolorowe.";
+"SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
+"SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "Jeśli nie lubisz Haptic Feedback'u tak bardzo jak ja, możesz go wyłączyć.";
+
+"Other" = "Inne";
+"Reset user settings" = "Resetuj";
+"SETTINGS_RESET" = "Na pewno?";
+"SETTINGS_RESET_TOOLTIP" = "Wszystkie dane aplikacji zostaną usunięte!";
+"SETTINGS_RESETTED" = "Zresetowano! Zrestartować aplikacje?";
+"Done!" = "Gotowe!";
+"Yes" = "Tak";
+"No" = "Nie";
+"Reset" = "Resetuj";
+"New update available!" = "Dostępna jest nowa wersja!";
+
+"Color Scheme" = "Motyw";
+"App Icon" = "Ikona aplikacji";
+"AppIcon" = "Domyślna";
+
+"Made with ❤️ (and ☕️) by @rrroyal" = "Zrobione z ❤️ (i ☕️) przez @rrroyal";
+"Version %@ (Build %@)" = "Wersja %@ (Numer %@)";
+
+// MARK: GradesDetailView.swift
+"No description" = "Brak opisu";
+"Average" = "Średnia";
+"Anticipated" = "Ocena proponowana";
+"Final" = "Ocena ostateczna";
+
+// MARK: ComposeMessageView.swift
+"Title" = "Tytuł";
+"Choose a recipient..." = "Wybierz adresatów...";
+"Message content..." = "Treść wiadomości...";
+"Recipients" = "Adresaci";
+"Done" = "Gotowe";
+
+// MARK: MessageDetailView.swift
+"Links" = "Odnośniki";
+"Search" = "Szukaj";
+
+// MARK: UsersView.swift
+"Users" = "Użytkownicy";
+
+// MARK: UserDetailView.swift
+"About" = "O użytkowniku";
+"Name" = "Imię";
+"Second name" = "Drugie imię";
+"Surname" = "Nazwisko";
+"Nick" = "Pseudonim";
+"Login ID" = "Login ID";
+"Department Code" = "Kod wydziału";
+"Branch Name" = "Nazwa wydziału";
+"Branch Name (short)" = "Krótka nazwa wydziału";
+"Nothing found" = "Nic nie znaleziono";
+"Anticipated grades" = "Oceny proponowane";
+"Final grades" = "Oceny ostateczne";
+"Notes" = "Uwagi";
+
+// MARK: - TaskCell.swift
+"No entry" = "Brak wpisu";
+"EXAM_BIG" = "Sprawdzian";
+"EXAM_SMALL" = "Kartkówka";

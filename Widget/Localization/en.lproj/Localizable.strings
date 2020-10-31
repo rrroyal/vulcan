@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  vulcan
+  en_US
+
+  Created by royal on 03/09/2020.
+  
+*/
+
+"NOW_DESCRIPTION" = "Displays your current event. It will change halfway through the event.";
+"NEXTUP_DESCRIPTION" = "Displays your next events.";
+
+"Spanish" = "Spanish";
+
+"No events for now 😊" = "No events for now 😊";
+
+"Now" = "Now";
+"Nothing for now" = "Nothing for now";
+
+"Next up" = "Next up";
+"Nothing left" = "Nothing left";
