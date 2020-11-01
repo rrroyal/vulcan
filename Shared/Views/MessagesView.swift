@@ -62,7 +62,7 @@ struct MessagesView: View {
 	}
 	
 	private func onAppear() {
-		if (AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil) {
+		if (AppState.shared.networkingMonitor.currentPath.isExpensive || vulcan.currentUser == nil) {
 			return
 		}
 		
@@ -146,16 +146,6 @@ struct MessagesView: View {
 			}
 		}
 		.listStyle(InsetGroupedListStyle())
-		.onAppear {
-			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
-				return
-			}
-			
-			let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.messages[tag]?.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
-			if nextFetch <= Date() {
-				fetch()
-			}
-		}
 	}
 	
 	/// Sidebar ViewBuilder
@@ -206,6 +196,16 @@ struct MessagesView: View {
 				let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
 				attributes.contentDescription = "See your received messages".localized
 				activity.contentAttributeSet = attributes				
+			}
+			.onAppear {
+				if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
+					return
+				}
+				
+				let nextFetch: Date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 5, to: vulcan.dataState.messages[tag]?.lastFetched ?? Date(timeIntervalSince1970: 0)) ?? Date()
+				if nextFetch <= Date() {
+					fetch()
+				}
 			}
 	}
 }

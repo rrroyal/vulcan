@@ -33,10 +33,10 @@ struct vulcanApp: App {
 						case .active:
 							if let shortcutItemToProcess = appState.shortcutItemToProcess {
 								switch shortcutItemToProcess.type {
-									case "shortcutGrades":		appState.currentTab = [.grades]
-									case "shortcutSchedule":	appState.currentTab = [.schedule]
-									case "shortcutTasks":		appState.currentTab = [.tasks]
-									case "shortcutMessages":	appState.currentTab = [.messages]
+									case "shortcutGrades":		appState.currentTab = .grades
+									case "shortcutSchedule":	appState.currentTab = .schedule
+									case "shortcutTasks":		appState.currentTab = .tasks
+									case "shortcutMessages":	appState.currentTab = .messages
 									default:					break
 								}
 								
@@ -54,24 +54,24 @@ struct vulcanApp: App {
 				}
 				.onOpenURL { url in
 					switch url.host {
-						case "schedule": appState.currentTab = [.schedule]
+						case "schedule": appState.currentTab = .schedule
 						default: break
 					}
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
-					appState.currentTab = [.home]
+					appState.currentTab = .home
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity") { activity in
-					appState.currentTab = [.grades]
+					appState.currentTab = .grades
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").scheduleActivity") { activity in
-					appState.currentTab = [.schedule]
+					appState.currentTab = .schedule
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity") { activity in
-					appState.currentTab = [.tasks]
+					appState.currentTab = .tasks
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").messagesActivity") { activity in
-					appState.currentTab = [.messages]
+					appState.currentTab = .messages
 				}
         }
 		

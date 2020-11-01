@@ -9,7 +9,7 @@ import SwiftUI
 import Vulcan
 
 struct AppSidebarNavigation: View {
-	@ObservedObject var appState: AppState
+	// @ObservedObject var appState: AppState
 	
 	@EnvironmentObject private var vulcan: Vulcan
 	@EnvironmentObject private var settings: SettingsModel
@@ -104,6 +104,6 @@ struct AppSidebarNavigation: View {
 
 struct AppSidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
-		AppSidebarNavigation(appState: AppState.shared)
+		AppSidebarNavigation()
     }
 }

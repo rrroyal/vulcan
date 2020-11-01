@@ -14,7 +14,7 @@ struct AppTabNavigation: View {
 	@State private var messagesFolder: Vulcan.MessageTag = .received
 	
 	var body: some View {
-		TabView(selection: $appState.currentTab[0]) {
+		TabView(selection: $appState.currentTab) {
 			// Home
 			NavigationView {
 				#if os(OSX)

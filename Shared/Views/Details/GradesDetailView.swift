@@ -131,7 +131,7 @@ struct GradesDetailView: View {
 		.onAppear {
 			vulcan.grades.first(where: { $0.subject.id == self.subject.id })?.hasNewItems = false
 			
-			if (AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil) {
+			if (AppState.shared.networkingMonitor.currentPath.isExpensive || vulcan.currentUser == nil) {
 				return
 			}
 			

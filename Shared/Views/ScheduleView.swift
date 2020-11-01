@@ -130,7 +130,7 @@ struct ScheduleView: View {
 			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
-			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
+			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return
 			}
 			

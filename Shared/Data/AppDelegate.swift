@@ -19,15 +19,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 	// MARK: - App Lifecycle
 	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "AppDelegate")
 	
-	private var cancellableSet: [AnyCancellable] = []
+	private var cancellableSet: Set<AnyCancellable> = []
 	
 	/// Called when app is launched
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		// WatchConnectivity session
 		WatchSessionManager.shared.startSession()
-		
-		// Networking
-		AppState.networking.monitor.start(queue: .global())
 		
 		// UserNotifications
 		let notifications: Notifications = Notifications.shared
@@ -37,7 +34,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 		BGTaskScheduler.shared.register(forTaskWithIdentifier: "dev.niepostek.vulcan.refreshData", using: nil) { task in
 			self.handleAppRefresh(task)
 		}
-		
+				
 		// Listeners
 		Vulcan.shared.$currentUser
 			.sink { user in

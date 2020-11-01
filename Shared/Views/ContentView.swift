@@ -23,13 +23,13 @@ struct ContentView: View {
 		Group {
 			#if os(iOS)
 			/* if horizontalSizeClass == .compact {
-				AppTabNavigation(currentTab: $currentTab)
+				AppTabNavigation(appState: appState)
 			} else {
 				AppSidebarNavigation()
 			} */
 			AppTabNavigation(appState: appState)
 			#else
-			AppSidebarNavigation(appState: appState)
+			AppSidebarNavigation()
 			#endif
 		}
 		.sheet(isPresented: $isOnboardingVisible, onDismiss: {
