@@ -93,7 +93,7 @@ struct GradesDetailView: View {
 		List {
 			// Grades
 			Section {
-				ForEach(subject.grades) { (grade) in
+				ForEach(subject.grades) { grade in
 					GradeCell(scheme: colorScheme, colorize: colorizeGrades, grade: grade)
 				}
 			}

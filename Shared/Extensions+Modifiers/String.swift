@@ -9,18 +9,17 @@ import Foundation
 
 extension String {
 	/// Returns strings of the URLs in the current string.
-	var urls: [URL] {
+	var urls: [URL]? {
 		var urls : [URL] = []
-		do {
-			let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-			detector.enumerateMatches(in: self, options: [], range: NSMakeRange(0, self.count), using: { (result, _, _) in
-				if let match = result, let url = match.url {
-					urls.append(url)
-				}
-			})
-		} catch {
-			// AppState.logger.info(error.localizedDescription)
+		guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
+			return nil
 		}
+		
+		detector.enumerateMatches(in: self, options: [], range: NSMakeRange(0, self.count), using: { result, _, _ in
+			if let match = result, let url = match.url {
+				urls.append(url)
+			}
+		})
 		
 		return urls
 	}

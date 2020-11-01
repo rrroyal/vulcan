@@ -36,7 +36,7 @@ final class Notifications: NSObject, UNUserNotificationCenterDelegate {
 	func requestAuthorization() {
 		let options: UNAuthorizationOptions = [.alert, .sound, .badge, .announcement]
 		
-		notificationCenter.requestAuthorization(options: options) { (allowed, error) in
+		notificationCenter.requestAuthorization(options: options) { allowed, error in
 			if !allowed {
 				self.logger.warning("User declined the authorization prompt. Error: \(error?.localizedDescription ?? "none")")
 				return

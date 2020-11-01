@@ -177,7 +177,7 @@ struct ComposeMessageView: View {
 				messageTitle = "RE: \(message.title)".trimmingCharacters(in: .whitespacesAndNewlines)
 				
 				// Why the fuck is `senderID` different than `DictionaryEmployee.id`?
-				switch (message.tag) {
+				switch message.tag {
 					case .received, .deleted, .none:
 						messageRecipients = [Vulcan.Recipient(id: message.senderID, name: message.sender ?? "")]
 					case .sent:

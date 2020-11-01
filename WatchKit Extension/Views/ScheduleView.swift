@@ -24,7 +24,7 @@ struct ScheduleView: View {
 	
     var body: some View {
 		Group {
-			if ((events ?? []).count > 0) {
+			if (!(events ?? []).isEmpty) {
 				List {
 					ForEach(events ?? []) { event in
 						ScheduleEventCell(event: event)

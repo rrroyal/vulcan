@@ -41,8 +41,8 @@ struct GradesView: View {
 	/// Sidebar ViewBuilder
 	@ViewBuilder var body: some View {
 		List(selection: $selection) {
-			if (vulcan.grades.count > 0) {
-				ForEach(vulcan.grades) { (subject) in
+			if (!vulcan.grades.isEmpty) {
+				ForEach(vulcan.grades) { subject in
 					NavigationLink(destination: GradesDetailView(subject: subject), tag: subject, selection: $selection) {
 						HStack {
 							VStack(alignment: .leading, spacing: 5) {

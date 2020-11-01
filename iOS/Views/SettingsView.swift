@@ -149,7 +149,7 @@ struct SettingsView: View {
 				}
 			}
 			
-			if vulcan.currentUser != nil || vulcan.users.count > 0 {
+			if vulcan.currentUser != nil || !vulcan.users.isEmpty {
 				NavigationLink(destination: UsersView()) {
 					Text("Users")
 						.font(.body)

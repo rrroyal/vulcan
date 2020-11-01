@@ -401,7 +401,7 @@ public final class Vulcan: ObservableObject {
 				var endpointURL: String?
 				
 				// Parse lines
-				lines?.forEach { (line) in
+				lines?.forEach { line in
 					let items = line.split(separator: ",")
 					if (token.starts(with: items[0])) {
 						// We found our URL
@@ -486,9 +486,9 @@ public final class Vulcan: ObservableObject {
 				
 				return json["TokenCert"] as? [String: Any]
 			}
-			.sink(receiveCompletion: { (completion) in
+			.sink(receiveCompletion: { completion in
 				logger.info("Completion: \(String(describing: completion))")
-				switch (completion) {
+				switch completion {
 					case .finished:
 						self.ud.setValue(true, forKey: UserDefaults.AppKeys.isLoggedIn.rawValue)
 						logger.debug("Finished logging in!")
@@ -603,7 +603,7 @@ public final class Vulcan: ObservableObject {
 				.sink(receiveCompletion: { completion in
 					logger.debug("Finished: \(String(describing: completion))")
 					self.dataState.dictionary.loading = false
-					switch (completion) {
+					switch completion {
 						case .finished:
 							break
 						case .failure(let error):
@@ -834,7 +834,7 @@ public final class Vulcan: ObservableObject {
 					return try JSONSerialization.data(withJSONObject: objects, options: [])
 				}
 				.decode(type: [Vulcan.Student].self, decoder: JSONDecoder())
-				.sink(receiveCompletion: { (completion) in
+				.sink(receiveCompletion: { completion in
 					self.dataState.users.loading = false
 					switch completion {
 						case .finished:
@@ -931,7 +931,7 @@ public final class Vulcan: ObservableObject {
 					return try JSONSerialization.data(withJSONObject: objects, options: [])
 				}
 				.decode(type: [Vulcan.ScheduleEvent].self, decoder: JSONDecoder())
-				.sink(receiveCompletion: { (completion) in
+				.sink(receiveCompletion: { completion in
 					self.dataState.schedule.loading = false
 					switch completion {
 						case .finished:
@@ -1083,7 +1083,7 @@ public final class Vulcan: ObservableObject {
 					return try JSONSerialization.data(withJSONObject: objects, options: [])
 				}
 				.decode(type: [Vulcan.Grade].self, decoder: JSONDecoder())
-				.sink(receiveCompletion: { (completion) in
+				.sink(receiveCompletion: { completion in
 					self.dataState.grades.loading = false
 					switch completion {
 						case .finished:
@@ -1233,7 +1233,7 @@ public final class Vulcan: ObservableObject {
 						try decoder.decode([Vulcan.EndOfTermGrade].self, from: finalData),
 						try decoder.decode([Vulcan.EndOfTermPoints].self, from: pointsData))
 				}
-				.sink(receiveCompletion: { (completion) in
+				.sink(receiveCompletion: { completion in
 					self.dataState.eotGrades.loading = false
 					switch completion {
 						case .finished:
@@ -1348,7 +1348,7 @@ public final class Vulcan: ObservableObject {
 					return try JSONSerialization.data(withJSONObject: objects, options: [])
 				}
 				.decode(type: [Vulcan.Note].self, decoder: JSONDecoder())
-				.sink(receiveCompletion: { (completion) in
+				.sink(receiveCompletion: { completion in
 					self.dataState.notes.loading = false
 					switch completion {
 						case .finished:
@@ -1602,7 +1602,7 @@ public final class Vulcan: ObservableObject {
 		var tempMessages = self.messages[tag] ?? []
 		
 		var tagEndpoint: String
-		switch (tag) {
+		switch tag {
 			case .received:	tagEndpoint = "WiadomosciOdebrane"
 			case .deleted:	tagEndpoint = "WiadomosciUsuniete"
 			case .sent:		tagEndpoint = "WiadomosciWyslane"
@@ -1631,7 +1631,7 @@ public final class Vulcan: ObservableObject {
 					return try JSONSerialization.data(withJSONObject: objects, options: [])
 				}
 				.decode(type: [Vulcan.Message].self, decoder: JSONDecoder())
-				.sink(receiveCompletion: { (completion) in
+				.sink(receiveCompletion: { completion in
 					self.dataState.messages[tag]?.loading = false
 					switch completion {
 						case .finished:
@@ -1664,7 +1664,7 @@ public final class Vulcan: ObservableObject {
 							let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredMessage.fetchRequest()
 							fetchRequest.predicate = NSPredicate(format: "dateSentEpoch <= %i OR dateSentEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
 														
-							switch (tag) {
+							switch tag {
 								case .deleted:	fetchRequest.predicate = NSPredicate(format: "status == %@", "Usunieta")
 								case .received:	fetchRequest.predicate = NSPredicate(format: "status == %@ AND folder == %@", "Widoczna", "Odebrane")
 								case .sent:		fetchRequest.predicate = NSPredicate(format: "status == %@ AND folder == %@", "Widoczna", "Wyslane")
@@ -1881,7 +1881,7 @@ public final class Vulcan: ObservableObject {
 		// Merge request bodies
 		if let httpBody: Data = request.httpBody,
 		   let oldRequestBody: [String: Any] = try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: Any] {
-			body = body.merging(oldRequestBody) { (_, new) in new }
+			body = body.merging(oldRequestBody) { _, new in new }
 		}
 		
 		let bodyData = try? JSONSerialization.data(withJSONObject: body)
@@ -1981,7 +1981,7 @@ public final class Vulcan: ObservableObject {
 		
 		let content = UNMutableNotificationContent()
 		
-		switch (task.tag) {
+		switch task.tag {
 			case .exam:
 				if let isBigType = isBigType {
 					content.title = "\(NSLocalizedString("Tomorrow", comment: "")): \(NSLocalizedString(isBigType ? "EXAM_BIG" : "EXAM_SMALL", comment: ""))"

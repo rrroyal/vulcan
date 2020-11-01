@@ -9,11 +9,12 @@ import SwiftUI
 import Vulcan
 
 struct AppTabNavigation: View {
-	@Binding var currentTab: Tab
+	@ObservedObject var appState: AppState
+	
 	@State private var messagesFolder: Vulcan.MessageTag = .received
 	
 	var body: some View {
-		TabView(selection: $currentTab) {
+		TabView(selection: $appState.currentTab[0]) {
 			// Home
 			NavigationView {
 				#if os(OSX)
@@ -88,6 +89,6 @@ struct AppTabNavigation: View {
 
 struct AppTabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-		AppTabNavigation(currentTab: .constant(.home))
+		AppTabNavigation(appState: AppState.shared)
     }
 }

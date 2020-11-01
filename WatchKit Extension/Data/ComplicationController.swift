@@ -168,7 +168,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 		// Graphic Extra Large
 		let graphicExtraLarge = CLKComplicationTemplateGraphicExtraLargeCircularStackText(line1TextProvider: scheduleText, line2TextProvider: nothingLeftEmojiText)
 		
-		switch (complication.family) {
+		switch complication.family {
 			case .circularSmall:		template = circularSmall
 			case .modularSmall:			template = modularSmall
 			case .modularLarge:			template = modularLarge
@@ -252,7 +252,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 		// Graphic Extra Large
 		let graphicExtraLarge: CLKComplicationTemplate = CLKComplicationTemplateGraphicExtraLargeCircularStackText(line1TextProvider: roomAndSubjectTextProvider, line2TextProvider: dateProvider)
 		
-		switch (complication.family) {
+		switch complication.family {
 			case .circularSmall:		template = circularSmall
 			case .modularSmall:			template = modularSmall
 			case .modularLarge:			template = modularLarge

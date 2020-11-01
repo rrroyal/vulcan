@@ -34,7 +34,7 @@ func generateHaptic(_ style: FeedbackStyle) {
 		
 	if (supportsHaptics) {
 		// Haptic Feedback
-		switch (style) {
+		switch style {
 			case .error:	UINotificationFeedbackGenerator().notificationOccurred(.error); break
 			case .success:	UINotificationFeedbackGenerator().notificationOccurred(.success); break
 			case .warning:	UINotificationFeedbackGenerator().notificationOccurred(.warning); break
@@ -47,7 +47,7 @@ func generateHaptic(_ style: FeedbackStyle) {
 		}
 	} else {
 		// Older devices
-		switch (style) {
+		switch style {
 			case .error:	AudioServicesPlaySystemSound(1521); break
 			case .success:	break
 			case .warning:	break

@@ -80,7 +80,7 @@ struct DebugView: View {
 				Button(action: {
 					logger.debug("Scheduling new BGRefresh task.")
 					(UIApplication.shared.delegate as? AppDelegate)?.scheduleBackgroundRefresh()
-					BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { (items) in
+					BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { items in
 						pendingTaskRequests = items
 					})
 					generateHaptic(.light)
@@ -92,7 +92,7 @@ struct DebugView: View {
 				Button(action: {
 					logger.debug("Cancelling all BGRefresh tasks.")
 					BGTaskScheduler.shared.cancelAllTaskRequests()
-					BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { (items) in
+					BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { items in
 						pendingTaskRequests = items
 					})
 					generateHaptic(.light)
@@ -101,7 +101,7 @@ struct DebugView: View {
 				}
 				
 				// Scheduled events
-				ForEach(pendingTaskRequests, id: \.identifier) { (item) in
+				ForEach(pendingTaskRequests, id: \.identifier) { item in
 					Text(String(describing: item))
 				}
 			}

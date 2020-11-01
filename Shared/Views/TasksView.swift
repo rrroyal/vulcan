@@ -62,7 +62,7 @@ struct TasksView: View {
 		List {
 			// Exams
 			Section(header: Text("Exams").textCase(.none)) {
-				if (exams.count > 0) {
+				if (!exams.isEmpty) {
 					ForEach(exams) { task in
 						TaskCell(task: task, isBigType: task.isBigType)
 					}
@@ -76,7 +76,7 @@ struct TasksView: View {
 			
 			// Homework
 			Section(header: Text("Homework").textCase(.none)) {
-				if (homework.count > 0) {
+				if (!homework.isEmpty) {
 					ForEach(homework) { task in
 						TaskCell(task: task, isBigType: nil)
 					}

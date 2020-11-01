@@ -12,7 +12,7 @@ struct ColorSchemeSettingsView: View {
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) var colorScheme: String = "Default"
 	
 	var body: some View {
-		List(Bundle.main.colorSchemes, id: \.self) { (scheme) in
+		List(Bundle.main.colorSchemes, id: \.self) { scheme in
 			HStack {
 				VStack(alignment: .leading) {
 					Text(LocalizedStringKey(scheme))

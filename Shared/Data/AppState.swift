@@ -16,6 +16,9 @@ final class AppState: ObservableObject {
 	static public var shared: AppState = AppState()
 	static public var networking: AppState.Networking = AppState.Networking()
 	
+	public var shortcutItemToProcess: UIApplicationShortcutItem?
+	@Published public var currentTab: [Tab] = [.home]
+	
 	private let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).AppState", category: "AppState")
 	
 	private init() {
@@ -32,7 +35,7 @@ final class AppState: ObservableObject {
 		
 		fileprivate init() {
 			// self.monitor.start(queue: .global())
-			self.monitor.pathUpdateHandler = { (path) in
+			self.monitor.pathUpdateHandler = { path in
 				// Publish
 				self.notificationPublisher.send(path.status == .satisfied)
 				

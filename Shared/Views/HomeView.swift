@@ -166,8 +166,8 @@ struct HomeView: View {
 	/// Section containing new exams.
 	private var examsSection: some View {
 		Section(header: Text("Exams").textCase(.none)) {
-			if (newExams.count > 0) {
-				ForEach(newExams) { (task) in
+			if (!newExams.isEmpty) {
+				ForEach(newExams) { task in
 					TaskCell(task: task, isBigType: task.isBigType)
 				}
 			} else {
@@ -183,8 +183,8 @@ struct HomeView: View {
 	/// Section containing new homework tasks.
 	private var homeworkSection: some View {
 		Section(header: Text("Homework").textCase(.none)) {
-			if (newHomework.count > 0) {
-				ForEach(newHomework) { (task) in
+			if (!newHomework.isEmpty) {
+				ForEach(newHomework) { task in
 					TaskCell(task: task, isBigType: nil)
 				}
 			} else {
@@ -200,7 +200,7 @@ struct HomeView: View {
 	/// Section containing unread messages.
 	private var messagesSection: some View {
 		Section(header: Text("New messages").textCase(.none)) {
-			if (newMessages.count > 0) {
+			if (!newMessages.isEmpty) {
 				ForEach(newMessages) { message in
 					NavigationLink(destination: MessageDetailView(message: message)) {
 						MessageCell(message: message, isComposeSheetPresented: $isComposeSheetPresented, messageToReply: $messageToReply)
@@ -225,7 +225,7 @@ struct HomeView: View {
 					.multilineTextAlignment(.center)
 					.fullWidth()
 			} else {
-				ForEach(vulcan.eotGrades.expected, id: \.subjectID) { (grade) in
+				ForEach(vulcan.eotGrades.expected, id: \.subjectID) { grade in
 					FinalGradeCell(scheme: colorScheme, colorize: colorizeGrades, grade: grade)
 						.id("anticipatedGrade:\(grade.subjectID)")
 				}
@@ -254,7 +254,7 @@ struct HomeView: View {
 					.multilineTextAlignment(.center)
 					.fullWidth()
 			} else {
-				ForEach(vulcan.eotGrades.final, id: \.subjectID) { (grade) in
+				ForEach(vulcan.eotGrades.final, id: \.subjectID) { grade in
 					FinalGradeCell(scheme: colorScheme, colorize: colorizeGrades, grade: grade)
 						.id("finalGrade:\(grade.subjectID)")
 				}
@@ -283,7 +283,7 @@ struct HomeView: View {
 					.multilineTextAlignment(.center)
 					.fullWidth()
 			} else {
-				ForEach(vulcan.notes) { (note) in
+				ForEach(vulcan.notes) { note in
 					NoteCell(note: note)
 				}
 			}

@@ -13,7 +13,7 @@ struct TasksView: View {
     var body: some View {
 		List {
 			Section(header: Text("Homework")) {
-				if (vulcanStore.tasks.homework.filter({ $0.date >= Date() }).count > 0) {
+				if (!vulcanStore.tasks.homework.filter({ $0.date >= Date() }).isEmpty) {
 					ForEach(vulcanStore.tasks.homework.filter({ $0.date >= Date() })) { task in
 						TaskCell(task: task, isBigType: nil)
 					}
@@ -26,7 +26,7 @@ struct TasksView: View {
 			}
 			
 			Section(header: Text("Exams")) {
-				if (vulcanStore.tasks.exams.filter({ $0.date >= Date() }).count > 0) {
+				if (!vulcanStore.tasks.exams.filter({ $0.date >= Date() }).isEmpty) {
 					ForEach(vulcanStore.tasks.exams.filter({ $0.date >= Date() })) { task in
 						TaskCell(task: task, isBigType: task.isBigType)
 					}

@@ -16,13 +16,11 @@ struct vulcanApp: App {
 	@StateObject private var vulcan: Vulcan = Vulcan.shared
 	@StateObject private var settings: SettingsModel = SettingsModel.shared
 	@StateObject private var appNotifications: AppNotifications = AppNotifications.shared
-	// @StateObject private var appState: AppState = AppState.shared
-	
-	@State private var currentTab: Tab = .home
-	
+	@StateObject private var appState: AppState = AppState.shared
+		
     @SceneBuilder var body: some Scene {
         WindowGroup {
-            ContentView(currentTab: $currentTab)
+			ContentView(appState: appState)
 				.environment(\.managedObjectContext, CoreDataModel.shared.persistentContainer.viewContext)
 				.environmentObject(vulcan)
 				.environmentObject(settings)
@@ -30,10 +28,20 @@ struct vulcanApp: App {
 				// .environmentObject(appState)
 				.defaultAppStorage(.group)
 				.notificationOverlay(appNotifications)
-				.onChange(of: scenePhase) { (newPhase) in
+				.onChange(of: scenePhase) { newPhase in
 					switch newPhase {
 						case .active:
-							break
+							if let shortcutItemToProcess = appState.shortcutItemToProcess {
+								switch shortcutItemToProcess.type {
+									case "shortcutGrades":		appState.currentTab = [.grades]
+									case "shortcutSchedule":	appState.currentTab = [.schedule]
+									case "shortcutTasks":		appState.currentTab = [.tasks]
+									case "shortcutMessages":	appState.currentTab = [.messages]
+									default:					break
+								}
+								
+								appState.shortcutItemToProcess = nil
+							}
 						case .inactive:
 							break
 						case .background:
@@ -45,25 +53,25 @@ struct vulcanApp: App {
 					}
 				}
 				.onOpenURL { url in
-					switch (url.host) {
-						case "schedule": currentTab = .schedule
+					switch url.host {
+						case "schedule": appState.currentTab = [.schedule]
 						default: break
 					}
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
-					currentTab = .home
+					appState.currentTab = [.home]
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity") { activity in
-					currentTab = .grades
+					appState.currentTab = [.grades]
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").scheduleActivity") { activity in
-					currentTab = .schedule
+					appState.currentTab = [.schedule]
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity") { activity in
-					currentTab = .tasks
+					appState.currentTab = [.tasks]
 				}
 				.onContinueUserActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").messagesActivity") { activity in
-					currentTab = .messages
+					appState.currentTab = [.messages]
 				}
         }
 		

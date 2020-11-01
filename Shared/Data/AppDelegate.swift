@@ -34,13 +34,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 		notifications.notificationCenter.delegate = notifications
 		
 		// Background fetch
-		BGTaskScheduler.shared.register(forTaskWithIdentifier: "dev.niepostek.vulcan.refreshData", using: nil) { (task) in
+		BGTaskScheduler.shared.register(forTaskWithIdentifier: "dev.niepostek.vulcan.refreshData", using: nil) { task in
 			self.handleAppRefresh(task)
 		}
 		
 		// Listeners
 		Vulcan.shared.$currentUser
 			.sink { user in
+				self.setShortcuts(visible: user != nil)
+				
 				let watchData: [String: Any] = [
 					"type": "Vulcan",
 					"data": [
@@ -75,6 +77,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 			.store(in: &cancellableSet)
 		
 		return true
+	}
+	
+	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+		if let shortcutItem = options.shortcutItem {
+			AppState.shared.shortcutItemToProcess = shortcutItem
+		}
+		
+		let sceneConfiguration = UISceneConfiguration(name: "Custom Configuration", sessionRole: connectingSceneSession.role)
+		sceneConfiguration.delegateClass = CustomSceneDelegate.self
+		
+		return sceneConfiguration
 	}
 	
 	/// Registered for APNs
@@ -151,5 +164,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 		}
 		
 		self.scheduleBackgroundRefresh()
+	}
+}
+
+class CustomSceneDelegate: UIResponder, UIWindowSceneDelegate {
+	func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+		AppState.shared.shortcutItemToProcess = shortcutItem
 	}
 }

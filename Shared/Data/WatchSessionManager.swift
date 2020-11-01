@@ -124,12 +124,12 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 			do {
 				if session.isReachable {
 					self.logger.info("Sending message! Reachable: \(session.isReachable).")
-					session.sendMessage(data, replyHandler: { (reply) in
+					session.sendMessage(data, replyHandler: { reply in
 						self.logger.info("Reply: \(reply)")
 						if (reply["receivedData"] as? Bool ?? true == true) {
 							return
 						}
-					}, errorHandler: { (error) in
+					}, errorHandler: { error in
 						self.logger.error("Error sending a message: \(error.localizedDescription).")
 					})
 				} else {

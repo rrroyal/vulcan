@@ -50,39 +50,4 @@ final class SettingsModel: ObservableObject {
 		Vulcan.shared.logOut()
 		logger.info("Done resetting!")
 	}
-	
-	/// Fetches the newest release on GitHub.
-	/* public func checkForUpdates() {
-		let currentVersion: String = Bundle.main.buildVersion
-		let repoURL: URL = URL(string: "https://api.github.com/repos/rrroyal/vulcan/releases/latest")!
-		
-		var request: URLRequest = URLRequest(url: repoURL)
-		request.httpMethod = "GET"
-		
-		// Check latest release
-		logger.info("Checking latest release on GitHub (Local version: \(currentVersion))...")
-		URLSession.shared.dataTaskPublisher(for: request)
-			.receive(on: DispatchQueue.main)
-			.mapError { $0 as Error }
-			.map { $0.data }
-			.sink(receiveCompletion:{ (completion) in
-				switch (completion) {
-					case .failure: self.logger.error("(Settings) Completion error: \(String(describing: completion))"); break
-					case .finished: break
-				}
-			}, receiveValue: { (data) in
-				do {
-					let json: JSON = try JSON(data: data)
-					if (json["tag_name"].stringValue.dropFirst() > currentVersion && !json["draft"].boolValue && json["target_commitish"].stringValue == "master") {
-						self.logger.notice("New release available: \(json["tag_name"]).")
-						self.updatesAvailable = true
-					} else {
-						self.logger.info("Already on latest version.")
-					}
-				} catch {
-					self.logger.error("Error serializing JSON: \(error.localizedDescription)")
-				}
-			})
-			.store(in: &cancellableSet)
-	} */
 }

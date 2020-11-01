@@ -20,7 +20,7 @@ struct UsersView: View {
 	}
 	
 	var body: some View {
-		List(vulcan.users) { (user) in
+		List(vulcan.users) { user in
 			Button(action: {
 				generateHaptic(.light)
 				vulcan.setUser(user, force: true)

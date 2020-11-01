@@ -9,9 +9,10 @@ import SwiftUI
 import Vulcan
 
 struct AppSidebarNavigation: View {
-	@EnvironmentObject var vulcan: Vulcan
-	@EnvironmentObject var settings: SettingsModel
-	// @Binding var currentTab: Set<Tab>
+	@ObservedObject var appState: AppState
+	
+	@EnvironmentObject private var vulcan: Vulcan
+	@EnvironmentObject private var settings: SettingsModel
 	
 	private var sidebar: some View {
 		List {
@@ -103,6 +104,6 @@ struct AppSidebarNavigation: View {
 
 struct AppSidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
-		AppSidebarNavigation()
+		AppSidebarNavigation(appState: AppState.shared)
     }
 }

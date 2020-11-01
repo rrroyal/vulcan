@@ -10,7 +10,7 @@ import SwiftUI
 /// View showing list of available app icons.
 struct AppIconView: View {	
 	var body: some View {
-		List(Bundle.main.appIcons, id: \.self) { (icon) in
+		List(Bundle.main.appIcons, id: \.self) { icon in
 			HStack {
 				Image(icon)
 					.cornerRadius(16)
