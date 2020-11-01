@@ -2,7 +2,7 @@
 //  ColorSchemeSettingsView.swift
 //  iOS
 //
-//  Created by Kacper on 21/09/2020.
+//  Created by royal on 21/09/2020.
 //
 
 import SwiftUI

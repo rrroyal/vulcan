@@ -8,6 +8,8 @@
 import SwiftUI
 import Vulcan
 import AppNotifications
+import CoreSpotlight
+import CoreServices
 
 /// View containing schedule for the current week.
 struct ScheduleView: View {
@@ -20,7 +22,7 @@ struct ScheduleView: View {
 		
 	/// Loads the data for the current week.
 	private func fetch(timeIntervalSince1970: Double? = nil) {
-		if (vulcan.dataState.schedule.loading) {
+		if vulcan.dataState.schedule.loading {
 			return
 		}
 		
@@ -29,11 +31,11 @@ struct ScheduleView: View {
 			return
 		}
 		
-		vulcan.getSchedule(isPersistent: (date.startOfWeek ?? date.startOfDay) == (Date().startOfWeek ?? Date().startOfDay), from: startDate, to: endDate) { error in
+		vulcan.getSchedule(isPersistent: startDate >= Date().startOfWeek ?? Date(), from: startDate, to: endDate) { error in
 			if let error = error {
 				generateHaptic(.error)
 				self.date = previousDate
-				AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+				AppNotifications.shared.notification = .init(error: error.localizedDescription)
 			}
 		}
 	}
@@ -51,7 +53,7 @@ struct ScheduleView: View {
 		ForEach(vulcan.schedule) { day in
 			if (filterSchedule ? Calendar.autoupdatingCurrent.isDate(day.date, inSameDayAs: date) : true) {
 				Section(header: Text(day.date.formattedDateString(dateStyle: .full, context: .beginningOfSentence)).textCase(.none)) {
-					ForEach(day.events.filter({ showAllScheduleEvents ? true : $0.userSchedule })) { event in
+					ForEach(day.events.filter({ showAllScheduleEvents ? true : $0.isUserSchedule })) { event in
 						ScheduleEventCell(event: event, showAllScheduleEvents: showAllScheduleEvents)
 					}
 				}
@@ -62,7 +64,7 @@ struct ScheduleView: View {
 	var body: some View {
 		List {
 			// Schedule
-			if (filterSchedule ? vulcan.schedule.filter({ Calendar.autoupdatingCurrent.isDate($0.date, inSameDayAs: date) }).count == 0 : vulcan.schedule.count == 0) {
+			if (filterSchedule ? vulcan.schedule.filter({ Calendar.autoupdatingCurrent.isDate($0.date, inSameDayAs: date) }).isEmpty : vulcan.schedule.isEmpty) {
 				Text(filterSchedule ? "No lessons for this day 😊" : "No lessons for this week 😊")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
@@ -87,6 +89,45 @@ struct ScheduleView: View {
 					fetch()
 				}
 			}
+		}
+		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").scheduleActivity") { activity in
+			activity.title = "Schedule".localized
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForSearch = true
+			activity.keywords = [
+				"Schedule".localized,
+				"Lessons".localized,
+				"vulcan"
+			]
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = "Displays your schedule".localized
+			activity.contentAttributeSet = attributes			
+		}
+		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").nextScheduleEventActivity") { activity in
+			guard let event = vulcan.schedule.flatMap(\.events).first(where: { $0.isUserSchedule && $0.dateStarts ?? $0.date >= Date() }),
+				  let dateStarts = event.dateStarts,
+				  let dateEnds = event.dateEnds else {
+				return
+			}
+			
+			activity.title = event.subjectName
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForSearch = true
+			activity.keywords = [
+				"Schedule".localized,
+				"Next lesson".localized
+			]
+			activity.expirationDate = dateEnds
+			activity.persistentIdentifier = event.id
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.startDate = dateStarts
+			attributes.endDate = dateEnds
+			attributes.contentDescription = "\(event.employeeFullName ?? "Unknown employee".localized) • \(event.room)"
+			attributes.identifier = event.id
+			attributes.relatedUniqueIdentifier = event.id
+			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
 			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {

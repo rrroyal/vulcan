@@ -16,7 +16,10 @@ final class AppState: ObservableObject {
 	static public var shared: AppState = AppState()
 	static public var networking: AppState.Networking = AppState.Networking()
 	
+	private let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).AppState", category: "AppState")
+	
 	private init() {
+		logger.debug("Initialized")
 		AppState.networking.monitor.start(queue: .global(qos: .background))
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(powerStateChanged), name: .NSProcessInfoPowerStateDidChange, object: nil)

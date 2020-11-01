@@ -10,12 +10,12 @@ import Vulcan
 
 struct TaskCell: View {
 	let task: VulcanTask
-	let type: Bool?
+	let isBigType: Bool?
 	
     var body: some View {
 		VStack(alignment: .leading, spacing: 4) {
 			Group {
-				if !task.entry.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+				if !task.entry.isReallyEmpty {
 					Text(task.entry)
 				} else {
 					Text("No entry")
@@ -34,8 +34,8 @@ struct TaskCell: View {
 					Text("\(subjectName) - \(employeeName) \(employeeSurname)")
 				}
 				
-				if let type = type {
-					Text("\(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")) • \(task.date.relativeString)")
+				if let isBigType = isBigType {
+					Text("\((isBigType ? "EXAM_BIG" : "EXAM_SMALL").localized) • \(task.date.relativeString)")
 				} else {
 					Text(task.date, style: .relative)
 				}				
@@ -52,7 +52,7 @@ struct TaskCell: View {
 			// Reminders
 			Button(action: {
 				generateHaptic(.light)
-				task.addToReminders(type: type)
+				task.addToReminders(isBigType: isBigType)
 			}) {
 				Label("Add to reminders", systemImage: "bell.fill")
 			}
@@ -60,7 +60,7 @@ struct TaskCell: View {
 			// Calendar
 			Button(action: {
 				generateHaptic(.light)
-				task.addToCalendar(type: type)
+				task.addToCalendar(isBigType: isBigType)
 			}) {
 				Label("Add to calendar", systemImage: "calendar.badge.plus")
 			}

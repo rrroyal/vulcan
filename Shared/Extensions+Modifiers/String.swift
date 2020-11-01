@@ -44,4 +44,8 @@ extension String {
 	func capitalingFirstLetter() -> String {
 		return prefix(1).capitalized + dropFirst()
 	}
+	
+	var isReallyEmpty: Bool {
+		self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+	}
 }

@@ -2,7 +2,7 @@
 //  NowEntryView.swift
 //  Widget
 //
-//  Created by Kacper on 18/10/2020.
+//  Created by royal on 18/10/2020.
 //
 
 import SwiftUI

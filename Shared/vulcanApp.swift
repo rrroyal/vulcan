@@ -16,6 +16,7 @@ struct vulcanApp: App {
 	@StateObject private var vulcan: Vulcan = Vulcan.shared
 	@StateObject private var settings: SettingsModel = SettingsModel.shared
 	@StateObject private var appNotifications: AppNotifications = AppNotifications.shared
+	// @StateObject private var appState: AppState = AppState.shared
 	
 	@State private var currentTab: Tab = .home
 	
@@ -26,16 +27,19 @@ struct vulcanApp: App {
 				.environmentObject(vulcan)
 				.environmentObject(settings)
 				.environmentObject(appNotifications)
+				// .environmentObject(appState)
 				.defaultAppStorage(.group)
-				.notificationOverlay($appNotifications.notificationData)
+				.notificationOverlay(appNotifications)
 				.onChange(of: scenePhase) { (newPhase) in
-					switch (newPhase) {
+					switch newPhase {
 						case .active:
 							break
 						case .inactive:
 							break
 						case .background:
-							appDelegate.scheduleBackgroundRefresh()
+							if vulcan.currentUser != nil {
+								appDelegate.scheduleBackgroundRefresh()
+							}
 						@unknown default:
 							break
 					}

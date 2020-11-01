@@ -60,7 +60,7 @@ struct NowProvider: TimelineProvider {
 				}
 				.filter { $0.dateStarts != nil && $0.dateEnds != nil }
 				.sorted { $0.dateStarts ?? $0.date < $1.dateStarts ?? $0.date }
-				.filter { $0.userSchedule }
+				.filter { $0.isUserSchedule }
 		} else {
 			return []
 		}
@@ -71,9 +71,9 @@ struct NowProvider: TimelineProvider {
 	}
 	
 	func getSnapshot(in context: Context, completion: @escaping (Entry) -> Void) {
-		var event: Vulcan.ScheduleEvent = Vulcan.ScheduleEvent(dateEpoch: Int(Date().startOfDay.timeIntervalSince1970), lessonOfTheDay: 1, lessonTimeID: 0, subjectID: 0, subjectName: NSLocalizedString("Spanish", comment: ""), divisionShort: nil, room: "03", employeeID: 1, helpingEmployeeID: nil, oldEmployeeID: nil, oldHelpingEmployeeID: nil, scheduleID: 1, note: nil, labelStrikethrough: false, labelBold: false, userSchedule: false, employeeFullName: "Ben Chang")
-		event.dateStarts = Date()
-		event.dateEnds = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+		var event: Vulcan.ScheduleEvent = Vulcan.ScheduleEvent(dateEpoch: Int(Date().startOfDay.timeIntervalSince1970), lessonOfTheDay: 1, lessonTimeID: 0, subjectID: 0, subjectName: "Spanish".localized, divisionShort: nil, room: "03", employeeID: 1, helpingEmployeeID: nil, oldEmployeeID: nil, oldHelpingEmployeeID: nil, scheduleID: 1, note: nil, labelStrikethrough: false, labelBold: false, isUserSchedule: false, employeeFullName: "Ben Chang")
+		event.dateStartsEpoch = Date().timeIntervalSince1970
+		event.dateEndsEpoch = (Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: Date()) ?? Date()).timeIntervalSince1970
 		
 		let entry = Entry(date: Date(), event: event)
 		completion(entry)
@@ -101,6 +101,6 @@ struct NowProvider: TimelineProvider {
 			"You look good today."
 		]
 		
-		return NSLocalizedString(strings[Int.random(in: 0...(strings.count - 1))], comment: "")
+		return strings[Int.random(in: 0...(strings.count - 1))].localized
 	}
 }

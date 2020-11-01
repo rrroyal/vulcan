@@ -8,6 +8,8 @@
 import SwiftUI
 import Vulcan
 import AppNotifications
+import CoreSpotlight
+import CoreServices
 
 /// Grades view, showing subject NavigationLinks to grades.
 struct GradesView: View {
@@ -32,7 +34,7 @@ struct GradesView: View {
 		
 		if let error = requestsError {
 			generateHaptic(.error)
-			AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+			AppNotifications.shared.notification = .init(error: error.localizedDescription)
 		}
 	}
 	
@@ -72,13 +74,7 @@ struct GradesView: View {
 			}
 		}
 		.listStyle(InsetGroupedListStyle())
-		// .sidebarListStyle(horizontalSizeClass: horizontalSizeClass)
-		// .navigationViewStyle(DoubleColumnNavigationViewStyle())
 		.navigationTitle("Grades")
-		/* .navigationBarItems(trailing: RefreshButton(loading: vulcan.dataState.grades.loading, progressValue: vulcan.dataState.grades.progress, iconName: "arrow.clockwise", edge: .trailing) {
-		generateHaptic(.light)
-		refresh()
-		}) */
 		.toolbar {
 			// Refresh button
 			ToolbarItem(placement: .primaryAction) {
@@ -87,6 +83,16 @@ struct GradesView: View {
 					fetch()
 				}
 			}
+		}
+		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity") { activity in
+			activity.title = "Grades".localized
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForSearch = true
+			activity.keywords = ["Grades".localized, "vulcan"]
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = "See your grades".localized
+			activity.contentAttributeSet = attributes			
 		}
 		.onAppear {
 			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {

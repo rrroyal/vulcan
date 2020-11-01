@@ -46,7 +46,7 @@ struct ScheduleEventCell: View {
 			// Second row: Time and teacher
 			HStack(alignment: .center, spacing: 0) {
 				// Time, teacher
-				Text("\(event.dateStarts?.localizedTime ?? "") - \(event.dateEnds?.localizedTime ?? "") • \(event.employee?.name ?? "Unknown employee") \(event.employee?.surname ?? "")")
+				Text("\(event.dateStarts?.localizedTime ?? "") - \(event.dateEnds?.localizedTime ?? "") • \(event.employee?.name ?? "Unknown") \(event.employee?.surname ?? "employee")")
 					.font(.callout)
 					.foregroundColor((event.dateStarts ?? Date(timeIntervalSince1970: 0) < Date() && event.dateEnds ?? Date(timeIntervalSince1970: 0) > Date()) ? Color.accentColor : Color.secondary)
 					.allowsTightening(true)
@@ -57,7 +57,7 @@ struct ScheduleEventCell: View {
 			}
 			
 			// Third row: Note
-			if let note = event.note, !note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+			if let note = event.note, !note.isReallyEmpty {
 				HStack(alignment: .center, spacing: 0) {
 					Text(note)
 						.font(.callout)

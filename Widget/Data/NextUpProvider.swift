@@ -2,7 +2,7 @@
 //  NextUpProvider.swift
 //  Widget
 //
-//  Created by Kacper on 18/10/2020.
+//  Created by royal on 18/10/2020.
 //
 
 import CoreData
@@ -59,7 +59,7 @@ struct NextUpProvider: TimelineProvider {
 				}
 				.filter { $0.dateStarts != nil && $0.dateEnds != nil }
 				.sorted { $0.dateStarts ?? $0.date < $1.dateStarts ?? $0.date }
-				.filter { $0.userSchedule }
+				.filter { $0.isUserSchedule }
 				.filter { $0.dateStarts ?? $0.date >= Date().startOfDay }
 		} else {
 			return []
@@ -71,13 +71,13 @@ struct NextUpProvider: TimelineProvider {
 	}
 	
 	func getSnapshot(in context: Context, completion: @escaping (Entry) -> Void) {
-		var currentEvent: Vulcan.ScheduleEvent = Vulcan.ScheduleEvent(dateEpoch: Int(Date().startOfDay.timeIntervalSince1970), lessonOfTheDay: 1, lessonTimeID: 0, subjectID: 0, subjectName: NSLocalizedString("Spanish", comment: ""), divisionShort: nil, room: "03", employeeID: 1, helpingEmployeeID: nil, oldEmployeeID: nil, oldHelpingEmployeeID: nil, scheduleID: 1, note: nil, labelStrikethrough: false, labelBold: false, userSchedule: false, employeeFullName: "Ben Chang")
-		currentEvent.dateStarts = Date()
-		currentEvent.dateEnds = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+		var currentEvent: Vulcan.ScheduleEvent = Vulcan.ScheduleEvent(dateEpoch: Int(Date().startOfDay.timeIntervalSince1970), lessonOfTheDay: 1, lessonTimeID: 0, subjectID: 0, subjectName: "Spanish".localized, divisionShort: nil, room: "03", employeeID: 1, helpingEmployeeID: nil, oldEmployeeID: nil, oldHelpingEmployeeID: nil, scheduleID: 1, note: nil, labelStrikethrough: false, labelBold: false, isUserSchedule: false, employeeFullName: "Ben Chang")
+		currentEvent.dateStartsEpoch = Date().timeIntervalSince1970
+		currentEvent.dateEndsEpoch = (Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: Date()) ?? Date()).timeIntervalSince1970
 		
 		var nextEvent = currentEvent
-		nextEvent.dateStarts = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: nextEvent.dateStarts ?? nextEvent.date) ?? nextEvent.date
-		nextEvent.dateEnds = Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: nextEvent.dateEnds ?? nextEvent.date) ?? nextEvent.date
+		nextEvent.dateStartsEpoch = (Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: nextEvent.dateStarts ?? nextEvent.date) ?? nextEvent.date).timeIntervalSince1970
+		nextEvent.dateEndsEpoch = (Calendar.autoupdatingCurrent.date(byAdding: .hour, value: 1, to: nextEvent.dateEnds ?? nextEvent.date) ?? nextEvent.date).timeIntervalSince1970
 		
 		let entry = Entry(date: Date(), currentEvent: currentEvent, nextEvents: [nextEvent])
 		completion(entry)
@@ -91,20 +91,27 @@ struct NextUpProvider: TimelineProvider {
 				
 				var entries: [Entry] = [Entry(date: event.dateStarts ?? event.date, currentEvent: event, nextEvents: nextEvents)]
 				
-				if let nextEventDateStarts = nextEvents.first?.dateStarts,
-				   let currentEventDateEnds = event.dateEnds,
+				// Spaces between events
+				if let currentEventDateEnds = event.dateEnds,
+				   let nextEventDateStarts = nextEvents.first?.dateStarts,
 				   currentEventDateEnds != nextEventDateStarts {
 					entries.append(Entry(date: currentEventDateEnds, currentEvent: nil, nextEvents: nextEvents))
-				} else if event.lessonOfTheDay == 1 {
-					entries.append(Entry(date: Date().startOfDay, currentEvent: nil, nextEvents: nextEvents))
 				}
 				
 				return entries
 			}
 			.flatMap { $0 }
+			.sorted { $0.date < $1.date }
 				
+		// Last entry
 		entries.append(Entry(date: entries.last?.currentEvent?.dateEnds ?? entries.last?.date.addingTimeInterval(3600) ?? Date().addingTimeInterval(3600), currentEvent: nil, nextEvents: []))
-		entries.sort { $0.date < $1.date }
+		
+		// If firstTimelineEventIndex == 0 (the event is first for this day), add new one
+		if let firstTimelineEvent = entries.first?.currentEvent,
+		   let firstTimelineEventIndex = schedule.firstIndex(of: firstTimelineEvent),
+		   firstTimelineEventIndex == 0 {
+			entries.insert(Entry(date: Date().startOfDay, currentEvent: nil, nextEvents: schedule), at: 0)
+		}
 		
 		let policy: TimelineReloadPolicy
 		if let lastEventDateEnds = entries.last?.currentEvent?.dateEnds ?? entries.last?.nextEvents.last?.dateEnds {

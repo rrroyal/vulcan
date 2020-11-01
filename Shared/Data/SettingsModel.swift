@@ -35,7 +35,7 @@ final class SettingsModel: ObservableObject {
 	
 	@Published public var updatesAvailable: Bool = false
 	private var cancellableSet: Set<AnyCancellable> = []
-	private let logger: Logger = Logger(subsystem: "Settings", category: "Settings")
+	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Settings", category: "Settings")
 	
 	// MARK: - init
 	private init() {

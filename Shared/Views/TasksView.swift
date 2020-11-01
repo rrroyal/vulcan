@@ -8,6 +8,8 @@
 import SwiftUI
 import Vulcan
 import AppNotifications
+import CoreSpotlight
+import CoreServices
 
 /// View containing current user tasks.
 struct TasksView: View {
@@ -33,7 +35,7 @@ struct TasksView: View {
 			if let error = error {
 				generateHaptic(.error)
 				self.date = previousDate
-				AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+				AppNotifications.shared.notification = .init(error: error.localizedDescription)
 			}
 		}
 	}
@@ -62,7 +64,7 @@ struct TasksView: View {
 			Section(header: Text("Exams").textCase(.none)) {
 				if (exams.count > 0) {
 					ForEach(exams) { task in
-						TaskCell(task: task, type: task.type)
+						TaskCell(task: task, isBigType: task.isBigType)
 					}
 				} else {
 					Text("No exams for this month 😊")
@@ -76,7 +78,7 @@ struct TasksView: View {
 			Section(header: Text("Homework").textCase(.none)) {
 				if (homework.count > 0) {
 					ForEach(homework) { task in
-						TaskCell(task: task, type: nil)
+						TaskCell(task: task, isBigType: nil)
 					}
 				} else {
 					Text("No homework for this month 😊")
@@ -88,13 +90,6 @@ struct TasksView: View {
 		}
 		.listStyle(InsetGroupedListStyle())
 		.navigationTitle(Text("Tasks"))
-		/* .navigationBarItems(
-			leading: datePicker,
-			trailing: RefreshButton(loading: (vulcan.dataState.tasksExams.loading || vulcan.dataState.tasksHomework.loading), iconName: "arrow.clockwise", edge: .trailing) {
-				generateHaptic(.light)
-				loadTasks()
-			}
-		) */
 		.toolbar {
 			// Date picker
 			ToolbarItem(placement: .cancellationAction) {
@@ -108,6 +103,16 @@ struct TasksView: View {
 					fetch()
 				}
 			}
+		}
+		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity") { activity in
+			activity.title = "Tasks".localized
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForSearch = true
+			activity.keywords = ["Tasks".localized, "vulcan"]
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = "Displays your upcoming exams and homework".localized
+			activity.contentAttributeSet = attributes			
 		}
 		.onAppear {
 			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {

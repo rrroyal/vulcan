@@ -96,7 +96,7 @@ struct ComposeMessageView: View {
 		let title: String = messageTitle.trimmingCharacters(in: .whitespacesAndNewlines)
 		let content: String = messageContent.trimmingCharacters(in: .whitespacesAndNewlines)
 		
-		if (title.isEmpty || content.isEmpty || messageRecipients.count == 0) {
+		if (title.isEmpty || content.isEmpty || messageRecipients.isEmpty) {
 			return
 		}
 		
@@ -130,14 +130,14 @@ struct ComposeMessageView: View {
 					Image(systemName: "paperplane.fill")
 						.navigationBarButton(edge: .trailing)
 				}
-				.disabled(messageTitle.isEmpty || messageContent.isEmpty || messageRecipients.count == 0 || loading)
+				.disabled(messageTitle.isEmpty || messageContent.isEmpty || messageRecipients.isEmpty || loading)
 			}
 			
 			// Recipients
 			HStack {
 				Image(systemName: "person.crop.circle")
 				
-				if (messageRecipientsString.count == 0) {
+				if (messageRecipientsString.isEmpty) {
 					Text("Choose a recipient...")
 				} else {
 					Text(messageRecipientsString.joined(separator: ", ").trimmingCharacters(in: .whitespacesAndNewlines))

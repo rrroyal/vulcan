@@ -11,15 +11,15 @@ import Foundation
 import EventKit
 
 public extension VulcanTask {
-	func addToReminders(type: Bool? = nil) {
+	func addToReminders(isBigType: Bool? = nil) {
 		let eventStore: EKEventStore = EKEventStore()
 		eventStore.requestAccess(to: .reminder) {
 			granted, error in
 			if (granted && error == nil) {
 				let tag: String
 				
-				if let type = type {
-					tag = NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
+				if let isBigType = isBigType {
+					tag = NSLocalizedString(isBigType ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
 				} else {
 					switch (self.tag) {
 						case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
@@ -52,15 +52,15 @@ public extension VulcanTask {
 		}
 	}
 	
-	func addToCalendar(type: Bool? = nil) {
+	func addToCalendar(isBigType: Bool? = nil) {
 		let eventStore: EKEventStore = EKEventStore()
 		eventStore.requestAccess(to: .event) {
 			granted, error in
 			if (granted && error == nil) {
 				let tag: String
 				
-				if let type = type {
-					tag = NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
+				if let isBigType = isBigType {
+					tag = NSLocalizedString(isBigType ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
 				} else {
 					switch (self.tag) {
 						case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")

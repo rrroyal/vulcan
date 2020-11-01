@@ -12,7 +12,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 	var schedule: [Vulcan.ScheduleEvent] {
 		VulcanStore.shared.schedule
 			.flatMap(\.events)
-			.filter { $0.userSchedule }
+			.filter { $0.isUserSchedule }
 	}
 	
     // MARK: - Complication Configuration
@@ -125,9 +125,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 	private func emptyTemplate(for complication: CLKComplication) -> CLKComplicationTemplate {
 		let template: CLKComplicationTemplate
 		
-		let scheduleText = CLKSimpleTextProvider(text: NSLocalizedString("Schedule", comment: ""))
-		let nothingLeftEmojiText = CLKSimpleTextProvider(text: NSLocalizedString("Nothing left for now ☺️", comment: ""))
-		let nothingLeftText = CLKSimpleTextProvider(text: NSLocalizedString("Nothing left for now", comment: ""))
+		let scheduleText = CLKSimpleTextProvider(text: "Schedule".localized)
+		let nothingLeftEmojiText = CLKSimpleTextProvider(text: "Nothing left for now ☺️".localized)
+		let nothingLeftText = CLKSimpleTextProvider(text: "Nothing left for now".localized)
 		let emojiText = CLKSimpleTextProvider(text: "☺️")
 		
 		// Modular Small

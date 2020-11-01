@@ -2,7 +2,7 @@
 //  TaskCell.swift
 //  WatchKit Extension
 //
-//  Created by Kacper on 20/09/2020.
+//  Created by royal on 20/09/2020.
 //
 
 import SwiftUI
@@ -10,12 +10,12 @@ import Vulcan
 
 struct TaskCell: View {
 	let task: VulcanTask
-	let type: Bool?
+	let isBigType: Bool?
 	
 	var body: some View {
 		VStack(alignment: .leading) {
 			Group {
-				if !task.entry.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+				if !task.entry.isReallyEmpty {
 					Text(task.entry)
 				} else {
 					Text("No entry")
@@ -32,8 +32,8 @@ struct TaskCell: View {
 					Text(subjectName)
 				}
 				
-				if let type = type {
-					Text("\(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: "")) • \(task.date.relativeString)")
+				if let isBigType = isBigType {
+					Text("\((isBigType ? "EXAM_BIG" : "EXAM_SMALL").localized) • \(task.date.relativeString)")
 				} else {
 					Text(task.date, style: .relative)
 				}

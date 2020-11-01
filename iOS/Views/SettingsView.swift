@@ -46,7 +46,7 @@ struct SettingsView: View {
 	@AppStorage(UserDefaults.AppKeys.enableScheduleNotifications.rawValue, store: .group) public var enableScheduleNotifications: Bool = false
 	@AppStorage(UserDefaults.AppKeys.enableTaskNotifications.rawValue, store: .group) public var enableTaskNotifications: Bool = false
 	
-	private let logger: Logger = Logger(subsystem: "VulcanApp", category: "Settings")
+	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanApp", category: "Settings")
 	
 	private func manageScheduleNotifications(enabled: Bool) {
 		if !enabled {
@@ -70,7 +70,7 @@ struct SettingsView: View {
 		vulcan.schedule
 			.flatMap(\.events)
 			.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
-			.filter { $0.userSchedule }
+			.filter { $0.isUserSchedule }
 			.forEach { event in
 				vulcan.addScheduleEventNotification(event)
 			}
@@ -102,36 +102,16 @@ struct SettingsView: View {
 			}
 	}
 	
-	/// App credits, displayed as the footer of the last settings section.
-	private var appCredits: some View {
-		VStack {
-			Group {
-				Text("Made with ❤️ (and ☕️) by @rrroyal")
-					.bold()
-				Text("Version \(Bundle.main.buildVersion) (Build \(Bundle.main.buildNumber))")
-					.bold()
-				#if DEBUG
-				Text("🚧 DEBUG 🚧")
-					.bold()
-				#endif
-			}
-			.font(.callout)
-			.opacity(0.2)
-			.multilineTextAlignment(.center)
-			.foregroundColor(.primary)
+	private var generalSection: some View {
+		Section(header: Text("General").sectionTitle()) {
+			// Mark message as read on open
+			SettingsOption(setting: $settings.readMessageOnOpen, title: "SETTINGS_READMESSAGEONOPEN", subtitle: "SETTINGS_READMESSAGEONOPEN_TOOLTIP")
 		}
-		.fullWidth()
-		.padding()
-		.edgesIgnoringSafeArea(.bottom)
-		.onTapGesture {
-			guard let url = URL(string: "https://vulcan.shameful.xyz") else { return }
-			generateHaptic(.light)
-			UIApplication.shared.open(url)
-		}
+		.padding(.vertical, 10)
 	}
 	
-	private var userSection: some View {
-		Section(header: Text("General").sectionTitle()) {
+	private var uonetSection: some View {
+		Section(header: Text("UONET+").sectionTitle()) {
 			// Log in/out
 			HStack {
 				if (vulcan.currentUser != nil) {
@@ -169,8 +149,13 @@ struct SettingsView: View {
 				}
 			}
 			
-			// Mark message as read on open
-			SettingsOption(setting: $settings.readMessageOnOpen, title: "SETTINGS_READMESSAGEONOPEN", subtitle: "SETTINGS_READMESSAGEONOPEN_TOOLTIP")
+			if vulcan.currentUser != nil || vulcan.users.count > 0 {
+				NavigationLink(destination: UsersView()) {
+					Text("Users")
+						.font(.body)
+						.bold()
+				}
+			}
 		}
 		.padding(.vertical, 10)
 	}
@@ -286,28 +271,44 @@ struct SettingsView: View {
 		.padding(.vertical, 10)
 	}
 	
+	/// App credits, displayed as the footer of the last settings section.
+	private var appCredits: some View {
+		VStack {
+			Group {
+				Text("Made with ❤️ (and ☕️) by @rrroyal")
+					.bold()
+				Text("Version \(Bundle.main.buildVersion) (Build \(Bundle.main.buildNumber))")
+					.bold()
+				#if DEBUG
+				Text("🚧 DEBUG 🚧")
+					.bold()
+				#endif
+			}
+			.font(.callout)
+			.opacity(0.2)
+			.multilineTextAlignment(.center)
+			.foregroundColor(.primary)
+		}
+		.fullWidth()
+		.padding()
+		.edgesIgnoringSafeArea(.bottom)
+		.onTapGesture {
+			guard let url = URL(string: "https://vulcan.shameful.xyz") else { return }
+			generateHaptic(.light)
+			UIApplication.shared.open(url)
+		}
+	}
+	
 	var body: some View {
-		List {
-			// User
-			userSection
-			
-			// Notifications
+		Form {
+			generalSection
+			uonetSection
 			notificationsSection
-
-			// Interface
 			interfaceSection
-
-			// Other
 			otherSection
 		}
 		.listStyle(InsetGroupedListStyle())
 		.navigationTitle(Text("Settings"))
-		.navigationBarItems(trailing: NavigationLink(destination: UsersView()) {
-				Image(systemName: "person.circle")
-					// .frame(width: 22.5)
-					.navigationBarButton(edge: .trailing)
-			}
-		)
 		.sheet(isPresented: $showingSetupView) {
 			SetupView(isPresented: $showingSetupView, isParentPresented: $showingSetupView, hasParent: false)
 		}

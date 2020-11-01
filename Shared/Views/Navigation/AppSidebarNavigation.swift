@@ -11,10 +11,10 @@ import Vulcan
 struct AppSidebarNavigation: View {
 	@EnvironmentObject var vulcan: Vulcan
 	@EnvironmentObject var settings: SettingsModel
-	@State private var currentTab: Set<Tab> = [.home]
+	// @Binding var currentTab: Set<Tab>
 	
 	private var sidebar: some View {
-		List(selection: $currentTab) {
+		List {
 			// Home
 			NavigationLink(destination: HomeView()) {
 				Label("Home", systemImage: "house")

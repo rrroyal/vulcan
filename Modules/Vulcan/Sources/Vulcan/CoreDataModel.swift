@@ -12,7 +12,7 @@ import os
 
 public final class CoreDataModel {
 	public static let shared: CoreDataModel = CoreDataModel()
-	private let logger: Logger = Logger(subsystem: "CoreData", category: "CoreData")
+	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).CoreData", category: "CoreData")
 
 	private init() { }
 	
@@ -48,7 +48,7 @@ public final class CoreDataModel {
 	
 	/// Saves the CoreData context.
 	public func saveContext(force: Bool = false) {
-		if (self.persistentContainer.viewContext.hasChanges || force) {
+		if self.persistentContainer.viewContext.hasChanges || force {
 			do {
 				try self.persistentContainer.viewContext.save()
 			} catch {
@@ -59,15 +59,18 @@ public final class CoreDataModel {
 	
 	/// Resets the database.
 	public func clearDatabase() {
-		guard let url = persistentContainer.persistentStoreDescriptions.first?.url else { return }
+		let urls = persistentContainer.persistentStoreDescriptions.map(\.url)
 		let persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
 		
 		logger.debug("Clearing database...")
 		
 		do {
 			let options = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
-			try persistentStoreCoordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
-			try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: options)
+			for url in urls {
+				guard let url = url else { return }
+				try persistentStoreCoordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
+				try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: options)
+			}
 			logger.debug("Done!")
 		} catch {
 			logger.error("Error: \(error.localizedDescription)")

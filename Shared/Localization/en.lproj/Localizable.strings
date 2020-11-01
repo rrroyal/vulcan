@@ -70,9 +70,18 @@
 
 "No grades" = "No grades";
 
+"Nothing in the near future" = "Nothing in the near future";
+"No new messages" = "No new messages";
+
+"Your summary for today" = "Your summary for today";
+
+// MARK: GradesView.swift
+"See your grades" = "See your grades";
+
 // MARK: ScheduleView.swift
 "No lessons for this week 😊" = "No lessons for this week 😊";
 "No lessons for this day 😊" = "No lessons for this day 😊";
+"Displays your schedule in app." = "Displays your schedule in app.";
 
 // MARK: TasksView.swift
 "No tasks" = "No tasks";
@@ -83,6 +92,7 @@
 "TAG_HOMEWORK" = "Homework";
 "No exams for this month 😊" = "No exams for this month 😊";
 "No homework for this month 😊" = "No homework for this month 😊";
+"Displays your upcoming exams and homework" = "Displays your upcoming exams and homework";
 
 // MARK: MessagesView.swift
 "No messages found" = "No messages found";
@@ -99,6 +109,7 @@
 "Filter" = "Filter";
 "All" = "All";
 "New" = "New";
+"See your received messages" = "See your received messages";
 
 // MARK: SettingsView.swift
 "General" = "General";

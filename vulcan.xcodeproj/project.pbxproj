@@ -58,8 +58,6 @@
 		00FAC9C924A3D85400ACAC83 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9C224A3D85400ACAC83 /* SettingsModel.swift */; };
 		00FAC9D524A3D8E800ACAC83 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 00FAC9D424A3D8E800ACAC83 /* KeychainAccess */; };
 		00FAC9D924A3D8F300ACAC83 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 00FAC9D824A3D8F300ACAC83 /* KeychainAccess */; };
-		00FAC9DD24A3D93000ACAC83 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9DA24A3D93000ACAC83 /* UserDefaults.swift */; };
-		00FAC9DE24A3D93000ACAC83 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9DA24A3D93000ACAC83 /* UserDefaults.swift */; };
 		00FAC9E124A3D93000ACAC83 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9DB24A3D93000ACAC83 /* Date.swift */; };
 		00FAC9E224A3D93000ACAC83 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9DB24A3D93000ACAC83 /* Date.swift */; };
 		00FAC9F924A3D9A600ACAC83 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9EB24A3D9A600ACAC83 /* View.swift */; };
@@ -116,6 +114,8 @@
 		E783D3A7250291E300514060 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E783D3A6250291E300514060 /* DebugView.swift */; };
 		E78FC1C525161DB700478AC1 /* GradesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78FC1C425161DB700478AC1 /* GradesDetailView.swift */; };
 		E78FC1F9251626AE00478AC1 /* MessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78FC1F8251626AE00478AC1 /* MessageDetailView.swift */; };
+		E7A1524F254D88970073DB9C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0088EBA824A37C50006F044E /* String.swift */; };
+		E7A15255254D88980073DB9C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0088EBA824A37C50006F044E /* String.swift */; };
 		E7A419AC24FA5A7400FC55D6 /* Vulcan in Frameworks */ = {isa = PBXBuildFile; productRef = E7A419AB24FA5A7400FC55D6 /* Vulcan */; };
 		E7A62490253C9C6B006DEDDE /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6248F253C9C6B006DEDDE /* EventView.swift */; };
 		E7A62497253CA093006DEDDE /* NextEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A62496253CA093006DEDDE /* NextEventView.swift */; };
@@ -241,7 +241,6 @@
 		0088EBCA24A38D9E006F044E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		0088EBCC24A38D9E006F044E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		00FAC9C224A3D85400ACAC83 /* SettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
-		00FAC9DA24A3D93000ACAC83 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		00FAC9DB24A3D93000ACAC83 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		00FAC9EB24A3D9A600ACAC83 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		00FAC9ED24A3D9A600ACAC83 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
@@ -451,7 +450,6 @@
 				E772E6D524B36FB900A7FFB4 /* View+.swift */,
 				0088EBA824A37C50006F044E /* String.swift */,
 				00FAC9DB24A3D93000ACAC83 /* Date.swift */,
-				00FAC9DA24A3D93000ACAC83 /* UserDefaults.swift */,
 				00FAC9F024A3D9A600ACAC83 /* Bundle.swift */,
 				00FAC9ED24A3D9A600ACAC83 /* DeviceInfo.swift */,
 			);
@@ -986,7 +984,6 @@
 				006AF91E24A600B500D06D21 /* Tab.swift in Sources */,
 				0088EBB224A37CD2006F044E /* HomeView.swift in Sources */,
 				E723FAC92518F02700DD8184 /* AppIconView.swift in Sources */,
-				00FAC9DD24A3D93000ACAC83 /* UserDefaults.swift in Sources */,
 				0012BAA824A4EF4000371F23 /* AppState.swift in Sources */,
 				00FACA6A24A41D3900ACAC83 /* AppSidebarNavigation.swift in Sources */,
 				000702B424A7E5750061733F /* UsersView.swift in Sources */,
@@ -1005,7 +1002,6 @@
 				0088EBAA24A37C50006F044E /* String.swift in Sources */,
 				00FAC9C924A3D85400ACAC83 /* SettingsModel.swift in Sources */,
 				0088EBBF24A37DA2006F044E /* MessagesView.swift in Sources */,
-				00FAC9DE24A3D93000ACAC83 /* UserDefaults.swift in Sources */,
 				00FACA2724A3E2E600ACAC83 /* MacSettingsView.swift in Sources */,
 				0088EBB624A37D86006F044E /* GradesView.swift in Sources */,
 				00FACA0E24A3D9A600ACAC83 /* Bundle.swift in Sources */,
@@ -1060,6 +1056,7 @@
 				E783D39D2502917200514060 /* ScheduleView.swift in Sources */,
 				E783D3A7250291E300514060 /* DebugView.swift in Sources */,
 				E74F54A5250924EF003F8066 /* ScheduleEventCell.swift in Sources */,
+				E7A1524F254D88970073DB9C /* String.swift in Sources */,
 				E7360BCF25028B26006A4E17 /* VulcanStore.swift in Sources */,
 				E7C144EB250123F600363BD3 /* NotificationView.swift in Sources */,
 			);
@@ -1071,6 +1068,7 @@
 			files = (
 				E7A62497253CA093006DEDDE /* NextEventView.swift in Sources */,
 				E7518A2E25012CC800135D55 /* NowProvider.swift in Sources */,
+				E7A15255254D88980073DB9C /* String.swift in Sources */,
 				E7A624B2253CA121006DEDDE /* SmallEventCell.swift in Sources */,
 				E7518A2B25012C9000135D55 /* NextUpEntryView.swift in Sources */,
 				E7C1452425012A2100363BD3 /* VulcanWidget.swift in Sources */,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17510.1" systemVersion="20A5395g" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20B5012d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DictionaryEmployee" representedClassName="DictionaryEmployee" syncable="YES" codeGenerationType="class">
         <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="code" attributeType="String"/>
@@ -69,8 +69,8 @@
         <attribute name="employeeID" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="entry" attributeType="String" spotlightIndexingEnabled="YES"/>
         <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="isBigType" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="subjectID" attributeType="Integer 32" usesScalarValueType="YES"/>
-        <attribute name="type" attributeType="Boolean" usesScalarValueType="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -158,6 +158,7 @@
         <attribute name="employeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="helpingEmployeeID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String"/>
+        <attribute name="isUserSchedule" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="labelBold" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="labelStrikethrough" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="lessonOfTheDay" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
@@ -169,7 +170,6 @@
         <attribute name="scheduleID" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="subjectID" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="subjectName" optional="YES" attributeType="String"/>
-        <attribute name="userSchedule" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -206,22 +206,22 @@
         <attribute name="userRole" attributeType="String"/>
     </entity>
     <elements>
-        <element name="DictionaryEmployee" positionX="-253.61328125" positionY="170.5390625" width="128" height="134"/>
-        <element name="DictionaryGradeCategory" positionX="-253.27734375" positionY="-127.05859375" width="128" height="74"/>
-        <element name="DictionaryLessonTime" positionX="-254.1640625" positionY="-78.87890625" width="128" height="89"/>
-        <element name="DictionaryNoteCategory" positionX="-257.5234375" positionY="-28.7578125" width="128" height="74"/>
-        <element name="DictionaryPresenceCategory" positionX="-255.43359375" positionY="22.80078125" width="128" height="149"/>
-        <element name="DictionaryPresenceType" positionX="-255.0546875" positionY="73.71484375" width="128" height="119"/>
-        <element name="DictionarySubject" positionX="-254.2734375" positionY="122.9296875" width="128" height="104"/>
-        <element name="StoredEndOfTermGrade" positionX="-103.3046875" positionY="-77.24609375" width="128" height="74"/>
-        <element name="StoredEndOfTermPoints" positionX="-108" positionY="36" width="128" height="74"/>
-        <element name="StoredExam" positionX="-103.98828125" positionY="-125.1015625" width="128" height="179"/>
-        <element name="StoredGrade" positionX="-102.76171875" positionY="-27.13671875" width="128" height="299"/>
-        <element name="StoredHomework" positionX="-104.8828125" positionY="21.89453125" width="128" height="119"/>
-        <element name="StoredMessage" positionX="-108" positionY="36" width="128" height="194"/>
-        <element name="StoredNote" positionX="-104.33203125" positionY="71.1640625" width="128" height="209"/>
-        <element name="StoredPresence" positionX="-104.53515625" positionY="121.52734375" width="128" height="104"/>
-        <element name="StoredScheduleEvent" positionX="-105.06640625" positionY="219.06640625" width="128" height="329"/>
-        <element name="StoredStudent" positionX="42.3046875" positionY="-123.52734375" width="128" height="434"/>
+        <element name="DictionaryEmployee" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryGradeCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryLessonTime" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryNoteCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryPresenceCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryPresenceType" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionarySubject" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredEndOfTermGrade" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredEndOfTermPoints" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredExam" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredGrade" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredHomework" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredNote" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredPresence" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredScheduleEvent" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="StoredStudent" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

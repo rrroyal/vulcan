@@ -94,7 +94,7 @@ struct MessageCell: View {
 					Vulcan.shared.moveMessage(message: message, to: .read) { error in
 						if let error = error {
 							generateHaptic(.error)
-							AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+							AppNotifications.shared.notification = .init(error: error.localizedDescription)
 						}
 					}
 				}) {
@@ -129,7 +129,7 @@ struct MessageCell: View {
 					Vulcan.shared.moveMessage(message: message, to: .deleted) { error in
 						if let error = error {
 							generateHaptic(.error)
-							AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+							AppNotifications.shared.notification = .init(error: error.localizedDescription)
 						}
 					}
 				}) {

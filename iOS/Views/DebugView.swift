@@ -11,15 +11,28 @@ import WidgetKit
 import BackgroundTasks
 import os
 import Vulcan
+import CoreSpotlight
 
 /// Debug view
 struct DebugView: View {
 	@EnvironmentObject var vulcan: Vulcan
+	
 	@State private var pendingTaskRequests: [BGTaskRequest] = []
-	private let logger: Logger = Logger(subsystem: "Debug", category: "Debug")
+	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Debug", category: "Debug")
+		
+	private var logsView: some View {
+		List([""], id: \.self) { entry in
+			Text(entry.isEmpty ? "<empty>" : entry)
+				.foregroundColor(entry.isEmpty ? .secondary : .primary)
+				.multilineTextAlignment(.leading)
+				.lineLimit(nil)
+				.font(.system(.body, design: .monospaced))
+		}
+		.navigationTitle(Text("Logs"))
+	}
 	
 	var body: some View {
-		List {
+		Form {
 			// VulcanAPI
 			Section(header: Text("VulcanAPI").textCase(.none)) {
 				// Reset dictionary
@@ -30,6 +43,12 @@ struct DebugView: View {
 				}) {
 					Text("Reset dictionary")
 						.foregroundColor(.red)
+				}
+				
+				NavigationLink(destination: logsView) {
+					Text("Logs")
+						.font(.body)
+						.bold()
 				}
 			}
 			.padding(.vertical, 10)
@@ -42,6 +61,15 @@ struct DebugView: View {
 					Text(CoreDataModel.shared.persistentContainer.persistentStoreDescriptions.first?.url?.absoluteString ?? "none")
 						.font(.body)
 						.lineLimit(nil)
+				}
+				
+				Button(action: {
+					logger.debug("Resetting CoreData DB!")
+					CoreDataModel.shared.clearDatabase()
+					generateHaptic(.light)
+				}) {
+					Text("Reset CoreData DB")
+						.foregroundColor(.red)
 				}
 			}
 			.padding(.vertical, 10)
@@ -91,13 +119,28 @@ struct DebugView: View {
 				}
 			}
 			.padding(.vertical, 10)
+			
+			// CoreSpotlight
+			Section(header: Text("CoreSpotlight").textCase(.none)) {
+				// Remove all
+				Button("Remove all") {
+					generateHaptic(.light)
+					logger.debug("Removing all searchable items")
+					CSSearchableIndex.default().deleteAllSearchableItems { error in
+						if let error = error {
+							logger.error("\(error.localizedDescription)")
+						}
+					}
+				}
+			}
+			.padding(.vertical, 10)
 		}
 		.listStyle(InsetGroupedListStyle())
 		.navigationTitle(Text("Debug"))
 		.onAppear {
-			BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { (items) in
+			BGTaskScheduler.shared.getPendingTaskRequests { items in
 				pendingTaskRequests = items
-			})
+			}
 		}
 	}
 }

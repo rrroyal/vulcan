@@ -32,12 +32,6 @@ struct AppTabNavigation: View {
 			}
 			.tag(Tab.home)
 			.navigationViewStyle(StackNavigationViewStyle())
-			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
-				activity.title = NSLocalizedString("Today", comment: "")
-				activity.isEligibleForPrediction = true
-				activity.isEligibleForSearch = true
-				activity.keywords = [NSLocalizedString("Today", comment: ""), "vulcan"]
-			}
 			
 			// Grades
 			NavigationView {
@@ -52,12 +46,6 @@ struct AppTabNavigation: View {
 			}
 			.tag(Tab.grades)
 			.navigationViewStyle(DoubleColumnNavigationViewStyle())
-			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity", isActive: currentTab == .grades) { activity in
-				activity.title = NSLocalizedString("Grades", comment: "")
-				activity.isEligibleForPrediction = true
-				activity.isEligibleForSearch = true
-				activity.keywords = [NSLocalizedString("Grades", comment: ""), "vulcan"]
-			}
 			
 			// Schedule
 			NavigationView {
@@ -69,16 +57,6 @@ struct AppTabNavigation: View {
 			}
 			.tag(Tab.schedule)
 			.navigationViewStyle(StackNavigationViewStyle())
-			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").scheduleActivity", isActive: currentTab == .schedule) { activity in
-				activity.title = NSLocalizedString("Schedule", comment: "")
-				activity.isEligibleForPrediction = true
-				activity.isEligibleForSearch = true
-				activity.keywords = [
-					NSLocalizedString("Schedule", comment: ""),
-					NSLocalizedString("Lessons", comment: ""),
-					"vulcan"
-				]
-			}
 			
 			// Tasks
 			NavigationView {
@@ -90,12 +68,6 @@ struct AppTabNavigation: View {
 			}
 			.tag(Tab.tasks)
 			.navigationViewStyle(StackNavigationViewStyle())
-			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity", isActive: currentTab == .tasks) { activity in
-				activity.title = NSLocalizedString("Tasks", comment: "")
-				activity.isEligibleForPrediction = true
-				activity.isEligibleForSearch = true
-				activity.keywords = [NSLocalizedString("Tasks", comment: ""), "vulcan"]
-			}
 			
 			// Messages
 			NavigationView {
@@ -110,12 +82,6 @@ struct AppTabNavigation: View {
 			}
 			.tag(Tab.messages)
 			.navigationViewStyle(DoubleColumnNavigationViewStyle())
-			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").messagesActivity", isActive: currentTab == .messages) { activity in
-				activity.title = NSLocalizedString("Messages", comment: "")
-				activity.isEligibleForPrediction = true
-				activity.isEligibleForSearch = true
-				activity.keywords = [NSLocalizedString("Messages", comment: ""), "vulcan"]
-			}
 		}
 	}
 }

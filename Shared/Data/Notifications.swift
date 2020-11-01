@@ -5,6 +5,7 @@
 //  Created by royal on 09/07/2020.
 //
 
+import UIKit
 import Foundation
 import UserNotifications
 import os
@@ -13,7 +14,7 @@ final class Notifications: NSObject, UNUserNotificationCenterDelegate {
 	public static var shared: Notifications = Notifications()
 	public var notificationCenter: UNUserNotificationCenter = UNUserNotificationCenter.current()
 	
-	public let logger: Logger = Logger(subsystem: "Vulcan", category: "Notifications")
+	public let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Notifications")
 	
 	private override init() {
 		super.init()
@@ -36,8 +37,14 @@ final class Notifications: NSObject, UNUserNotificationCenterDelegate {
 		let options: UNAuthorizationOptions = [.alert, .sound, .badge, .announcement]
 		
 		notificationCenter.requestAuthorization(options: options) { (allowed, error) in
-			if (!allowed) {
-				self.logger.warning("(Notifications) User declined the authorization prompt. Error: \(error?.localizedDescription ?? "none")")
+			if !allowed {
+				self.logger.warning("User declined the authorization prompt. Error: \(error?.localizedDescription ?? "none")")
+				return
+			}
+			
+			DispatchQueue.main.async {
+				self.logger.debug("Registering for APNs.")
+				UIApplication.shared.registerForRemoteNotifications()
 			}
 		}
 	}

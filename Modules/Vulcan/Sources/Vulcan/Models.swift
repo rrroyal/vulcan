@@ -453,7 +453,7 @@ public extension Vulcan {
 	}
 	
 	struct ScheduleEvent: Identifiable, Codable, Hashable {
-		public init(dateEpoch: Int, lessonOfTheDay: Int, lessonTimeID: Int, subjectID: Int, subjectName: String, divisionShort: String?, room: String, employeeID: Int, helpingEmployeeID: Int?, oldEmployeeID: Int?, oldHelpingEmployeeID: Int?, scheduleID: Int, note: String?, labelStrikethrough: Bool, labelBold: Bool, userSchedule: Bool, dateStartsEpoch: TimeInterval? = nil, dateEndsEpoch: TimeInterval? = nil, employeeFullName: String? = nil) {
+		public init(dateEpoch: Int, lessonOfTheDay: Int, lessonTimeID: Int, subjectID: Int, subjectName: String, divisionShort: String?, room: String, employeeID: Int, helpingEmployeeID: Int?, oldEmployeeID: Int?, oldHelpingEmployeeID: Int?, scheduleID: Int, note: String?, labelStrikethrough: Bool, labelBold: Bool, isUserSchedule: Bool, dateStartsEpoch: TimeInterval? = nil, dateEndsEpoch: TimeInterval? = nil, employeeFullName: String? = nil) {
 			self.dateEpoch = dateEpoch
 			self.lessonOfTheDay = lessonOfTheDay
 			self.lessonTimeID = lessonTimeID
@@ -469,7 +469,7 @@ public extension Vulcan {
 			self.note = note
 			self.labelStrikethrough = labelStrikethrough
 			self.labelBold = labelBold
-			self.userSchedule = userSchedule
+			self.isUserSchedule = isUserSchedule
 			self.dateStartsEpoch = dateStartsEpoch
 			self.dateEndsEpoch = dateEndsEpoch
 			self.employeeFullName = employeeFullName
@@ -483,7 +483,7 @@ public extension Vulcan {
 				return nil
 			}
 			
-			self.init(dateEpoch: Int(entity.dateEpoch), lessonOfTheDay: Int(entity.lessonOfTheDay), lessonTimeID: Int(entity.lessonTimeID), subjectID: Int(entity.subjectID), subjectName: subjectName, divisionShort: entity.divisionShort, room: room, employeeID: Int(entity.employeeID), helpingEmployeeID: Int(entity.helpingEmployeeID), oldEmployeeID: Int(entity.oldEmployeeID), oldHelpingEmployeeID: Int(entity.oldHelpingEmployeeID), scheduleID: Int(entity.scheduleID), note: entity.note, labelStrikethrough: entity.labelStrikethrough, labelBold: entity.labelBold, userSchedule: entity.userSchedule, dateStartsEpoch: TimeInterval(entity.dateStartsEpoch), dateEndsEpoch: TimeInterval(entity.dateEndsEpoch), employeeFullName: entity.employeeFullName)
+			self.init(dateEpoch: Int(entity.dateEpoch), lessonOfTheDay: Int(entity.lessonOfTheDay), lessonTimeID: Int(entity.lessonTimeID), subjectID: Int(entity.subjectID), subjectName: subjectName, divisionShort: entity.divisionShort, room: room, employeeID: Int(entity.employeeID), helpingEmployeeID: Int(entity.helpingEmployeeID), oldEmployeeID: Int(entity.oldEmployeeID), oldHelpingEmployeeID: Int(entity.oldHelpingEmployeeID), scheduleID: Int(entity.scheduleID), note: entity.note, labelStrikethrough: entity.labelStrikethrough, labelBold: entity.labelBold, isUserSchedule: entity.isUserSchedule, dateStartsEpoch: TimeInterval(entity.dateStartsEpoch), dateEndsEpoch: TimeInterval(entity.dateEndsEpoch), employeeFullName: entity.employeeFullName)
 		}
 		
 		enum CodingKeys: String, CodingKey {
@@ -502,7 +502,7 @@ public extension Vulcan {
 			case note = "AdnotacjaOZmianie"
 			case labelStrikethrough = "PrzekreslonaNazwa"
 			case labelBold = "PogrubionaNazwa"
-			case userSchedule = "PlanUcznia"
+			case isUserSchedule = "PlanUcznia"
 			case dateStartsEpoch = "GodzinaRozpoczecia"
 			case dateEndsEpoch = "GodzinaZakonczenia"
 			case employeeFullName = "PracownikPelnaNazwa"
@@ -523,7 +523,7 @@ public extension Vulcan {
 		public let note: String?
 		public let labelStrikethrough: Bool
 		public let labelBold: Bool
-		public let userSchedule: Bool
+		public let isUserSchedule: Bool
 		
 		public var dateStartsEpoch: TimeInterval?
 		public var dateEndsEpoch: TimeInterval?
@@ -533,47 +533,37 @@ public extension Vulcan {
 		public var employee: DictionaryEmployee?
 		
 		public var id: String {
-			return "\(self.employeeID):\(self.subjectID):\(self.lessonTimeID):\(self.helpingEmployeeID ?? -1):\(self.divisionShort ?? "ungrouped")"
+			"\(self.dateEpoch):\(self.lessonOfTheDay):\(self.lessonTimeID):\(self.subjectID):\(self.divisionShort ?? "ungrouped")"
 		}
 		
 		public var date: Date { Date(timeIntervalSince1970: TimeInterval(self.dateEpoch)) }
 		
 		public var dateStarts: Date? {
-			get {
-				guard let epoch = self.dateStartsEpoch else {
-					return nil
-				}
-				
-				return Date(timeIntervalSince1970: TimeInterval(epoch))
-			}
-			
-			set(value) {
-				self.dateStartsEpoch = value?.timeIntervalSince1970
-			}
-		}
-		
-		public var dateEnds: Date? {
-			get {
-				guard let epoch = self.dateEndsEpoch else {
-					return nil
-				}
-				
-				return Date(timeIntervalSince1970: TimeInterval(epoch))
-			}
-			
-			set(value) {
-				self.dateEndsEpoch = value?.timeIntervalSince1970
-			}
-		}
-		
-		public var isCurrent: Bool? {
-			guard let dateStarts = dateStarts,
-				  let dateEnds = dateEnds else {
+			guard let epoch = self.dateStartsEpoch else {
 				return nil
 			}
 			
-			let now: Date = Date()
-			return now > dateStarts && now < dateEnds
+			return Date(timeIntervalSince1970: TimeInterval(epoch))
+		}
+		
+		public var dateEnds: Date? {
+			guard let epoch = self.dateEndsEpoch else {
+				return nil
+			}
+			
+			return Date(timeIntervalSince1970: TimeInterval(epoch))
+		}
+		
+		public var isCurrent: Bool? {
+			get {
+				guard let dateStarts = dateStarts,
+					  let dateEnds = dateEnds else {
+					return nil
+				}
+				
+				let now: Date = Date()
+				return now > dateStarts && now < dateEnds
+			}
 		}
 		
 		public var group: Int? {
@@ -600,7 +590,7 @@ public extension Vulcan {
 			entity.subjectID = Int32(self.subjectID)
 			entity.subjectName = self.subjectName
 			entity.employeeID = Int32(self.employeeID)
-			entity.userSchedule = self.userSchedule
+			entity.isUserSchedule = self.isUserSchedule
 			entity.divisionShort = self.divisionShort
 			entity.id = self.id
 			
@@ -832,7 +822,7 @@ public extension Vulcan {
 	}
 	
 	class Exam: Identifiable, Codable, VulcanTask {
-		public init(id: Int, subjectID: Int, employeeID: Int, branchID: Int, divisionID: Int?, divisionName: String?, divisionShort: String?, type: Bool, entry: String, dateEpoch: Int, subject: DictionarySubject? = nil, employee: DictionaryEmployee? = nil) {
+		public init(id: Int, subjectID: Int, employeeID: Int, branchID: Int, divisionID: Int?, divisionName: String?, divisionShort: String?, isBigType: Bool, entry: String, dateEpoch: Int, subject: DictionarySubject? = nil, employee: DictionaryEmployee? = nil) {
 			self.id = id
 			self.subjectID = subjectID
 			self.employeeID = employeeID
@@ -840,7 +830,7 @@ public extension Vulcan {
 			self.divisionID = divisionID
 			self.divisionName = divisionName
 			self.divisionShort = divisionShort
-			self.type = type
+			self.isBigType = isBigType
 			self.entry = entry
 			self.dateEpoch = dateEpoch
 			self.subject = subject
@@ -854,7 +844,7 @@ public extension Vulcan {
 				return nil
 			}
 			
-			self.init(id: Int(entity.id), subjectID: Int(entity.subjectID), employeeID: Int(entity.employeeID), branchID: Int(entity.branchID), divisionID: Int(entity.divisionID), divisionName: entity.divisionName, divisionShort: entity.divisionShort, type: entity.type, entry: entry, dateEpoch: Int(entity.dateEpoch))
+			self.init(id: Int(entity.id), subjectID: Int(entity.subjectID), employeeID: Int(entity.employeeID), branchID: Int(entity.branchID), divisionID: Int(entity.divisionID), divisionName: entity.divisionName, divisionShort: entity.divisionShort, isBigType: entity.isBigType, entry: entry, dateEpoch: Int(entity.dateEpoch))
 		}
 		
 		enum CodingKeys: String, CodingKey {
@@ -865,7 +855,7 @@ public extension Vulcan {
 			case divisionID = "IdPodzial"
 			case divisionName = "PodzialNazwa"
 			case divisionShort = "PodzialSkrot"
-			case type = "Rodzaj"
+			case isBigType = "Rodzaj"
 			case entry = "Opis"
 			case dateEpoch = "Data"
 		}
@@ -877,7 +867,7 @@ public extension Vulcan {
 		public let divisionID: Int?
 		public let divisionName: String?
 		public let divisionShort: String?
-		public let type: Bool
+		public let isBigType: Bool
 		public let entry: String
 		public let dateEpoch: Int
 		
@@ -901,7 +891,7 @@ public extension Vulcan {
 			entity.branchID = Int32(self.branchID)
 			entity.divisionName = self.divisionName
 			entity.divisionShort = self.divisionShort
-			entity.type = self.type
+			entity.isBigType = self.isBigType
 			entity.entry = self.entry
 			entity.dateEpoch = Int64(self.dateEpoch)
 			
@@ -1009,30 +999,30 @@ public extension Vulcan {
 		
 		enum CodingKeys: String, CodingKey {
 			case key = "UwagaKey"
-			case employeeName = "PracownikImie"
-			case studentSurname = "UczenNazwisko"
 			case id = "Id"
 			case categoryID = "IdKategoriaUwag"
 			case dateCreatedEpoch = "DataWpisu"
-			case studentID = "IdUczen"
 			case dateModifiedEpoch = "DataModyfikacji"
+			case studentID = "IdUczen"
 			case entry = "TrescUwagi"
+			case employeeName = "PracownikImie"
 			case employeeSurname = "PracownikNazwisko"
 			case studentName = "UczenImie"
+			case studentSurname = "UczenNazwisko"
 			case employeeID = "IdPracownik"
 		}
 		
 		public let key: String
-		public let employeeName: String
-		public let studentSurname: String
 		public let id: Int
 		public let categoryID: Int?
 		public let dateCreatedEpoch: Int
-		public let studentID: Int
 		public let dateModifiedEpoch: Int?
+		public let studentID: Int
 		public let entry: String
+		public let employeeName: String
 		public let employeeSurname: String
 		public let studentName: String
+		public let studentSurname: String
 		public let employeeID: Int
 		
 		public var employee: DictionaryEmployee?

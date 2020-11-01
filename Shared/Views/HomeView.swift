@@ -8,6 +8,8 @@
 import SwiftUI
 import Vulcan
 import AppNotifications
+import CoreSpotlight
+import CoreServices
 
 /// Home view, containing dashboard for user
 struct HomeView: View {
@@ -19,7 +21,7 @@ struct HomeView: View {
 	@State private var isComposeSheetPresented: Bool = false
 	@State private var messageToReply: Vulcan.Message?
 	
-	/// Data
+	// MARK: Variables
 	var helloString: LocalizedStringKey {
 		let hour: Int = Calendar.autoupdatingCurrent.component(.hour, from: Date())
 		var helloString: LocalizedStringKey = "HELLO : \(vulcan.currentUser?.name ?? "User")"
@@ -38,14 +40,14 @@ struct HomeView: View {
 	var currentLesson: Vulcan.ScheduleEvent? {
 		vulcan.schedule
 			.flatMap(\.events)
-			.filter { $0.userSchedule }
+			.filter { $0.isUserSchedule }
 			.first(where: { $0.isCurrent ?? false })
 	}
 	
 	var nextLesson: Vulcan.ScheduleEvent? {
 		vulcan.schedule
 			.flatMap(\.events)
-			.filter { $0.userSchedule }
+			.filter { $0.isUserSchedule }
 			.first(where: {
 				guard let dateStarts = $0.dateStarts else {
 					return false
@@ -69,6 +71,7 @@ struct HomeView: View {
 		vulcan.messages[.received]?.filter({ !$0.hasBeenRead }) ?? []
 	}
 	
+	// MARK: Views
 	/// Divider view
 	private var divider: some View {
 		VStack {
@@ -165,10 +168,10 @@ struct HomeView: View {
 		Section(header: Text("Exams").textCase(.none)) {
 			if (newExams.count > 0) {
 				ForEach(newExams) { (task) in
-					TaskCell(task: task, type: task.type)
+					TaskCell(task: task, isBigType: task.isBigType)
 				}
 			} else {
-				Text("Nothing found")
+				Text("Nothing in the near future")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
 					.fullWidth()
@@ -182,10 +185,10 @@ struct HomeView: View {
 		Section(header: Text("Homework").textCase(.none)) {
 			if (newHomework.count > 0) {
 				ForEach(newHomework) { (task) in
-					TaskCell(task: task, type: nil)
+					TaskCell(task: task, isBigType: nil)
 				}
 			} else {
-				Text("Nothing found")
+				Text("Nothing in the near future")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
 					.fullWidth()
@@ -204,7 +207,7 @@ struct HomeView: View {
 					}
 				}
 			} else {
-				Text("Nothing found")
+				Text("No new messages")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
 					.fullWidth()
@@ -216,7 +219,7 @@ struct HomeView: View {
 	/// Section containing anticipated grades.
 	private var anticipatedGradesSection: some View {
 		Section(header: Text("Anticipated grades").textCase(.none)) {
-			if (vulcan.eotGrades.expected.count == 0) {
+			if (vulcan.eotGrades.expected.isEmpty) {
 				Text("No grades")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
@@ -236,7 +239,7 @@ struct HomeView: View {
 			vulcan.getEndOfTermGrades() { error in
 				if let error = error {
 					generateHaptic(.error)
-					AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+					AppNotifications.shared.notification = .init(error: error.localizedDescription)
 				}
 			}
 		}
@@ -245,7 +248,7 @@ struct HomeView: View {
 	/// Section containing final grades.
 	private var finalGradesSection: some View {
 		Section(header: Text("Final grades").textCase(.none)) {
-			if (vulcan.eotGrades.final.count == 0) {
+			if (vulcan.eotGrades.final.isEmpty) {
 				Text("No grades")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
@@ -265,7 +268,7 @@ struct HomeView: View {
 			vulcan.getEndOfTermGrades() { error in
 				if let error = error {
 					generateHaptic(.error)
-					AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+					AppNotifications.shared.notification = .init(error: error.localizedDescription)
 				}
 			}
 		}
@@ -274,7 +277,7 @@ struct HomeView: View {
 	/// Section containing user notes.
 	private var notesSection: some View {
 		Section(header: Text("Notes").textCase(.none)) {
-			if (vulcan.notes.count == 0) {
+			if (vulcan.notes.isEmpty) {
 				Text("Nothing found")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
@@ -293,7 +296,7 @@ struct HomeView: View {
 			vulcan.getNotes() { error in
 				if let error = error {
 					generateHaptic(.error)
-					AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+					AppNotifications.shared.notification = .init(error: error.localizedDescription)
 				}
 			}
 		}
@@ -325,6 +328,16 @@ struct HomeView: View {
 		}
 		.listStyle(InsetGroupedListStyle())
 		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply) })
+		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
+			activity.title = "Today".localized
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForSearch = true
+			activity.keywords = ["Today".localized, "vulcan"]
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = "Your summary for today.".localized
+			activity.contentAttributeSet = attributes			
+		}
 		.onAppear {
 			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
 				return
@@ -336,7 +349,7 @@ struct HomeView: View {
 				vulcan.getNotes() { error in
 					if let error = error {
 						generateHaptic(.error)
-						AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}
 			}
@@ -347,7 +360,7 @@ struct HomeView: View {
 				vulcan.getEndOfTermGrades() { error in
 					if let error = error {
 						generateHaptic(.error)
-						AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}
 			}

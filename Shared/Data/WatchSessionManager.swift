@@ -13,7 +13,7 @@ import Vulcan
 @available (iOS 14, watchOS 7, *)
 public final class WatchSessionManager: NSObject, WCSessionDelegate {
 	static public let shared = WatchSessionManager()
-	public let logger: Logger = Logger(subsystem: "WatchConnectivity", category: "WatchConnectivity")
+	public let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).WatchConnectivity", category: "WatchConnectivity")
 	public let ud: UserDefaults = UserDefaults.group
 	
 	private override init() {
@@ -122,7 +122,7 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 			self.logger.info("Sending data...")
 
 			do {
-				if (session.isReachable) {
+				if session.isReachable {
 					self.logger.info("Sending message! Reachable: \(session.isReachable).")
 					session.sendMessage(data, replyHandler: { (reply) in
 						self.logger.info("Reply: \(reply)")
@@ -133,7 +133,7 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 						self.logger.error("Error sending a message: \(error.localizedDescription).")
 					})
 				} else {
-					try session.updateApplicationContext(data)
+					self.logger.warning("Session not reachable!")
 				}
 			}
 			

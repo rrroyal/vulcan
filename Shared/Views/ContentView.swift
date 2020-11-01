@@ -12,23 +12,21 @@ import Vulcan
 struct ContentView: View {
 	@Binding var currentTab: Tab
 	
-	#if os(iOS)
+	/* #if os(iOS)
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
-	#endif
+	#endif */
 	
-	@State private var isOnboardingVisible: Bool = false
+	@State private var isOnboardingVisible: Bool = !SettingsModel.shared.launchedBefore
 	@State private var isNotificationVisible: Bool = false
-	
-	/// Runs after the view displays (which is shortly after the initialization) and displays the onboarding.
-	private func loadView() {
-		if (!SettingsModel.shared.launchedBefore) {
-			isOnboardingVisible = true
-		}
-	}
 	
 	@ViewBuilder var body: some View {
 		Group {
 			#if os(iOS)
+			/* if horizontalSizeClass == .compact {
+				AppTabNavigation(currentTab: $currentTab)
+			} else {
+				AppSidebarNavigation()
+			} */
 			AppTabNavigation(currentTab: $currentTab)
 			#else
 			AppSidebarNavigation()
@@ -39,7 +37,11 @@ struct ContentView: View {
 		}) {
 			OnboardingView(isPresented: $isOnboardingVisible)
 		}
-		.onAppear(perform: loadView)
+		/* .onAppear {
+			if !SettingsModel.shared.launchedBefore {
+				isOnboardingVisible = true
+			}
+		} */
 	}
 }
 

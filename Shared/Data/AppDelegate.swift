@@ -15,19 +15,14 @@ import os
 import Vulcan
 import WidgetKit
 
-class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate {
 	// MARK: - App Lifecycle
-	private let logger: Logger = Logger(subsystem: "Vulcan", category: "AppDelegate")
+	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "AppDelegate")
 	
 	private var cancellableSet: [AnyCancellable] = []
 	
 	/// Called when app is launched
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {		
-		// Background fetch
-		BGTaskScheduler.shared.register(forTaskWithIdentifier: "dev.niepostek.vulcan.refreshData", using: nil) { (task) in
-			self.handleAppRefresh(task)
-		}
-		
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		// WatchConnectivity session
 		WatchSessionManager.shared.startSession()
 		
@@ -37,6 +32,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 		// UserNotifications
 		let notifications: Notifications = Notifications.shared
 		notifications.notificationCenter.delegate = notifications
+		
+		// Background fetch
+		BGTaskScheduler.shared.register(forTaskWithIdentifier: "dev.niepostek.vulcan.refreshData", using: nil) { (task) in
+			self.handleAppRefresh(task)
+		}
 		
 		// Listeners
 		Vulcan.shared.$currentUser
@@ -58,8 +58,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 					return
 				}
 				
-				// Widget
-				WidgetCenter.shared.reloadTimelines(ofKind: "ScheduleWidget")
+				// Widgets
+				WidgetCenter.shared.reloadTimelines(ofKind: "NextUpWidget")
+				WidgetCenter.shared.reloadTimelines(ofKind: "NowWidget")
 				
 				// Watch
 				let watchData: [String: Any] = [
@@ -76,16 +77,27 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 		return true
 	}
 	
+	/// Registered for APNs
+	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+		let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+		logger.info("Successfuly registered for APNs. Device token: \(token, privacy: .private).")
+	}
+	
+	/// Failed to register for APNs
+	func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+		logger.warning("Failed to register for APNs: \(error.localizedDescription)")
+	}
+	
 	// MARK: - Helper functions
 	
 	/// Sets the currently visible shortcuts
 	/// - Parameter visible: Should shortcuts be visible?
 	public func setShortcuts(visible: Bool) {
 		if visible {
-			let shortcutGradesItem = UIApplicationShortcutItem(type: "shortcutGrades", localizedTitle: NSLocalizedString("Grades", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "rosette"), userInfo: nil)
-			let shortcutScheduleItem = UIApplicationShortcutItem(type: "shortcutSchedule", localizedTitle: NSLocalizedString("Schedule", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "calendar"), userInfo: nil)
-			let shortcutTasksItem = UIApplicationShortcutItem(type: "shortcutTasks", localizedTitle: NSLocalizedString("Tasks", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "doc.on.clipboard.fill"), userInfo: nil)
-			let shortcutMessagesItem = UIApplicationShortcutItem(type: "shortcutMessages", localizedTitle: NSLocalizedString("Messages", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "text.bubble.fill"), userInfo: nil)
+			let shortcutGradesItem = UIApplicationShortcutItem(type: "shortcutGrades", localizedTitle: "Grades".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "rosette"), userInfo: nil)
+			let shortcutScheduleItem = UIApplicationShortcutItem(type: "shortcutSchedule", localizedTitle: "Schedule".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "calendar"), userInfo: nil)
+			let shortcutTasksItem = UIApplicationShortcutItem(type: "shortcutTasks", localizedTitle: "Tasks".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "doc.on.clipboard.fill"), userInfo: nil)
+			let shortcutMessagesItem = UIApplicationShortcutItem(type: "shortcutMessages", localizedTitle: "Messages".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "text.bubble.fill"), userInfo: nil)
 			UIApplication.shared.shortcutItems = [shortcutGradesItem, shortcutScheduleItem, shortcutTasksItem, shortcutMessagesItem]
 		} else {
 			UIApplication.shared.shortcutItems = []

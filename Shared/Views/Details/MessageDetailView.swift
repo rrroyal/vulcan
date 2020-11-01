@@ -88,7 +88,7 @@ struct MessageDetailView: View {
 				Vulcan.shared.moveMessage(message: message, to: .read) { error in
 					if let error = error {
 						generateHaptic(.error)
-						AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}
 			}

@@ -70,9 +70,18 @@
 
 "No grades" = "Brak ocen";
 
+"Nothing in the near future" = "Nic w najbliższym czasie";
+"No new messages" = "Brak nowych wiadomości";
+
+"Your summary for today" = "Twoje dzisiejsze podsumowanie";
+
+// MARK: GradesView.swift
+"See your grades" = "Zobacz swoje oceny";
+
 // MARK: ScheduleView.swift
 "No lessons for this week 😊" = "Brak lekcji na ten tydzień 😊";
 "No lessons for this day 😊" = "Brak lekcji na ten dzień 😊";
+"Displays your schedule" = "Pokazuje Twój plan lekcji";
 
 // MARK: TasksView.swift
 "No tasks" = "Brak zadań";
@@ -83,6 +92,7 @@
 "TAG_HOMEWORK" = "Zadanie domowe";
 "No exams for this month 😊" = "Brak testów w tym miesiącu 😊";
 "No homework for this month 😊" = "Brak zadań domowych w tym miesiącu 😊";
+"Displays your upcoming exams and homework" = "Pokazuje Twoje najbliższe testy i zadania domowe";
 
 // MARK: MessagesView.swift
 "No messages found" = "Brak wiadomości";
@@ -99,6 +109,7 @@
 "Filter" = "Filtrowanie";
 "All" = "Wszystko";
 "New" = "Nowa";
+"See your received messages" = "Zobacz swoje odebrane wiadomości";
 
 // MARK: SettingsView.swift
 "General" = "Ogólne";

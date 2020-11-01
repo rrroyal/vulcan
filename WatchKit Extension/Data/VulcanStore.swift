@@ -12,7 +12,7 @@ import CoreData
 import ClockKit
 
 final class VulcanStore: ObservableObject {
-	private let ud: UserDefaults = UserDefaults.group
+	private let ud = UserDefaults.group
 	
 	static let shared: VulcanStore = VulcanStore()
 	
@@ -140,7 +140,7 @@ final class VulcanStore: ObservableObject {
 	/// - Parameter user: Selected user
 	/// - Parameter force: Force dictionary update
 	public func setUser(_ user: Vulcan.Student, force: Bool = false) {
-		let logger: Logger = Logger(subsystem: "VulcanStore", category: "Users")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Users")
 		logger.debug("Setting default user with ID \(user.id, privacy: .sensitive) (\(user.loginID ?? -1, privacy: .sensitive) : \(user.userLoginID, privacy: .sensitive)).")
 		
 		ud.setValue(user.id, forKey: UserDefaults.AppKeys.userID.rawValue)
@@ -163,7 +163,7 @@ final class VulcanStore: ObservableObject {
 	/// Sets the app' schedule.
 	/// - Parameter schedule: Schedule received from the phone app
 	public func setSchedule(_ schedule: [Vulcan.Schedule]) {
-		let logger: Logger = Logger(subsystem: "VulcanStore", category: "Schedule")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Schedule")
 		
 		DispatchQueue.main.async {
 			self.schedule = schedule
@@ -194,7 +194,7 @@ final class VulcanStore: ObservableObject {
 	/// Sets the app' grades.
 	/// - Parameter grades: Received grades
 	public func setGrades(_ grades: [Vulcan.SubjectGrades]) {
-		let logger: Logger = Logger(subsystem: "VulcanStore", category: "Grades")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Grades")
 		
 		DispatchQueue.main.async {
 			self.grades = grades
@@ -219,7 +219,7 @@ final class VulcanStore: ObservableObject {
 	/// Sets the app' EOT grades.
 	/// - Parameter eotGrades: End of term grades
 	public func setEOTGrades(_ eotGrades: [Vulcan.EndOfTermGrade]) {
-		let logger: Logger = Logger(subsystem: "VulcanStore", category: "EOTGrades")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "EOTGrades")
 		
 		DispatchQueue.main.async {
 			self.eotGrades = eotGrades
@@ -244,7 +244,7 @@ final class VulcanStore: ObservableObject {
 	/// Sets the app' tasks.
 	/// - Parameter tasks: Received tasks
 	public func setTasks(_ tasks: Vulcan.Tasks) {
-		let logger: Logger = Logger(subsystem: "VulcanStore", category: "Tasks")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Tasks")
 		
 		DispatchQueue.main.async {
 			self.tasks = tasks
@@ -275,7 +275,7 @@ final class VulcanStore: ObservableObject {
 	///   - messages: Received messages with certain tag
 	///   - tag: Tag of the messages
 	public func setMessages(_ messages: [Vulcan.Message], tag: Vulcan.MessageTag) {
-		let logger: Logger = Logger(subsystem: "VulcanStore", category: "Messages")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Messages")
 		
 		DispatchQueue.main.async {
 			switch tag {

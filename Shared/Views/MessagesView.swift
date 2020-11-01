@@ -8,6 +8,8 @@
 import SwiftUI
 import Vulcan
 import AppNotifications
+import CoreSpotlight
+import CoreServices
 
 /// View containing the received, sent and deleted messages.
 struct MessagesView: View {
@@ -37,7 +39,7 @@ struct MessagesView: View {
 			if let error = error {
 				generateHaptic(.error)
 				self.date = previousDate
-				AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+				AppNotifications.shared.notification = .init(error: error.localizedDescription)
 			}
 		}
 	}
@@ -52,7 +54,7 @@ struct MessagesView: View {
 				vulcan.moveMessage(message: message, to: .deleted) { error in
 					if let error = error {
 						generateHaptic(.error)
-						AppNotifications.shared.sendNotification(NotificationData(error: error.localizedDescription))
+						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}
 			}
@@ -127,23 +129,9 @@ struct MessagesView: View {
 		}
 	}
 	
-	/// Button showing the `ComposeMessageView` sheet.
-	private var newMessageButton: some View {
-		Button(action: {
-			messageToReply = nil
-			isComposeSheetPresented = true
-		}) {
-			Image(systemName: "square.and.pencil")
-				.navigationBarButton(edge: .trailing)
-				// .frame(width: 22.5)
-				// .padding(.vertical)
-				// .font(.system(size: 20))
-		}
-	}
-	
 	private var content: some View {
 		List {
-			if ((vulcan.messages[tag] ?? []).count == 0) {
+			if ((vulcan.messages[tag] ?? []).isEmpty) {
 				Text("No messages found")
 					.opacity(0.5)
 					.multilineTextAlignment(.center)
@@ -173,6 +161,7 @@ struct MessagesView: View {
 	/// Sidebar ViewBuilder
 	@ViewBuilder var body: some View {
 		content
+			.navigationTitle(Text(LocalizedStringKey(tag.rawValue)))
 			.sheet(isPresented: $isComposeSheetPresented) {
 				ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply)
 			}
@@ -192,10 +181,32 @@ struct MessagesView: View {
 				ToolbarItem(placement: .primaryAction) {
 					folderButton
 						.navigationBarButton(edge: .trailing)
+					
+					/* if horizontalSizeClass == .compact {
+						folderButton
+							.navigationBarButton(edge: .trailing)
+					} else {
+						Button(action: {
+							messageToReply = nil
+							isComposeSheetPresented = true
+						}) {
+							Image(systemName: "square.and.pencil")
+						}
+						.navigationBarButton(edge: .trailing)
+					} */
 				}
 				#endif
 			}
-			.navigationTitle(Text(LocalizedStringKey(tag.rawValue)))
+			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").messagesActivity") { activity in
+				activity.title = "Messages".localized
+				activity.isEligibleForPrediction = true
+				activity.isEligibleForSearch = true
+				activity.keywords = ["Messages".localized, "vulcan"]
+				
+				let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+				attributes.contentDescription = "See your received messages".localized
+				activity.contentAttributeSet = attributes				
+			}
 	}
 }
 

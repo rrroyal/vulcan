@@ -26,7 +26,7 @@ public final class Vulcan: ObservableObject {
 	// MARK: - Private variables
 	
 	private let keychain: Keychain = Keychain(service: ("\(Bundle.main.bundleIdentifier ?? "vulcan")-\(Bundle.main.deviceName)")).label("vulcan Certificate (\(Bundle.main.deviceName))").synchronizable(false).accessibility(.afterFirstUnlock)
-	private let ud: UserDefaults = UserDefaults.group
+	private let ud = UserDefaults.group
 	private let persistentContainer: NSPersistentContainer = CoreDataModel.shared.persistentContainer
 	private let monitor: NWPathMonitor = NWPathMonitor()
 	
@@ -101,12 +101,12 @@ public final class Vulcan: ObservableObject {
 	// MARK: - init
 	/// Initializes, loads and sanity checks the data.
 	private init() {
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Init")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Init")
 		monitor.start(queue: .global(qos: .utility))
 		
 		// If we have the certificate, we're logged in
 		if (self.keychain["CertificatePfx"] != nil) && (self.keychain["CertificatePfx"] != "") {
-			logger.debug("Logged in. Key: \(self.keychain["CertificateKey"] ?? "none", privacy: .sensitive).")
+			logger.debug("Logged in. Key: \(self.keychain["CertificateKey"] ?? "none", privacy: .private).")
 		} else {
 			logger.debug("Not logged in.")
 			self.logOut()
@@ -140,9 +140,11 @@ public final class Vulcan: ObservableObject {
 									event.subject = subject
 								}
 								
-								if let employee: DictionaryEmployee = dictionaryEmployees.first(where: { $0.id == event.employeeID }) {
+								if let employee: DictionaryEmployee = dictionaryEmployees.first(where: { $0.id == event.employeeID }),
+								   let employeeName = employee.name,
+								   let employeeSurname = employee.surname {
 									event.employee = employee
-									event.employeeFullName = "\(employee.name ?? "Unknown") \(employee.surname ?? "employee")"
+									event.employeeFullName = "\(employeeName) \(employeeSurname)"
 								}
 								
 								if let dictionaryLessonTimes: [DictionaryLessonTime] = try? context.fetch(DictionaryLessonTime.fetchRequest()),
@@ -306,7 +308,7 @@ public final class Vulcan: ObservableObject {
 		}
 		
 		// Logged-in specific code
-		if (self.ud.bool(forKey: UserDefaults.AppKeys.isLoggedIn.rawValue)) {
+		if self.ud.bool(forKey: UserDefaults.AppKeys.isLoggedIn.rawValue) {
 			// Refresh users
 			self.getUsers()
 		}
@@ -321,21 +323,11 @@ public final class Vulcan: ObservableObject {
 	///   - pin: 6 numbers
 	///   - completionHandler: Callback
 	public func login(token: String, symbol: String, pin: Int, completionHandler: @escaping (Bool, Error?) -> ()) {
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Login")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Login")
 		logger.debug("Logging in...")
 
 		// Apple Review
 		if (token == "applepark" && symbol == "infiniteloop" && pin == 000941) {
-			let request: URLRequest = URLRequest(url: URL(string: "https://hidden.shameful.xyz/vulcan/data")!)
-			URLSession.shared.dataTaskPublisher(for: request)
-				.receive(on: DispatchQueue.main)
-				.mapError { $0 as Error }
-				.map { $0.data }
-				.sink(receiveCompletion: { _ in }, receiveValue: { value in
-					print(value.base64EncodedString())
-				})
-				.store(in: &cancellableSet)
-			
 			let user: Vulcan.Student = Vulcan.Student(classificationPeriodID: 1, periodLevel: 1, periodNumber: 1, periodDateFrom: 1, periodDateTo: 1, reportingUnitID: 1, reportingUnitShort: "AAPL", reportingUnitName: "Apple", reportingUnitSymbol: "AAPL", unitID: 1, unitName: "Apple", unitShort: "AAPL", unitSymbol: "AAPL", unitCode: "AAPL", userRole: "", userLogin: "johnappleseed@apple.com", userLoginID: 1, username: "JohnAppleseed", id: 1, branchID: 1, name: "John", secondName: "", surname: "Appleseed", nickname: nil, userGender: 1, position: 1, loginID: nil)
 			self.setUser(user)
 			completionHandler(true, nil)
@@ -530,7 +522,7 @@ public final class Vulcan: ObservableObject {
 	
 	/// Logs out, removing all stored data.
 	public func logOut() {
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Logout")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Logout")
 		logger.debug("Logging out!")
 		
 		// Keychain
@@ -559,7 +551,7 @@ public final class Vulcan: ObservableObject {
 	/// - Parameter user: Selected user
 	/// - Parameter force: Force dictionary update
 	public func setUser(_ user: Vulcan.Student, force: Bool = false) {
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Users")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Users")
 		logger.debug("Setting default user with ID \(user.id, privacy: .sensitive) (\(user.loginID ?? -1, privacy: .sensitive) : \(user.userLoginID, privacy: .sensitive)).")
 		
 		ud.setValue(true, forKey: UserDefaults.AppKeys.isLoggedIn.rawValue)
@@ -575,7 +567,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Dictionary")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Dictionary")
 		
 		// Return if no user/no endpoint URL
 		guard let user: Vulcan.Student = self.currentUser, let endpointURL: String = self.endpointURL else {
@@ -824,7 +816,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Users")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Users")
 		logger.debug("Requesting users...")
 		
 		let request: URLRequest = URLRequest(url: URL(string: "\(endpointURL)mobile-api/Uczen.v3.UczenStart/ListaUczniow")!)
@@ -908,7 +900,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 				
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Schedule")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Schedule")
 		logger.debug("Getting schedule of user with ID \(user.userLoginID, privacy: .private) from \(startDate.formattedString(format: "yyyy-MM-dd")) to \(endDate.formattedString(format: "yyyy-MM-dd")) (persistent: \(isPersistent))...")
 		self.dataState.schedule.loading = true
 		
@@ -952,7 +944,7 @@ public final class Vulcan: ObservableObject {
 								self.schedule
 									.flatMap(\.events)
 									.filter { $0.dateStarts != nil && $0.dateStarts ?? $0.date >= Date() }
-									.filter { $0.userSchedule }
+									.filter { $0.isUserSchedule }
 									.forEach(self.addScheduleEventNotification)
 							}
 						case .failure(let error):
@@ -960,7 +952,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { events in
-					logger.debug("Received \(events.count) events.")
+					logger.debug("Received \(events.count) event(s).")
 					
 					let context = self.persistentContainer.viewContext
 					guard let dictionarySubjects: [DictionarySubject] = try? context.fetch(DictionarySubject.fetchRequest()),
@@ -980,9 +972,11 @@ public final class Vulcan: ObservableObject {
 										event.subject = subject
 									}
 									
-									if let employee: DictionaryEmployee = dictionaryEmployees.first(where: { $0.id == event.employeeID }) {
+									if let employee: DictionaryEmployee = dictionaryEmployees.first(where: { $0.id == event.employeeID }),
+									   let employeeName = employee.name,
+									   let employeeSurname = employee.surname {
 										event.employee = employee
-										event.employeeFullName = "\(employee.name ?? "Unknown") \(employee.surname ?? "employee")"
+										event.employeeFullName = "\(employeeName) \(employeeSurname)"
 									}
 									
 									if let lessonTime: DictionaryLessonTime = dictionaryLessonTimes.first(where: { $0.id == event.lessonTimeID }) {
@@ -1000,14 +994,26 @@ public final class Vulcan: ObservableObject {
 					
 					if isPersistent {
 						let context = self.persistentContainer.viewContext
+						let events = tempSchedule.flatMap(\.events)
 						
 						do {
 							let oneMonthAgo: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: -1, to: Date()) ?? Date().startOfMonth
 							let oneMonthInFuture: Date = Calendar.autoupdatingCurrent.date(byAdding: .month, value: 1, to: Date()) ?? Date().endOfMonth
 							
 							let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredScheduleEvent.fetchRequest()
-							fetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
-							
+							if let startPeriod = events.first?.date.startOfDay,
+							   let endPeriod = events.last?.date.endOfDay {
+								fetchRequest.predicate = NSPredicate(
+									format: "(dateEpoch >= %i AND dateEpoch <= %i) OR (dateEpoch <= %i OR dateEpoch >= %i)",
+									Int(startPeriod.timeIntervalSince1970),
+									Int(endPeriod.timeIntervalSince1970),
+									Int(oneMonthAgo.timeIntervalSince1970),
+									Int(oneMonthInFuture.timeIntervalSince1970)
+								)
+							} else {
+								fetchRequest.predicate = NSPredicate(format: "dateEpoch <= %i OR dateEpoch >= %i", Int(oneMonthAgo.timeIntervalSince1970), Int(oneMonthInFuture.timeIntervalSince1970))
+							}
+														
 							try context.execute(NSBatchDeleteRequest(fetchRequest: fetchRequest))
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
@@ -1050,7 +1056,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Grades")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Grades")
 		logger.debug("Getting grades of user with ID \(user.userLoginID, privacy: .private)...")
 		self.dataState.grades.loading = true
 		
@@ -1089,7 +1095,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { grades in
-					logger.debug("Received \(grades.count) grades.")
+					logger.debug("Received \(grades.count) grade(s).")
 					
 					let context = self.persistentContainer.viewContext
 					guard let dictionarySubjects: [DictionarySubject] = try? context.fetch(DictionarySubject.fetchRequest()),
@@ -1187,7 +1193,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "EOTGrades")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "EOTGrades")
 		logger.debug("Getting end of term grades of user with ID \(user.userLoginID, privacy: .private)...")
 		self.dataState.eotGrades.loading = true
 		
@@ -1239,7 +1245,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { expected, final, points in
-					logger.debug("Received \(expected.count) expected, \(final.count) final grades and \(points.count) points objects.")
+					logger.debug("Received \(expected.count) expected, \(final.count) final grade(s) and \(points.count) points object(s).")
 					
 					let context = self.persistentContainer.viewContext
 					guard let dictionarySubjects: [DictionarySubject] = try? context.fetch(DictionarySubject.fetchRequest()) else {
@@ -1315,7 +1321,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Notes")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Notes")
 		logger.debug("Getting notes of user with ID \(user.userLoginID, privacy: .private)...")
 		self.dataState.notes.loading = true
 		
@@ -1338,7 +1344,7 @@ public final class Vulcan: ObservableObject {
 						  let objects = json["Data"] as? [[String: Any]] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
-										
+					
 					return try JSONSerialization.data(withJSONObject: objects, options: [])
 				}
 				.decode(type: [Vulcan.Note].self, decoder: JSONDecoder())
@@ -1354,7 +1360,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { notes in
-					logger.debug("Received \(notes.count) notes.")
+					logger.debug("Received \(notes.count) note(s).")
 					
 					let context = self.persistentContainer.viewContext
 					guard let dictionaryEmployees: [DictionaryEmployee] = try? context.fetch(DictionaryEmployee.fetchRequest()),
@@ -1423,7 +1429,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Tasks")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Tasks")
 		logger.debug("Getting tasks from \(startDate.formattedString(format: "yyyy-MM-dd")) to \(endDate.formattedString(format: "yyyy-MM-dd")) (persistent: \(isPersistent))...")
 		self.dataState.tasks.loading = true
 		
@@ -1484,7 +1490,7 @@ public final class Vulcan: ObservableObject {
 								tempTasks.exams
 									.filter { $0.date >= Date() }
 									.forEach { task in
-										self.addTaskNotification(task, type: task.type)
+										self.addTaskNotification(task, isBigType: task.isBigType)
 									}
 								
 								tempTasks.homework
@@ -1498,7 +1504,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { exams, homework in
-					logger.debug("Received \(exams.count) exam and \(homework.count) homework tasks.")
+					logger.debug("Received \(exams.count) exam and \(homework.count) homework task(s).")
 					
 					let context = self.persistentContainer.viewContext
 					guard let dictionarySubjects: [DictionarySubject] = try? context.fetch(DictionarySubject.fetchRequest()),
@@ -1589,8 +1595,8 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Messages")
-		logger.debug("Getting messages of user with ID \(user.userLoginID, privacy: .private) with tag \(tag.rawValue) from \(startDate.formattedString(format: "yyyy-MM-dd")) to \(endDate.formattedString(format: "yyyy-MM-dd")) (persistent: \(isPersistent))...")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Messages")
+		logger.debug("Getting messages of user with ID \(user.userLoginID, privacy: .private) with tag \"\(tag.rawValue)\" from \(startDate.formattedString(format: "yyyy-MM-dd")) to \(endDate.formattedString(format: "yyyy-MM-dd")) (persistent: \(isPersistent))...")
 		self.dataState.messages[tag]?.loading = true
 		
 		var tempMessages = self.messages[tag] ?? []
@@ -1637,7 +1643,7 @@ public final class Vulcan: ObservableObject {
 							completionHandler(error)
 					}
 				}, receiveValue: { messages in
-					logger.debug("Received \(messages.count) messages.")
+					logger.debug("Received \(messages.count) message(s).")
 					
 					let messages = messages
 						.map { message -> Vulcan.Message in
@@ -1702,7 +1708,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Messages")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Messages")
 		logger.debug("Moving a message with ID \(message.id, privacy: .sensitive) to folder \"\(folder.rawValue)\"...")
 		
 		var request: URLRequest = URLRequest(url: URL(string: "\(endpointURL)\(user.reportingUnitSymbol)/mobile-api/Uczen.v3.Uczen/ZmienStatusWiadomosci")!)
@@ -1782,7 +1788,7 @@ public final class Vulcan: ObservableObject {
 			return
 		}
 		
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Messages")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Messages")
 		logger.debug("Sending a message with title \(title, privacy: .sensitive) to recipients with ID(s) \(recipients.map(\.id))...")
 		
 		var request: URLRequest = URLRequest(url: URL(string: "\(endpointURL)\(user.reportingUnitSymbol)/mobile-api/Uczen.v3.Uczen/DodajWiadomosc")!)
@@ -1844,12 +1850,11 @@ public final class Vulcan: ObservableObject {
 	///   - sign: Should we sign the data?
 	/// - Returns: AnyPublisher<Data, Error>
 	private func request(_ request: URLRequest, sign: Bool = true) throws -> AnyPublisher<Data, Error> {
-		let logger: Logger = Logger(subsystem: "Vulcan", category: "Request")
+		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Request")
 		
 		// Check reachability
 		if (self.monitor.currentPath.status != .satisfied) {
 			logger.warning("Not reachable!")
-			// AppNotifications.shared.sendNotification(NotificationData(autodismisses: true, dismissable: true, style: .normal, icon: "wifi.slash", title: "NO_CONNECTION_TITLE", subtitle: "NO_CONNECTION_SUBTITLE", expandedText: nil))
 			throw APIError.error(reason: "Not reachable")
 		}
 		
@@ -1882,7 +1887,7 @@ public final class Vulcan: ObservableObject {
 		let bodyData = try? JSONSerialization.data(withJSONObject: body)
 		modifiedRequest.httpBody = bodyData
 		
-		if (sign) {
+		if sign {
 			let requestParametersData: NSData = NSData(data: bodyData ?? Data())
 			
 			let password = "CE75EA598C7743AD9B0B7328DED85B06"
@@ -1912,7 +1917,7 @@ public final class Vulcan: ObservableObject {
 	/// Schedules a task for supplied event.
 	/// - Parameter event: Event to be notified about
 	public func addScheduleEventNotification(_ event: Vulcan.ScheduleEvent) {
-		let logger = Logger(subsystem: "Vulcan", category: "Notifications")
+		let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Notifications")
 		logger.debug("Registering a new notification of event with title \"\(event.subjectName, privacy: .sensitive)\".")
 		
 		guard let dateStarts = event.dateStarts else {
@@ -1945,7 +1950,7 @@ public final class Vulcan: ObservableObject {
 		let schedule = self.schedule
 			.flatMap(\.events)
 			.filter { $0.dateStarts ?? $0.date >= Date() }
-			.filter { $0.userSchedule }
+			.filter { $0.isUserSchedule }
 		
 		if let itemIndex = schedule.firstIndex(of: event),
 		   (itemIndex - 1) >= 0,
@@ -1970,16 +1975,16 @@ public final class Vulcan: ObservableObject {
 	/// Schedules a task for supplied event.
 	/// - Parameter task: Task to be notified about
 	/// - Parameter type: Type of exam
-	public func addTaskNotification(_ task: VulcanTask, type: Bool? = nil) {
-		let logger = Logger(subsystem: "Vulcan", category: "Notifications")
+	public func addTaskNotification(_ task: VulcanTask, isBigType: Bool? = nil) {
+		let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Notifications")
 		logger.debug("Registering a new notification of task with entry \"\(task.entry, privacy: .sensitive)\".")
 		
 		let content = UNMutableNotificationContent()
 		
 		switch (task.tag) {
 			case .exam:
-				if let type = type {
-					content.title = "\(NSLocalizedString("Tomorrow", comment: "")): \(NSLocalizedString(type ? "EXAM_BIG" : "EXAM_SMALL", comment: ""))"
+				if let isBigType = isBigType {
+					content.title = "\(NSLocalizedString("Tomorrow", comment: "")): \(NSLocalizedString(isBigType ? "EXAM_BIG" : "EXAM_SMALL", comment: ""))"
 				} else {
 					content.title = "\(NSLocalizedString("Tomorrow", comment: "")): \(NSLocalizedString(task.tag.rawValue, comment: ""))"
 				}

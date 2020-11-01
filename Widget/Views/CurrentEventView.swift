@@ -2,7 +2,7 @@
 //  CurrentEventView.swift
 //  Widget
 //
-//  Created by Kacper on 18/10/2020.
+//  Created by royal on 18/10/2020.
 //
 
 import SwiftUI
@@ -39,7 +39,7 @@ struct CurrentEventView: View {
 					.truncationMode(.tail)
 					.lineLimit(2)
 			} else {
-				Text("Nothing for now 😊")
+				Text("Nothing for now")
 					.font(.headline)
 					.foregroundColor(.white)
 					.truncationMode(.tail)

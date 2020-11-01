@@ -19,7 +19,7 @@ struct ScheduleView: View {
 				$0.events.contains { $0.dateStarts ?? $0.date >= Date() }
 			})?
 			.events
-			.filter { $0.userSchedule }
+			.filter { $0.isUserSchedule }
 	}
 	
     var body: some View {

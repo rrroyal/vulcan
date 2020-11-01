@@ -96,9 +96,9 @@ struct SetupView: View {
 			
 			Button(action: {
 				if (
-					token.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-					symbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-					pin.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+					token.isReallyEmpty ||
+					symbol.isReallyEmpty ||
+					pin.isReallyEmpty
 				) {
 					generateHaptic(.error)
 					setButton(color: Color(UIColor.systemRed), text: "Fill all fields!")

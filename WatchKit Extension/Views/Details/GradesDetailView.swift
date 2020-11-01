@@ -2,7 +2,7 @@
 //  GradesDetailView.swift
 //  WatchKit Extension
 //
-//  Created by Kacper on 19/09/2020.
+//  Created by royal on 19/09/2020.
 //
 
 import SwiftUI
