@@ -17,18 +17,20 @@ struct GradeCell: View {
 	var body: some View {
 		HStack {
 			// Grade entry
-			Text((grade.entry?.isEmpty ?? true) ? "..." : (grade.entry ?? "..."))
-				.font(.title)
-				.bold()
-				.padding(.trailing)
-				.opacity(grade.value == nil ? 0.5 : 1)
-				.coloredGrade(scheme: scheme, colorize: colorize, grade: grade.grade)
-			
-			// New grade indicator
-			/* if (!grade.seen) {
-				Image(systemName: "staroflife.fill")
-					.opacity(0.35)
-			} */
+			Group {
+				if let entry = grade.entry,
+				   !entry.isReallyEmpty {
+					Text(entry)
+						.bold()
+				} else {
+					Text("...")
+						.bold()
+				}
+			}
+			.font(.title)
+			.padding(.trailing)
+			.opacity(grade.value == nil ? 0.5 : 1)
+			.coloredGrade(scheme: scheme, colorize: colorize, grade: grade.grade)
 			
 			// Spacing
 			Spacer(minLength: 20)

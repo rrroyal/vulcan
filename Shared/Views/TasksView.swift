@@ -19,6 +19,8 @@ struct TasksView: View {
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	#endif
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").TasksActivity"
+	
 	@State private var date: Date = Date()
 	
 	/// Loads the data for the current month.
@@ -62,7 +64,7 @@ struct TasksView: View {
 		List {
 			// Exams
 			Section(header: Text("Exams").textCase(.none)) {
-				if (exams.count > 0) {
+				if (!exams.isEmpty) {
 					ForEach(exams) { task in
 						TaskCell(task: task, isBigType: task.isBigType)
 					}
@@ -76,7 +78,7 @@ struct TasksView: View {
 			
 			// Homework
 			Section(header: Text("Homework").textCase(.none)) {
-				if (homework.count > 0) {
+				if (!homework.isEmpty) {
 					ForEach(homework) { task in
 						TaskCell(task: task, isBigType: nil)
 					}
@@ -104,18 +106,32 @@ struct TasksView: View {
 				}
 			}
 		}
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity") { activity in
+		/* .userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").tasksActivity") { activity in
 			activity.title = "Tasks".localized
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForSearch = true
-			activity.keywords = ["Tasks".localized, "vulcan"]
+			activity.keywords = ["Tasks".localized]
 			
 			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
 			attributes.contentDescription = "Displays your upcoming exams and homework".localized
 			activity.contentAttributeSet = attributes			
+		} */
+		.userActivity(Self.activityIdentifier) { activity in
+			activity.isEligibleForSearch = true
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = true
+			activity.isEligibleForHandoff = false
+			activity.title = "Tasks".localized
+			activity.keywords = ["Tasks".localized]
+			activity.persistentIdentifier = "TasksActivity"
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = "See your upcoming exams and homework".localized
+			
+			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
-			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
+			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return
 			}
 			

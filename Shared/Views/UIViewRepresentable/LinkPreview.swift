@@ -16,7 +16,7 @@ struct LinkPreview: UIViewRepresentable {
 		let view = LPLinkView(url: url)
 		let provider = LPMetadataProvider()
 		
-		provider.startFetchingMetadata(for: url) { (metadata, error) in
+		provider.startFetchingMetadata(for: url) { metadata, error in
 			if let metadata = metadata {
 				DispatchQueue.main.async {
 					view.metadata = metadata

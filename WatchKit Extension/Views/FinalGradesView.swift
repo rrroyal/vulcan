@@ -18,7 +18,7 @@ struct FinalGradesView: View {
 		List {
 			// Anticipated
 			Section(header: Text("Anticipated")) {
-				if (vulcanStore.eotGrades.expected.count > 0) {
+				if (!vulcanStore.eotGrades.expected.isEmpty) {
 					ForEach(vulcanStore.eotGrades.expected, id: \.subjectID) { grade in
 						HStack {
 							Text(grade.subject?.name ?? "Unknown subject")
@@ -40,7 +40,7 @@ struct FinalGradesView: View {
 			
 			// Final
 			Section(header: Text("Final")) {
-				if (vulcanStore.eotGrades.final.count > 0) {
+				if (!vulcanStore.eotGrades.final.isEmpty) {
 					ForEach(vulcanStore.eotGrades.final, id: \.subjectID) { grade in
 						HStack {
 							Text(grade.subject?.name ?? "Unknown subject")

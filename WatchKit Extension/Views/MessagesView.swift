@@ -13,7 +13,7 @@ struct MessagesView: View {
 	
     var body: some View {
 		List {
-			if (vulcanStore.receivedMessages.count > 0) {
+			if (!vulcanStore.receivedMessages.isEmpty) {
 				ForEach(vulcanStore.receivedMessages) { message in
 					VStack {
 						NavigationLink(destination: MessageDetailView(message: message)) {

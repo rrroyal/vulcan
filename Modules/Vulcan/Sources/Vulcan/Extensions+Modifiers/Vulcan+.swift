@@ -21,7 +21,7 @@ public extension VulcanTask {
 				if let isBigType = isBigType {
 					tag = NSLocalizedString(isBigType ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
 				} else {
-					switch (self.tag) {
+					switch self.tag {
 						case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
 						case .homework:	tag = NSLocalizedString("TAG_HOMEWORK", comment: "")
 					}
@@ -62,7 +62,7 @@ public extension VulcanTask {
 				if let isBigType = isBigType {
 					tag = NSLocalizedString(isBigType ? "EXAM_BIG" : "EXAM_SMALL", comment: "")
 				} else {
-					switch (self.tag) {
+					switch self.tag {
 						case .exam:		tag = NSLocalizedString("TAG_EXAM", comment: "")
 						case .homework:	tag = NSLocalizedString("TAG_HOMEWORK", comment: "")
 					}

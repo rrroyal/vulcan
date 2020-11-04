@@ -85,7 +85,7 @@ extension AppNotifications {
 		var expandedText: String?
 		
 		var primaryColor: Color {
-			switch (self.style) {
+			switch self.style {
 				case .normal:		return .primary
 				case .information:	return .blue
 				case .warning:		return .orange
@@ -95,7 +95,7 @@ extension AppNotifications {
 		}
 		
 		var backgroundColor: Color {
-			switch (self.style) {
+			switch self.style {
 				#if os(macOS)
 				case .normal:		return Color(NSColor.controlBackgroundColor)
 				#else

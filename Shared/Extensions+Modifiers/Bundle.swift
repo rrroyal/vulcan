@@ -6,30 +6,40 @@
 //  Copyright © 2020 shameful. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension Bundle {
 	public var buildVersion: String {
-		return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+		Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
 	}
 	
 	public var buildNumber: String {
-		return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+		Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
 	}
 	
 	public var colorSchemes: [String] {
-		return ["Default", "Dzienniczek+"]
+		["Default", "Dzienniczek+"]
 	}
 	
 	public var appIcons: [String] {
-		return ["AppIcon"]
+		["Default", "Dark"]
 	}
 	
-	public var currentAppIcon: String {
-		return "AppIcon"
+	public var currentAppIconName: String {
+		UIApplication.shared.alternateIconName ?? "Default"
+	}
+	
+	public var currentAppIconImage: UIImage? {
+		if let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
+		   let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+		   let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+		   let lastIcon = iconFiles.last {
+			return UIImage(named: lastIcon)
+		}
+		return nil
 	}
 	
 	public var groupIdentifier: String {
-		return "group.dev.niepostek.vulcanGroup"
+		"group.dev.niepostek.vulcanGroup"
 	}
 }

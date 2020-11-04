@@ -13,7 +13,7 @@ struct GradesView: View {
 	
     var body: some View {
 		Group {
-			if (vulcanStore.grades.count > 0) {
+			if (!vulcanStore.grades.isEmpty) {
 				List(vulcanStore.grades) { subject in
 					NavigationLink(destination: GradesDetailView(subject: subject)) {
 						VStack(alignment: .leading) {

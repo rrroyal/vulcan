@@ -60,15 +60,21 @@
 	<string>App will use Your calendar to add new task events.</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>App will use Your reminders to add new task reminders.</string>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>GroupIntent</string>
-	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<true/>
 	</dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewMessageActivity</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).NextScheduleEventActivity</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).TodayActivity</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).GradesActivity</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).ScheduleActivity</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).TasksActivity</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).MessagesActivity</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -96,5 +102,53 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Dark</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Dark</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Dark</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Dark~iPad</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+	</dict>
 </dict>
 </plist>

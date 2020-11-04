@@ -1,7 +1,7 @@
 <p align="center">
-<img width="200" src="Shared/Assets.xcassets/vulcan.imageset/Vulcan@2x.png" alt="vulcan Logo"><br>
-<h3 align="center">vulcan</h3>
-<p align="center">Open-source UONET+ app for Apple devices.</p>
+	<img width="200" src="Shared/Assets.xcassets/vulcan.imageset/Vulcan@2x.png" alt="vulcan Logo"><br/>
+	<h3 align="center">vulcan</h3>
+	<p align="center">Open-source UONET+ app for Apple devices.</p>
 </p>
 
 ## Installation

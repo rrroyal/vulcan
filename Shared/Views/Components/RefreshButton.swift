@@ -30,7 +30,7 @@ struct RefreshButton: View {
 				Button(action: action) {
 					Image(systemName: iconName)
 				}
-				.keyboardShortcut("R", modifiers: .command)
+				.keyboardShortcut("r")
 			}
 		}
 		// .transition(.opacity)

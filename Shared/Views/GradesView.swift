@@ -20,6 +20,8 @@ struct GradesView: View {
 	#endif
 	@State private var selection: Vulcan.SubjectGrades?
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").GradesActivity"
+	
 	/// Refreshes the data
 	private func fetch() {
 		var requestsError: Error?
@@ -41,8 +43,8 @@ struct GradesView: View {
 	/// Sidebar ViewBuilder
 	@ViewBuilder var body: some View {
 		List(selection: $selection) {
-			if (vulcan.grades.count > 0) {
-				ForEach(vulcan.grades) { (subject) in
+			if (!vulcan.grades.isEmpty) {
+				ForEach(vulcan.grades) { subject in
 					NavigationLink(destination: GradesDetailView(subject: subject), tag: subject, selection: $selection) {
 						HStack {
 							VStack(alignment: .leading, spacing: 5) {
@@ -84,18 +86,22 @@ struct GradesView: View {
 				}
 			}
 		}
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity") { activity in
-			activity.title = "Grades".localized
-			activity.isEligibleForPrediction = true
+		.userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
-			activity.keywords = ["Grades".localized, "vulcan"]
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = true
+			activity.isEligibleForHandoff = false
+			activity.title = "Grades".localized
+			activity.keywords = ["Grades".localized]
+			activity.persistentIdentifier = "GradesActivity"
 			
 			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
 			attributes.contentDescription = "See your grades".localized
-			activity.contentAttributeSet = attributes			
+			
+			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
-			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
+			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return
 			}
 			

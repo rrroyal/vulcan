@@ -15,6 +15,8 @@ import CoreServices
 struct HomeView: View {
 	@EnvironmentObject private var vulcan: Vulcan
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").TodayActivity"
+	
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) private var colorScheme: String = "Default"
 	@AppStorage(UserDefaults.AppKeys.colorizeGrades.rawValue, store: .group) private var colorizeGrades: Bool = true
 	
@@ -166,8 +168,8 @@ struct HomeView: View {
 	/// Section containing new exams.
 	private var examsSection: some View {
 		Section(header: Text("Exams").textCase(.none)) {
-			if (newExams.count > 0) {
-				ForEach(newExams) { (task) in
+			if (!newExams.isEmpty) {
+				ForEach(newExams) { task in
 					TaskCell(task: task, isBigType: task.isBigType)
 				}
 			} else {
@@ -183,8 +185,8 @@ struct HomeView: View {
 	/// Section containing new homework tasks.
 	private var homeworkSection: some View {
 		Section(header: Text("Homework").textCase(.none)) {
-			if (newHomework.count > 0) {
-				ForEach(newHomework) { (task) in
+			if (!newHomework.isEmpty) {
+				ForEach(newHomework) { task in
 					TaskCell(task: task, isBigType: nil)
 				}
 			} else {
@@ -200,7 +202,7 @@ struct HomeView: View {
 	/// Section containing unread messages.
 	private var messagesSection: some View {
 		Section(header: Text("New messages").textCase(.none)) {
-			if (newMessages.count > 0) {
+			if (!newMessages.isEmpty) {
 				ForEach(newMessages) { message in
 					NavigationLink(destination: MessageDetailView(message: message)) {
 						MessageCell(message: message, isComposeSheetPresented: $isComposeSheetPresented, messageToReply: $messageToReply)
@@ -225,7 +227,7 @@ struct HomeView: View {
 					.multilineTextAlignment(.center)
 					.fullWidth()
 			} else {
-				ForEach(vulcan.eotGrades.expected, id: \.subjectID) { (grade) in
+				ForEach(vulcan.eotGrades.expected, id: \.subjectID) { grade in
 					FinalGradeCell(scheme: colorScheme, colorize: colorizeGrades, grade: grade)
 						.id("anticipatedGrade:\(grade.subjectID)")
 				}
@@ -254,7 +256,7 @@ struct HomeView: View {
 					.multilineTextAlignment(.center)
 					.fullWidth()
 			} else {
-				ForEach(vulcan.eotGrades.final, id: \.subjectID) { (grade) in
+				ForEach(vulcan.eotGrades.final, id: \.subjectID) { grade in
 					FinalGradeCell(scheme: colorScheme, colorize: colorizeGrades, grade: grade)
 						.id("finalGrade:\(grade.subjectID)")
 				}
@@ -283,7 +285,7 @@ struct HomeView: View {
 					.multilineTextAlignment(.center)
 					.fullWidth()
 			} else {
-				ForEach(vulcan.notes) { (note) in
+				ForEach(vulcan.notes) { note in
 					NoteCell(note: note)
 				}
 			}
@@ -328,18 +330,27 @@ struct HomeView: View {
 		}
 		.listStyle(InsetGroupedListStyle())
 		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply) })
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
-			activity.title = "Today".localized
-			activity.isEligibleForPrediction = true
+		.userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
-			activity.keywords = ["Today".localized, "vulcan"]
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = true
+			activity.isEligibleForHandoff = false
+			activity.title = "Today".localized
+			activity.keywords = ["Today".localized]
+			activity.persistentIdentifier = "TodayActivity"
+			
+			if let symbol = Vulcan.shared.symbol {
+				activity.referrerURL = URL(string: "https://uonetplus.vulcan.net.pl/\(symbol)")
+				activity.webpageURL = activity.referrerURL
+			}
 			
 			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
-			attributes.contentDescription = "Your summary for today.".localized
-			activity.contentAttributeSet = attributes			
+			attributes.contentDescription = "Your summary for today".localized
+			
+			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
-			if AppState.networking.monitor.currentPath.isExpensive || vulcan.currentUser == nil {
+			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return
 			}
 			

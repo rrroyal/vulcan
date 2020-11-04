@@ -48,13 +48,13 @@ struct MessageDetailView: View {
 				Spacer()
 								
 				// URLs
-				if (message.content.urls.count > 0) {
+				if (!(message.content.urls ?? []).isEmpty) {
 					VStack(alignment: .leading) {
 						Text("Links")
 							.font(.title)
 							.bold()
 						
-						ForEach(message.content.urls, id: \.self) { (url) in
+						ForEach(message.content.urls ?? [], id: \.self) { url in
 							LinkPreview(url: url)
 								.frame(minHeight: 50, idealHeight: 70, maxHeight: 80)
 								.id(url.absoluteString)

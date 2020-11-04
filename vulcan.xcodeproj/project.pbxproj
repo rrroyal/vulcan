@@ -100,8 +100,10 @@
 		E7518A2B25012C9000135D55 /* NextUpEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7518A2A25012C9000135D55 /* NextUpEntryView.swift */; };
 		E7518A2E25012CC800135D55 /* NowProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7518A2D25012CC800135D55 /* NowProvider.swift */; };
 		E7518A3225012D5500135D55 /* Vulcan in Frameworks */ = {isa = PBXBuildFile; productRef = E7518A3125012D5500135D55 /* Vulcan */; };
-		E772E6D624B36FB900A7FFB4 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E772E6D524B36FB900A7FFB4 /* View+.swift */; };
-		E772E6D724B36FB900A7FFB4 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E772E6D524B36FB900A7FFB4 /* View+.swift */; };
+		E75AC87D25506B5000E69CE2 /* Dark~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87925506B5000E69CE2 /* Dark~iPad@2x.png */; };
+		E75AC87E25506B5000E69CE2 /* Dark~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87A25506B5000E69CE2 /* Dark~iPad.png */; };
+		E75AC87F25506B5000E69CE2 /* Dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87B25506B5000E69CE2 /* Dark@3x.png */; };
+		E75AC88025506B5000E69CE2 /* Dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87C25506B5000E69CE2 /* Dark@2x.png */; };
 		E772FEF2253C9489003F80AF /* NextUpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E772FEF1253C9489003F80AF /* NextUpProvider.swift */; };
 		E772FF17253C9786003F80AF /* NowEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E772FF16253C9786003F80AF /* NowEntryView.swift */; };
 		E7790C6A24B9275600BA4187 /* Vulcan in Frameworks */ = {isa = PBXBuildFile; productRef = E7790C6924B9275600BA4187 /* Vulcan */; };
@@ -133,7 +135,7 @@
 		E7C144F2250123F600363BD3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C144F1250123F600363BD3 /* Preview Assets.xcassets */; };
 		E7C144F7250123F600363BD3 /* WatchKit.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E7C144D6250123F500363BD3 /* WatchKit.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E7C14503250124E500363BD3 /* Vulcan in Frameworks */ = {isa = PBXBuildFile; productRef = E7C14502250124E500363BD3 /* Vulcan */; };
-		E7C1452025012A2100363BD3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0088EBCA24A38D9E006F044E /* WidgetKit.framework */; };
+		E7C1452025012A2100363BD3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0088EBCA24A38D9E006F044E /* WidgetKit.framework */; platformFilter = ios; };
 		E7C1452125012A2100363BD3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0088EBCC24A38D9E006F044E /* SwiftUI.framework */; };
 		E7C1452425012A2100363BD3 /* VulcanWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C1452325012A2100363BD3 /* VulcanWidget.swift */; };
 		E7C1452725012A2200363BD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C1452625012A2200363BD3 /* Assets.xcassets */; };
@@ -271,7 +273,10 @@
 		E74F54A4250924EF003F8066 /* ScheduleEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEventCell.swift; sourceTree = "<group>"; };
 		E7518A2A25012C9000135D55 /* NextUpEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextUpEntryView.swift; sourceTree = "<group>"; };
 		E7518A2D25012CC800135D55 /* NowProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowProvider.swift; sourceTree = "<group>"; };
-		E772E6D524B36FB900A7FFB4 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
+		E75AC87925506B5000E69CE2 /* Dark~iPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark~iPad@2x.png"; sourceTree = "<group>"; };
+		E75AC87A25506B5000E69CE2 /* Dark~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark~iPad.png"; sourceTree = "<group>"; };
+		E75AC87B25506B5000E69CE2 /* Dark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark@3x.png"; sourceTree = "<group>"; };
+		E75AC87C25506B5000E69CE2 /* Dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark@2x.png"; sourceTree = "<group>"; };
 		E772FEF1253C9489003F80AF /* NextUpProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextUpProvider.swift; sourceTree = "<group>"; };
 		E772FF16253C9786003F80AF /* NowEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowEntryView.swift; sourceTree = "<group>"; };
 		E783D39C2502917200514060 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
@@ -428,6 +433,7 @@
 				0088EB6224A37BB7006F044E /* Info.plist */,
 				0088EB7924A37BE2006F044E /* vulcan.entitlements */,
 				00FACA3924A3EABD00ACAC83 /* Views */,
+				E7CAE04E254F6BE60015C155 /* Assets */,
 				E7F1B3F725161AFC0044F1BC /* Localization */,
 			);
 			path = iOS;
@@ -447,7 +453,6 @@
 			isa = PBXGroup;
 			children = (
 				00FAC9EB24A3D9A600ACAC83 /* View.swift */,
-				E772E6D524B36FB900A7FFB4 /* View+.swift */,
 				0088EBA824A37C50006F044E /* String.swift */,
 				00FAC9DB24A3D93000ACAC83 /* Date.swift */,
 				00FAC9F024A3D9A600ACAC83 /* Bundle.swift */,
@@ -613,6 +618,17 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		E75AC87825506AF700E69CE2 /* Dark */ = {
+			isa = PBXGroup;
+			children = (
+				E75AC87C25506B5000E69CE2 /* Dark@2x.png */,
+				E75AC87B25506B5000E69CE2 /* Dark@3x.png */,
+				E75AC87A25506B5000E69CE2 /* Dark~iPad.png */,
+				E75AC87925506B5000E69CE2 /* Dark~iPad@2x.png */,
+			);
+			path = Dark;
+			sourceTree = "<group>";
+		};
 		E78FC1C325161DAB00478AC1 /* Details */ = {
 			isa = PBXGroup;
 			children = (
@@ -708,6 +724,22 @@
 				E7518A2925012C4B00135D55 /* Views */,
 			);
 			path = Widget;
+			sourceTree = "<group>";
+		};
+		E7CAE04E254F6BE60015C155 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				E7CAE066254F785C0015C155 /* App Icon */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		E7CAE066254F785C0015C155 /* App Icon */ = {
+			isa = PBXGroup;
+			children = (
+				E75AC87825506AF700E69CE2 /* Dark */,
+			);
+			path = "App Icon";
 			sourceTree = "<group>";
 		};
 		E7EB03EF25081865003043D8 /* Localization */ = {
@@ -892,11 +924,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E75AC88025506B5000E69CE2 /* Dark@2x.png in Resources */,
 				0088EB6F24A37BB7006F044E /* Assets.xcassets in Resources */,
 				E7F1B40925161BB50044F1BC /* InfoPlist.strings in Resources */,
 				00FACA5B24A40C2800ACAC83 /* Colors.xcassets in Resources */,
 				E704C12D24F9A1F90036073F /* LaunchScreen.storyboard in Resources */,
+				E75AC87F25506B5000E69CE2 /* Dark@3x.png in Resources */,
 				00FACA3124A3E34000ACAC83 /* Localizable.strings in Resources */,
+				E75AC87D25506B5000E69CE2 /* Dark~iPad@2x.png in Resources */,
+				E75AC87E25506B5000E69CE2 /* Dark~iPad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,7 +997,6 @@
 				00FACA5224A4073A00ACAC83 /* DebugView.swift in Sources */,
 				003FC5F724A4B54400001F47 /* AppDelegate.swift in Sources */,
 				E723FAD72518F06C00DD8184 /* LicenseView.swift in Sources */,
-				E772E6D624B36FB900A7FFB4 /* View+.swift in Sources */,
 				00FACA3C24A3EDC900ACAC83 /* OnboardingView.swift in Sources */,
 				0026DB7F24A7B3BC00E232E5 /* MessageDetailView.swift in Sources */,
 				00708A6B24B743B1009FB4DD /* Notifications.swift in Sources */,
@@ -1018,7 +1053,6 @@
 				0088EBB924A37D92006F044E /* ScheduleView.swift in Sources */,
 				00FACA6324A40EF100ACAC83 /* GradesDetailView.swift in Sources */,
 				00FACA2024A3DC0600ACAC83 /* DeviceInfo.swift in Sources */,
-				E772E6D724B36FB900A7FFB4 /* View+.swift in Sources */,
 				00FACA3D24A3EDC900ACAC83 /* OnboardingView.swift in Sources */,
 				0088EB6E24A37BB7006F044E /* ContentView.swift in Sources */,
 				00FACA6E24A41D5B00ACAC83 /* AppTabNavigation.swift in Sources */,
@@ -1265,7 +1299,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/vulcan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1294,7 +1328,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/vulcan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1325,7 +1359,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1334,7 +1368,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 11;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan;
 				PRODUCT_NAME = vulcan;
@@ -1352,7 +1386,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1361,7 +1395,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 11;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan;
 				PRODUCT_NAME = vulcan;
@@ -1377,7 +1411,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				IBSC_MODULE = watchkit_Extension;
 				INFOPLIST_FILE = watchkit/Info.plist;
@@ -1399,7 +1433,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				IBSC_MODULE = watchkit_Extension;
 				INFOPLIST_FILE = watchkit/Info.plist;
@@ -1421,7 +1455,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "WatchKit Extension/WatchKit Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_PREVIEWS = YES;
@@ -1448,7 +1482,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "WatchKit Extension/WatchKit Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_PREVIEWS = YES;
@@ -1477,7 +1511,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = Widget/Widget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				INFOPLIST_FILE = Widget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1503,7 +1537,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = Widget/Widget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				INFOPLIST_FILE = Widget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

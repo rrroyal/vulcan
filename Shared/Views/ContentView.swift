@@ -10,7 +10,7 @@ import Vulcan
 
 /// Main view
 struct ContentView: View {
-	@Binding var currentTab: Tab
+	@ObservedObject var appState: AppState
 	
 	/* #if os(iOS)
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -23,13 +23,13 @@ struct ContentView: View {
 		Group {
 			#if os(iOS)
 			/* if horizontalSizeClass == .compact {
-				AppTabNavigation(currentTab: $currentTab)
+				AppTabNavigation(appState: appState)
 			} else {
 				AppSidebarNavigation()
 			} */
-			AppTabNavigation(currentTab: $currentTab)
+			AppTabNavigation(appState: appState)
 			#else
-			AppSidebarNavigation()
+			AppSidebarNavigation(appState: appState)
 			#endif
 		}
 		.sheet(isPresented: $isOnboardingVisible, onDismiss: {
@@ -47,6 +47,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-		ContentView(currentTab: .constant(.home))
+		ContentView(appState: AppState.shared)
     }
 }

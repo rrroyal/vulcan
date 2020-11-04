@@ -33,17 +33,18 @@ final class SettingsModel: ObservableObject {
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) public var colorScheme: String = "Default"
 	@AppStorage(UserDefaults.AppKeys.hapticFeedback.rawValue, store: .group) public var hapticFeedback: Bool = true
 	
-	@Published public var updatesAvailable: Bool = false
+	@Published public private(set) var latestVersion: String = Bundle.main.buildVersion
 	private var cancellableSet: Set<AnyCancellable> = []
 	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Settings", category: "Settings")
 	
 	// MARK: - init
 	private init() {
-		// self.checkForUpdates()		
+		self.checkForUpdates()		
 	}
 	
 	// MARK: - Public functions
-	/// Resets the app' UserDefaults
+	
+	/// Resets UserDefaults and logs out from Vulcan.
 	public func resetSettings() {
 		logger.info("Resetting settings...")
 		UserDefaults.standard.removePersistentDomain(forName: Bundle.main.groupIdentifier)
@@ -51,38 +52,33 @@ final class SettingsModel: ObservableObject {
 		logger.info("Done resetting!")
 	}
 	
-	/// Fetches the newest release on GitHub.
-	/* public func checkForUpdates() {
-		let currentVersion: String = Bundle.main.buildVersion
-		let repoURL: URL = URL(string: "https://api.github.com/repos/rrroyal/vulcan/releases/latest")!
+	/// Fetches the latest GitHub release.
+	public func checkForUpdates() {
+		logger.debug("Fetching latest GitHub release...")
 		
-		var request: URLRequest = URLRequest(url: repoURL)
-		request.httpMethod = "GET"
+		guard let url = URL(string: "https://api.github.com/repos/rrroyal/vulcan/releases/latest") else {
+			logger.error("Couldn't initialize URL!")
+			return
+		}
 		
-		// Check latest release
-		logger.info("Checking latest release on GitHub (Local version: \(currentVersion))...")
-		URLSession.shared.dataTaskPublisher(for: request)
-			.receive(on: DispatchQueue.main)
-			.mapError { $0 as Error }
-			.map { $0.data }
-			.sink(receiveCompletion:{ (completion) in
-				switch (completion) {
-					case .failure: self.logger.error("(Settings) Completion error: \(String(describing: completion))"); break
-					case .finished: break
+		URLSession.shared.dataTaskPublisher(for: url)
+			.tryMap {
+				try JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
+			}
+			.sink(receiveCompletion: { completion in
+				self.logger.debug("Fetching release: \(String(describing: completion))")
+			}) { json in
+				guard let latestRelease = json?["tag_name"] as? String else {
+					self.logger.error("No \"tag_name\"!")
+					return
 				}
-			}, receiveValue: { (data) in
-				do {
-					let json: JSON = try JSON(data: data)
-					if (json["tag_name"].stringValue.dropFirst() > currentVersion && !json["draft"].boolValue && json["target_commitish"].stringValue == "master") {
-						self.logger.notice("New release available: \(json["tag_name"]).")
-						self.updatesAvailable = true
-					} else {
-						self.logger.info("Already on latest version.")
-					}
-				} catch {
-					self.logger.error("Error serializing JSON: \(error.localizedDescription)")
+				
+				self.logger.info("Latest version: \(latestRelease) (local: \(self.latestVersion))")
+				
+				DispatchQueue.main.async {
+					self.latestVersion = latestRelease.starts(with: "v") ? String(latestRelease.dropFirst()) : latestRelease
 				}
-			})
+			}
 			.store(in: &cancellableSet)
-	} */
+	}
 }
