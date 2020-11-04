@@ -15,7 +15,7 @@ import os
 import Vulcan
 import WidgetKit
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: - App Lifecycle
 	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "AppDelegate")
 	
@@ -104,11 +104,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 	/// - Parameter visible: Should shortcuts be visible?
 	public func setShortcuts(visible: Bool) {
 		if visible {
-			let shortcutGradesItem = UIApplicationShortcutItem(type: "shortcutGrades", localizedTitle: "Grades".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "rosette"), userInfo: nil)
-			let shortcutScheduleItem = UIApplicationShortcutItem(type: "shortcutSchedule", localizedTitle: "Schedule".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "calendar"), userInfo: nil)
-			let shortcutTasksItem = UIApplicationShortcutItem(type: "shortcutTasks", localizedTitle: "Tasks".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "doc.on.clipboard.fill"), userInfo: nil)
-			let shortcutMessagesItem = UIApplicationShortcutItem(type: "shortcutMessages", localizedTitle: "Messages".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "text.bubble.fill"), userInfo: nil)
-			UIApplication.shared.shortcutItems = [shortcutGradesItem, shortcutScheduleItem, shortcutTasksItem, shortcutMessagesItem]
+			UIApplication.shared.shortcutItems = [
+				UIApplicationShortcutItem(type: "ShortcutGrades", localizedTitle: "Grades".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "rosette"), userInfo: nil),	// Grades
+				UIApplicationShortcutItem(type: "ShortcutSchedule", localizedTitle: "Schedule".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "calendar"), userInfo: nil),	// Schedule
+				UIApplicationShortcutItem(type: "ShortcutTasks", localizedTitle: "Tasks".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "doc.on.clipboard"), userInfo: nil), // Tasks
+				UIApplicationShortcutItem(type: "ShortcutMessages", localizedTitle: "Messages".localized, localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "envelope"), userInfo: nil)	// Messages
+				]
 		} else {
 			UIApplication.shared.shortcutItems = []
 		}

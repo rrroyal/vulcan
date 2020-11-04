@@ -81,7 +81,7 @@
 // MARK: ScheduleView.swift
 "No lessons for this week 😊" = "No lessons for this week 😊";
 "No lessons for this day 😊" = "No lessons for this day 😊";
-"Displays your schedule in app." = "Displays your schedule in app.";
+"See your schedule" = "See your schedule";
 
 // MARK: TasksView.swift
 "No tasks" = "No tasks";
@@ -92,7 +92,7 @@
 "TAG_HOMEWORK" = "Homework";
 "No exams for this month 😊" = "No exams for this month 😊";
 "No homework for this month 😊" = "No homework for this month 😊";
-"Displays your upcoming exams and homework" = "Displays your upcoming exams and homework";
+"See your upcoming exams and homework" = "See your upcoming exams and homework";
 
 // MARK: MessagesView.swift
 "No messages found" = "No messages found";
@@ -150,7 +150,8 @@
 
 "Color Scheme" = "Color Scheme";
 "App Icon" = "App Icon";
-"AppIcon" = "Default";
+"Dark" = "Dark";
+"Dev" = "Dev";
 
 "Made with ❤️ (and ☕️) by @rrroyal" = "Made with ❤️ (and ☕️) by @rrroyal";
 "Version %@ (Build %@)" = "Version %@ (Build %@)";
@@ -167,6 +168,8 @@
 "Message content..." = "Message content...";
 "Recipients" = "Recipients";
 "Done" = "Done";
+"New message" = "New message";
+"Continue creating a new message" = "Continue creating a new message";
 
 // MARK: MessageDetailView.swift
 "Links" = "Links";

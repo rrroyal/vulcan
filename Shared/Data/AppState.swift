@@ -16,15 +16,20 @@ final class AppState: ObservableObject {
 	static public var shared: AppState = AppState()
 	
 	// Private variables
-	private let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).AppState", category: "AppState")
 	private var cancellableSet: Set<AnyCancellable> = []
 	
 	// Public variables
+	public let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).AppState", category: "AppState")
+
 	@Published public var currentTab: Tab = .home
+	
+	public var lastUserActivity: NSUserActivity?
+	public var shortcutItemToProcess: UIApplicationShortcutItem?
+	
 	public var isLowPowerModeEnabled: Bool {
 		get { ProcessInfo.processInfo.isLowPowerModeEnabled }
 	}
-	public var shortcutItemToProcess: UIApplicationShortcutItem?
+	
 	public let networkingMonitor: NWPathMonitor = NWPathMonitor()
 	
 	private init() {

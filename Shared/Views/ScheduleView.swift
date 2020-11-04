@@ -15,6 +15,9 @@ import CoreServices
 struct ScheduleView: View {
 	@EnvironmentObject var vulcan: Vulcan
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").ScheduleActivity"
+	public static let nextScheduleEventActivityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").NextScheduleEventActivity"
+	
 	@AppStorage(UserDefaults.AppKeys.showAllScheduleEvents.rawValue, store: .group) public var showAllScheduleEvents: Bool = false
 	@AppStorage(UserDefaults.AppKeys.filterSchedule.rawValue, store: .group) private var filterSchedule: Bool = false
 	
@@ -90,28 +93,14 @@ struct ScheduleView: View {
 				}
 			}
 		}
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").scheduleActivity") { activity in
-			activity.title = "Schedule".localized
-			activity.isEligibleForPrediction = true
-			activity.isEligibleForSearch = true
-			activity.keywords = [
-				"Schedule".localized,
-				"Lessons".localized,
-				"vulcan"
-			]
-			
-			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
-			attributes.contentDescription = "Displays your schedule".localized
-			activity.contentAttributeSet = attributes			
-		}
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").nextScheduleEventActivity") { activity in
+		/* .userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").nextScheduleEventActivity") { activity in
 			guard let event = vulcan.schedule.flatMap(\.events).first(where: { $0.isUserSchedule && $0.dateStarts ?? $0.date >= Date() }),
 				  let dateStarts = event.dateStarts,
 				  let dateEnds = event.dateEnds else {
 				return
 			}
 			
-			activity.title = event.subjectName
+			activity.title = "Next up".localized
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForSearch = true
 			activity.keywords = [
@@ -122,11 +111,30 @@ struct ScheduleView: View {
 			activity.persistentIdentifier = event.id
 			
 			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.title = event.subjectName
 			attributes.startDate = dateStarts
 			attributes.endDate = dateEnds
 			attributes.contentDescription = "\(event.employeeFullName ?? "Unknown employee".localized) • \(event.room)"
 			attributes.identifier = event.id
 			attributes.relatedUniqueIdentifier = event.id
+			activity.contentAttributeSet = attributes
+		} */
+		.userActivity(Self.activityIdentifier) { activity in
+			activity.isEligibleForSearch = true
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = true
+			activity.isEligibleForHandoff = false
+			activity.title = "Schedule".localized
+			activity.keywords = [
+				"Schedule".localized,
+				"Lessons".localized,
+				"Next up".localized
+			]
+			activity.persistentIdentifier = "ScheduleActivity"
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = "See your schedule".localized
+			
 			activity.contentAttributeSet = attributes
 		}
 		.onAppear {

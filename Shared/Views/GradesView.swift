@@ -20,6 +20,8 @@ struct GradesView: View {
 	#endif
 	@State private var selection: Vulcan.SubjectGrades?
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").GradesActivity"
+	
 	/// Refreshes the data
 	private func fetch() {
 		var requestsError: Error?
@@ -84,15 +86,19 @@ struct GradesView: View {
 				}
 			}
 		}
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").gradesActivity") { activity in
-			activity.title = "Grades".localized
-			activity.isEligibleForPrediction = true
+		.userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
-			activity.keywords = ["Grades".localized, "vulcan"]
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = true
+			activity.isEligibleForHandoff = false
+			activity.title = "Grades".localized
+			activity.keywords = ["Grades".localized]
+			activity.persistentIdentifier = "GradesActivity"
 			
 			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
 			attributes.contentDescription = "See your grades".localized
-			activity.contentAttributeSet = attributes			
+			
+			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
 			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {

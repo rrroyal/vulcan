@@ -50,6 +50,8 @@ struct DebugView: View {
 						.font(.body)
 						.bold()
 				}
+				
+				Text(String(describing: Vulcan.shared.currentUser))
 			}
 			.padding(.vertical, 10)
 			
@@ -116,21 +118,6 @@ struct DebugView: View {
 					generateHaptic(.light)
 				}) {
 					Text("Reload all timelines")
-				}
-			}
-			.padding(.vertical, 10)
-			
-			// CoreSpotlight
-			Section(header: Text("CoreSpotlight").textCase(.none)) {
-				// Remove all
-				Button("Remove all") {
-					generateHaptic(.light)
-					logger.debug("Removing all searchable items")
-					CSSearchableIndex.default().deleteAllSearchableItems { error in
-						if let error = error {
-							logger.error("\(error.localizedDescription)")
-						}
-					}
 				}
 			}
 			.padding(.vertical, 10)

@@ -15,6 +15,8 @@ import CoreServices
 struct HomeView: View {
 	@EnvironmentObject private var vulcan: Vulcan
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").TodayActivity"
+	
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) private var colorScheme: String = "Default"
 	@AppStorage(UserDefaults.AppKeys.colorizeGrades.rawValue, store: .group) private var colorizeGrades: Bool = true
 	
@@ -328,15 +330,24 @@ struct HomeView: View {
 		}
 		.listStyle(InsetGroupedListStyle())
 		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply) })
-		.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").todayActivity") { activity in
-			activity.title = "Today".localized
-			activity.isEligibleForPrediction = true
+		.userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
-			activity.keywords = ["Today".localized, "vulcan"]
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = true
+			activity.isEligibleForHandoff = false
+			activity.title = "Today".localized
+			activity.keywords = ["Today".localized]
+			activity.persistentIdentifier = "TodayActivity"
+			
+			if let symbol = Vulcan.shared.symbol {
+				activity.referrerURL = URL(string: "https://uonetplus.vulcan.net.pl/\(symbol)")
+				activity.webpageURL = activity.referrerURL
+			}
 			
 			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
-			attributes.contentDescription = "Your summary for today.".localized
-			activity.contentAttributeSet = attributes			
+			attributes.contentDescription = "Your summary for today".localized
+			
+			activity.contentAttributeSet = attributes
 		}
 		.onAppear {
 			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {

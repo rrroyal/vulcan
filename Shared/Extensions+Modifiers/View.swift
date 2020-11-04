@@ -6,6 +6,7 @@
 //  Copyright © 2020 shameful. All rights reserved.
 //
 
+import UIKit
 import SwiftUI
 import Combine
 
@@ -33,9 +34,10 @@ extension View {
 	}
 	
 	func coloredGrade(scheme: String, colorize: Bool, grade: Int?) -> some View {		
-		if colorize {
+		if colorize,
+		   let uiColor = UIColor(named: "ColorSchemes/\(scheme)/\(grade ?? 0)") {
 			return self
-				.foregroundColor(Color("ColorSchemes/\(scheme)/\(grade ?? 0)", bundle: Bundle(identifier: "Colors")))
+				.foregroundColor(Color(uiColor))
 		} else {
 			return self
 				.foregroundColor(Color.primary)

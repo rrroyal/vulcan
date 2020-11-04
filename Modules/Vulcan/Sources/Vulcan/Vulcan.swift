@@ -18,7 +18,7 @@ import Network
 import WidgetKit
 #endif
 
-@available (iOS 14, macOS 10.16, watchOS 7, tvOS 14, *)
+@available (iOS 14, macOS 11, watchOS 7, tvOS 14, *)
 /// Model that manages all of the Vulcan-related data.
 public final class Vulcan: ObservableObject {
 	static public let shared: Vulcan = Vulcan()
@@ -32,53 +32,19 @@ public final class Vulcan: ObservableObject {
 	
 	private var cancellableSet: Set<AnyCancellable> = []
 	
+	/// Endpoint URL
 	private var endpointURL: String? {
 		get { return self.keychain["endpointURL"] }
 		set (value) { self.keychain["endpointURL"] = value }
 	}
 	
-	/// Used to manage the current data state.
-	public struct DataState {
-		fileprivate init(dictionary: Vulcan.DataState.Status = DataState.Status(), users: Vulcan.DataState.Status = DataState.Status(), schedule: Vulcan.DataState.Status = DataState.Status(), grades: Vulcan.DataState.Status = DataState.Status(), eotGrades: Vulcan.DataState.Status = DataState.Status()) {
-			self.dictionary = dictionary
-			self.users = users
-			self.schedule = schedule
-			self.grades = grades
-			self.eotGrades = eotGrades
-		}
-		
-		public struct Status {
-			fileprivate init(loading: Bool = false, lastFetched: Date? = nil, progress: Double? = nil) {
-				self.loading = loading
-				self.lastFetched = lastFetched
-				self.progress = progress
-			}
-			
-			public var loading: Bool = false
-			public var lastFetched: Date?
-			public var progress: Double?
-			
-			public var fetched: Bool {
-				return self.lastFetched != nil
-			}
-		}
-		
-		public var dictionary: DataState.Status = .init()
-		public var users: DataState.Status = .init()
-		
-		public var schedule: DataState.Status = .init()
-		public var grades: DataState.Status = .init()
-		public var eotGrades: DataState.Status = .init()
-		public var notes: DataState.Status = .init()
-		public var tasks: DataState.Status = .init()
-		public var messages: [Vulcan.MessageTag: DataState.Status] = [
-			.deleted:	.init(),
-			.received:	.init(),
-			.sent:		.init()
-		]
-	}
-	
 	// MARK: - Public variables
+	
+	/// Symbol
+	public private(set) var symbol: String? {
+		get { return self.keychain["symbol"] }
+		set (value) { self.keychain["symbol"] = value }
+	}
 	
 	/// Notifiers
 	@Published public private(set) var scheduleDidChange: PassthroughSubject = PassthroughSubject<Bool, Never>()
@@ -496,6 +462,7 @@ public final class Vulcan: ObservableObject {
 						self.getUsers()
 					case .failure(let error):
 						logger.error("Error logging in: \(error.localizedDescription)")
+						self.symbol = nil
 						completionHandler(false, error)
 						self.logOut()
 				}
@@ -514,6 +481,7 @@ public final class Vulcan: ObservableObject {
 				self.keychain["CertificateCreated"] = certificate["CertyfikatDataUtworzenia"] as? String
 				self.keychain["Username"] = certificate["UzytkownikNazwa"] as? String
 				self.endpointURL = certificate["AdresBazowyRestApi"] as? String
+				self.symbol = symbol
 				
 				logger.debug("Parsed certificate! Key: \(self.keychain["CertificateKey"] ?? "", privacy: .sensitive).")
 			})
@@ -2022,5 +1990,48 @@ public final class Vulcan: ObservableObject {
 				logger.warning("Couldn't add a notification with ID \(identifier, privacy: .sensitive): \(error.localizedDescription)")
 			}
 		}
+	}
+}
+
+public extension Vulcan {
+	/// Used to manage the current data state.
+	struct DataState {
+		fileprivate init(dictionary: Vulcan.DataState.Status = DataState.Status(), users: Vulcan.DataState.Status = DataState.Status(), schedule: Vulcan.DataState.Status = DataState.Status(), grades: Vulcan.DataState.Status = DataState.Status(), eotGrades: Vulcan.DataState.Status = DataState.Status()) {
+			self.dictionary = dictionary
+			self.users = users
+			self.schedule = schedule
+			self.grades = grades
+			self.eotGrades = eotGrades
+		}
+		
+		public struct Status {
+			fileprivate init(loading: Bool = false, lastFetched: Date? = nil, progress: Double? = nil) {
+				self.loading = loading
+				self.lastFetched = lastFetched
+				self.progress = progress
+			}
+			
+			public var loading: Bool = false
+			public var lastFetched: Date?
+			public var progress: Double?
+			
+			public var fetched: Bool {
+				return self.lastFetched != nil
+			}
+		}
+		
+		public var dictionary: DataState.Status = .init()
+		public var users: DataState.Status = .init()
+		
+		public var schedule: DataState.Status = .init()
+		public var grades: DataState.Status = .init()
+		public var eotGrades: DataState.Status = .init()
+		public var notes: DataState.Status = .init()
+		public var tasks: DataState.Status = .init()
+		public var messages: [Vulcan.MessageTag: DataState.Status] = [
+			.deleted:	.init(),
+			.received:	.init(),
+			.sent:		.init()
+		]
 	}
 }

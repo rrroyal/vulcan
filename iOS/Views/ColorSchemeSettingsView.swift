@@ -34,7 +34,6 @@ struct ColorSchemeSettingsView: View {
 				
 				if colorScheme == scheme {
 					Image(systemName: "checkmark")
-						.font(.headline)
 						.foregroundColor(.accentColor)
 				}
 			}
@@ -42,8 +41,14 @@ struct ColorSchemeSettingsView: View {
 			.padding(.vertical, 10)
 			.contentShape(Rectangle())
 			.onTapGesture {
-				colorScheme = scheme
+				if colorScheme == scheme {
+					return
+				}
+				
 				generateHaptic(.light)
+				withAnimation {
+					colorScheme = scheme
+				}
 			}
 		}
 		.listStyle(InsetGroupedListStyle())

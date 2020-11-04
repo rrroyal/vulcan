@@ -23,12 +23,11 @@ struct UsersView: View {
 		List(vulcan.users) { user in
 			Button(action: {
 				generateHaptic(.light)
-				vulcan.setUser(user, force: true)
+				withAnimation {
+					vulcan.setUser(user, force: true)
+				}
 			}) {
 				HStack {
-					Image(systemName: "person.fill")
-						.padding(.trailing, 5)
-					
 					Text("\(user.username) (\(user.unitCode))")
 						.foregroundColor(.primary)
 					
@@ -44,10 +43,6 @@ struct UsersView: View {
 		}
 		.listStyle(InsetGroupedListStyle())
 		.navigationTitle(Text("Users"))
-		/* .navigationBarItems(trailing: RefreshButton(loading: vulcan.dataState.users.loading, iconName: "arrow.clockwise", edge: .trailing) {
-		generateHaptic(.light)
-		refresh()
-		}) */
 		.toolbar {
 			// Refresh button
 			ToolbarItem(placement: .navigationBarTrailing) {

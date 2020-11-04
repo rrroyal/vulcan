@@ -132,6 +132,7 @@ struct SetupView: View {
 					.bold()
 					.padding()
 			}
+			.keyboardShortcut(.cancelAction)
 			.padding(.horizontal)
 		}
 		.padding(.vertical)

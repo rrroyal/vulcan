@@ -20,6 +20,8 @@ struct MessagesView: View {
 	
 	@Binding var tag: Vulcan.MessageTag
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").MessagesActivity"
+	
 	@State private var date: Date = Date()
 	@State private var selection: Vulcan.Message?
 	@State private var isComposeSheetPresented: Bool = false
@@ -89,6 +91,7 @@ struct MessagesView: View {
 				}) {
 					Label("New", systemImage: "square.and.pencil")
 				}
+				.keyboardShortcut("n")
 			}
 			
 			Section(header: Text("Folders")) {
@@ -99,6 +102,7 @@ struct MessagesView: View {
 				}) {
 					Label("Received", systemImage: tag == .received ? "tray.fill" : "tray")
 				}
+				.keyboardShortcut("r")
 				
 				// Sent
 				Button(action: {
@@ -107,6 +111,7 @@ struct MessagesView: View {
 				}) {
 					Label("Sent", systemImage: tag == .sent ? "paperplane.fill" : "paperplane")
 				}
+				.keyboardShortcut("s")
 				
 				// Deleted
 				Button(action: {
@@ -115,6 +120,7 @@ struct MessagesView: View {
 				}) {
 					Label("Deleted", systemImage: tag == .deleted ? "trash.fill" : "trash")
 				}
+				.keyboardShortcut("d")
 			}
 		}) {
 			Image(systemName: "ellipsis.circle")
@@ -187,15 +193,24 @@ struct MessagesView: View {
 				}
 				#endif
 			}
-			.userActivity("\(Bundle.main.bundleIdentifier ?? "vulcan").messagesActivity") { activity in
-				activity.title = "Messages".localized
-				activity.isEligibleForPrediction = true
+			.userActivity(Self.activityIdentifier) { activity in
 				activity.isEligibleForSearch = true
-				activity.keywords = ["Messages".localized, "vulcan"]
+				activity.isEligibleForPrediction = true
+				activity.isEligibleForPublicIndexing = true
+				activity.isEligibleForHandoff = false
+				activity.title = "Messages".localized
+				activity.keywords = ["Messages".localized]
+				activity.persistentIdentifier = "MessagesActivity"
+				
+				if let currentUser = Vulcan.shared.currentUser {
+					activity.referrerURL = URL(string: "https://uonetplus-uzytkownik.vulcan.net.pl/\(currentUser.unitSymbol)")
+					activity.webpageURL = activity.referrerURL
+				}
 				
 				let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
 				attributes.contentDescription = "See your received messages".localized
-				activity.contentAttributeSet = attributes				
+				
+				activity.contentAttributeSet = attributes
 			}
 			.onAppear {
 				if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {

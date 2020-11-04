@@ -81,7 +81,7 @@
 // MARK: ScheduleView.swift
 "No lessons for this week 😊" = "Brak lekcji na ten tydzień 😊";
 "No lessons for this day 😊" = "Brak lekcji na ten dzień 😊";
-"Displays your schedule" = "Pokazuje Twój plan lekcji";
+"See your schedule" = "Zobacz swój plan lekcji";
 
 // MARK: TasksView.swift
 "No tasks" = "Brak zadań";
@@ -92,7 +92,7 @@
 "TAG_HOMEWORK" = "Zadanie domowe";
 "No exams for this month 😊" = "Brak testów w tym miesiącu 😊";
 "No homework for this month 😊" = "Brak zadań domowych w tym miesiącu 😊";
-"Displays your upcoming exams and homework" = "Pokazuje Twoje najbliższe testy i zadania domowe";
+"See your upcoming exams and homework" = "Zobacz swoje testy i zadania domowe w ciągu najbliższych dni";
 
 // MARK: MessagesView.swift
 "No messages found" = "Brak wiadomości";
@@ -115,14 +115,14 @@
 "General" = "Ogólne";
 "Settings" = "Ustawienia";
 "Libraries" = "Biblioteki";
-"Default" = "Domyślny";
+"Default" = "Domyślna";
 
 "SETTINGS_LOGGEDIN : %@" = "Zalogowano jako %@";
 "Log out" = "Wyloguj się";
 "Show all" = "Wszystkie";
 "Notifications" = "Powiadomienia";
 "SETTINGS_SCHEDULEALLEVENTS" = "Pokaż wszystkie grupy";
-"SETTINGS_SCHEDULEALLEVENTS_TOOLTIP" = "Jeśli włączone, będziesz widzieć plan lekcji całej klasy.";
+"SETTINGS_SCHEDULEALLEVENTS_TOOLTIP" = "Jeśli włączono, będziesz widzieć plan lekcji całej klasy.";
 "SETTINGS_READMESSAGEONOPEN" = "Czytaj wiadomości po otwarciu";
 "SETTINGS_READMESSAGEONOPEN_TOOLTIP" = "Wiadomości zostaną oznaczone jako przeczytane po ich otwarciu.";
 "SETTINGS_SCHEDULENOTIFICATIONS" = "Powiadomienia o lekcjach";
@@ -150,7 +150,8 @@
 
 "Color Scheme" = "Motyw";
 "App Icon" = "Ikona aplikacji";
-"AppIcon" = "Domyślna";
+"Dark" = "Ciemna";
+"Dev" = "Dev";
 
 "Made with ❤️ (and ☕️) by @rrroyal" = "Zrobione z ❤️ (i ☕️) przez @rrroyal";
 "Version %@ (Build %@)" = "Wersja %@ (Numer %@)";
@@ -167,6 +168,8 @@
 "Message content..." = "Treść wiadomości...";
 "Recipients" = "Adresaci";
 "Done" = "Gotowe";
+"New message" = "Nowa wiadomość";
+"Continue creating a new message" = "Kontynuuj tworzenie nowej wiadomości";
 
 // MARK: MessageDetailView.swift
 "Links" = "Odnośniki";

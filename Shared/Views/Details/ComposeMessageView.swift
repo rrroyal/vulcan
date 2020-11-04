@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Vulcan
+import CoreSpotlight
+import CoreServices
 
 fileprivate struct MessageRecipientsListView: View {
 	@Binding var isRecipientsSheetVisible: Bool
@@ -35,28 +37,30 @@ fileprivate struct MessageRecipientsListView: View {
 					   let employeeCode = employee.code {
 						HStack {
 							Text("\(employeeSurname) \(employeeName) (\(employeeCode))".trimmingCharacters(in: .whitespacesAndNewlines))
+							
 							Spacer()
-							Image(systemName: "checkmark")
-								.opacity(isRecipient(employee) ? 1 : 0)
-								.transition(.opacity)
-								.animation(.easeInOut(duration: 0.1))
-								.foregroundColor(.accentColor)
+							
+							if isRecipient(employee) {
+								Image(systemName: "checkmark")
+									.foregroundColor(.accentColor)
+							}
 						}
 						.contentShape(Rectangle())
 						.onTapGesture {
 							generateHaptic(.selectionChanged)
 							
-							if (isRecipient(employee)) {
-								guard let recipientsIndex = messageRecipients.map(\.id).firstIndex(of: Int(employee.id)) else {
-									return
+							withAnimation(.easeInOut(duration: 0.1)) {
+								if isRecipient(employee) {
+									guard let recipientsIndex = messageRecipients.map(\.id).firstIndex(of: Int(employee.id)) else {
+										return
+									}
+									
+									messageRecipients.remove(at: recipientsIndex)
+								} else {
+									let recipient = Vulcan.Recipient(id: Int(employee.id), name: "\(employee.surname ?? "Unknown employee") \(employee.name ?? "") (\(employee.code ?? ""))")
+									messageRecipients.append(recipient)
 								}
-								
-								messageRecipients.remove(at: recipientsIndex)
-								return
 							}
-							
-							let recipient = Vulcan.Recipient(id: Int(employee.id), name: "\(employee.surname ?? "Unknown employee") \(employee.name ?? "") (\(employee.code ?? ""))")
-							messageRecipients.append(recipient)
 						}
 					}
 				}
@@ -70,6 +74,7 @@ fileprivate struct MessageRecipientsListView: View {
 					}) {
 						Text("Done")
 					}
+					.keyboardShortcut(.cancelAction)
 				}
 			}
 		}
@@ -80,6 +85,8 @@ struct ComposeMessageView: View {
 	@Binding var isPresented: Bool
 	@Binding var message: Vulcan.Message?
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").NewMessageActivity"
+
 	@State private var loading: Bool = false
 	@State private var isRecipientsSheetVisible: Bool = false
 	@State private var messageTitle: String = ""
@@ -171,6 +178,46 @@ struct ComposeMessageView: View {
 		}
 		.loadingOverlay(loading)
 		.allowsHitTesting(!loading)
+		.userActivity(Self.activityIdentifier, isActive: isPresented) { activity in
+			activity.isEligibleForSearch = true
+			activity.isEligibleForPrediction = true
+			activity.isEligibleForPublicIndexing = false
+			activity.isEligibleForHandoff = true
+			activity.title = "New message".localized
+			activity.keywords = ["New message".localized]
+			activity.persistentIdentifier = "NewMessageActivity"
+			activity.suggestedInvocationPhrase = "Continue creating a new message".localized
+			
+			activity.userInfo = [
+				"messageTitle": messageTitle,
+				"messageContent": messageContent,
+				"messageRecipients": messageRecipients
+			]
+			
+			if let symbol = Vulcan.shared.symbol {
+				activity.referrerURL = URL(string: "https://uonetplus-uzytkownik.vulcan.net.pl/\(symbol)")
+				activity.webpageURL = activity.referrerURL
+			}
+			
+			let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			attributes.contentDescription = activity.suggestedInvocationPhrase
+			
+			activity.contentAttributeSet = attributes
+		}
+		.onContinueUserActivity(Self.activityIdentifier) { activity in
+			AppState.shared.currentTab = .messages
+			self.isPresented = true
+			
+			if let messageTitle = activity.userInfo?["messageTitle"] as? String {
+				self.messageTitle = messageTitle
+			}
+			if let messageContent = activity.userInfo?["messageContent"] as? String {
+				self.messageContent = messageContent
+			}
+			if let messageRecipients = activity.userInfo?["messageRecipients"] as? [Vulcan.Recipient] {
+				self.messageRecipients = messageRecipients
+			}
+		}
 		.onAppear {
 			// Message reply setup
 			if let message: Vulcan.Message = message {

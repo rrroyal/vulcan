@@ -39,6 +39,8 @@ struct SettingsView: View {
 	@EnvironmentObject var vulcan: Vulcan
 	@EnvironmentObject var settings: SettingsModel
 	
+	@Environment(\.openURL) var openURL
+	
 	@State private var showingSetupView: Bool = false
 	@State private var showingResetSheet: Bool = false
 	@State private var showingResetAlert: Bool = false
@@ -199,7 +201,7 @@ struct SettingsView: View {
 			}
 			
 			// App icon
-			if (Bundle.main.appIcons.count > 1) {
+			if Bundle.main.appIcons.count > 1 && UIApplication.shared.supportsAlternateIcons {
 				NavigationLink(destination: AppIconView()) {
 					Text("App Icon")
 						.font(.body)
@@ -227,18 +229,15 @@ struct SettingsView: View {
 			}
 			#endif
 			
-			if (settings.updatesAvailable) {
-				HStack {
-					Spacer()
-					Button(action: {
-						guard let url = URL(string: "https://github.com/rrroyal/vulcan/releases/latest") else { return }
-						generateHaptic(.light)
-						UIApplication.shared.open(url)
-					}) {
-						Text("New update available!")
-							.bold()
-					}
-					Spacer()
+			if settings.latestVersion > Bundle.main.buildVersion {
+				Button(action: {
+					guard let url = URL(string: "https://github.com/rrroyal/vulcan/releases/latest") else { return }
+					generateHaptic(.light)
+					openURL(url)
+				}) {
+					Text("New update available!")
+						.bold()
+						.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
 				}
 			}
 			
@@ -247,12 +246,9 @@ struct SettingsView: View {
 				generateHaptic(.warning)
 				showingResetSheet = true
 			}) {
-				HStack {
-					Spacer()
-					Text("Reset user settings")
-						.foregroundColor(.red)
-					Spacer()
-				}
+				Text("Reset user settings")
+					.foregroundColor(.red)
+					.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
 			}
 			.actionSheet(isPresented: $showingResetSheet) {
 				ActionSheet(title: Text("SETTINGS_RESET"), message: Text("SETTINGS_RESET_TOOLTIP"), buttons: [
@@ -295,7 +291,7 @@ struct SettingsView: View {
 		.onTapGesture {
 			guard let url = URL(string: "https://vulcan.shameful.xyz") else { return }
 			generateHaptic(.light)
-			UIApplication.shared.open(url)
+			openURL(url)
 		}
 	}
 	
