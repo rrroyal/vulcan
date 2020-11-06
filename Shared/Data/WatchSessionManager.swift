@@ -8,11 +8,21 @@
 import Foundation
 import os
 import WatchConnectivity
+import CoreData
 import Vulcan
+
+/**
+	WatchSessionManager payload:
+	[
+		"type": "InitData" / "Vulcan" / "DataRequest" / "MessageReceived"
+		"requestedData": {type}	// only when type == "DataRequest"
+		"payload": [String: Any]	// only when type == "Vulcan"
+	]
+*/
 
 @available (iOS 14, watchOS 7, *)
 public final class WatchSessionManager: NSObject, WCSessionDelegate {
-	static public let shared = WatchSessionManager()
+	public static let shared = WatchSessionManager()
 	public let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).WatchConnectivity", category: "WatchConnectivity")
 	public let ud: UserDefaults = UserDefaults.group
 	
@@ -24,11 +34,11 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 	var initData: [String: Any] {
 		get {
 			[
-				"type": "UserDefaults",
-				"data": [
+				"type": "InitData",
+				"payload": [
 					UserDefaults.AppKeys.isLoggedIn.rawValue: ud.bool(forKey: UserDefaults.AppKeys.isLoggedIn.rawValue),
 					UserDefaults.AppKeys.colorScheme.rawValue: ud.string(forKey: UserDefaults.AppKeys.colorScheme.rawValue) ?? "Default",
-					UserDefaults.AppKeys.colorizeGrades.rawValue: ud.bool(forKey: UserDefaults.AppKeys.colorizeGrades.rawValue),
+					UserDefaults.AppKeys.colorizeGrades.rawValue: ud.bool(forKey: UserDefaults.AppKeys.colorizeGrades.rawValue)
 				]
 			]
 		}
@@ -63,198 +73,312 @@ public final class WatchSessionManager: NSObject, WCSessionDelegate {
 		session?.activate()
 	}
 	
-	/// Called after session is started
+	/// Called after session is started.
 	/// - Parameters:
 	///   - session: Current session
-	///   - activationState: Session' activation state
+	///   - activationState: Session activation state
 	///   - error: Error
 	public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
 		self.logger.info("Session started.")
 		
 		#if os(iOS)
-		do {
-			try self.sendData(initData)
-			try self.updateApplicationContext(schedule: Vulcan.shared.schedule, grades: Vulcan.shared.grades, eotGrades: Vulcan.shared.eotGrades, tasks: Vulcan.shared.tasks, receivedMessages: Vulcan.shared.messages[.received] ?? [])
-		} catch {
-			self.logger.error("Error sending UserDefaults! Error: \(error.localizedDescription)")
-		}
+		self.sendMessage(initData)
+		// update context
+		#elseif os(watchOS)
+		let message = [
+			"type": "DataRequest",
+			"requestedData": "InitData"
+		]
+		self.sendMessage(message)
 		#endif
 	}
 	
-	/// Called when the app received a message from the counterpart
+	/// Called when the app received a message from the counterpart.
 	/// - Parameters:
 	///   - session: Current session
 	///   - message: Received message
 	///   - replyHandler: Code to run on a reply
-	public func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
+	public func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String: Any]) -> Void) {
 		// Handle the request
-		self.logger.info("Received a message!")
-		replyHandler(["receivedData": true])
+		self.logger.info("Received a message! Keys: \(message.keys.joined(separator: ","), privacy: .private)")
 		
-		// Prevent loop
-		if (message["receivedData"] as? Bool ?? false == true) {
-			return
-		}
+		// Handle message
+		self.handleMessage(message, replyHandler: replyHandler)
+	}
+	
+	/// Called when the app received a message from the counterpart.
+	/// - Parameters:
+	///   - session: Current session
+	///   - message: Received message
+	public func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+		// Handle the request
+		self.logger.info("Received a message! Keys: \(message.keys.joined(separator: ","), privacy: .private)")
 		
 		// Handle message
 		self.handleMessage(message)
 	}
 	
-	/// Called when the app received an applicationContext from the counterpart
+	public func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+		// Handle the request
+		self.logger.info("Received user info! Keys: \(userInfo.keys.joined(separator: ","), privacy: .private)")
+	}
+	
+	#if os(watchOS)
+	/// Called when the app received an applicationContext from the counterpart.
 	/// - Parameters:
 	///   - session: Current session
 	///   - applicationContext: Received context
 	public func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
-		if (applicationContext["receivedData"] as? Bool ?? false == true) {
+		guard let payload = applicationContext["payload"] as? [String: Any],
+			  applicationContext["type"] as? String ?? "" == "ApplicationContext" else {
+			self.logger.warning("Invalid applicationContext!")
 			return
 		}
 		
-		handleMessage(applicationContext)
+		// User
+		if let data = payload["currentUser"] as? Data,
+		   let user = try? JSONDecoder().decode(Vulcan.Student.self, from: data) {
+			VulcanStore.shared.setUser(user)
+		}
+		
+		// Schedule
+		if let data = payload["schedule"] as? Data,
+		   let schedule = try? JSONDecoder().decode([Vulcan.Schedule].self, from: data) {
+			VulcanStore.shared.setSchedule(schedule)
+		}
+		
+		// Grades
+		if let data = payload["grades"] as? Data,
+		   let grades = try? JSONDecoder().decode([Vulcan.SubjectGrades].self, from: data) {
+			VulcanStore.shared.setGrades(grades)
+		}
+		
+		// EOT Grades
+		if let data = payload["eotGrades"] as? Data,
+		   let eotGrades = try? JSONDecoder().decode([Vulcan.EndOfTermGrade].self, from: data) {
+			VulcanStore.shared.setEOTGrades(eotGrades)
+		}
+		
+		// Tasks
+		if let data = payload["tasks"] as? Data,
+		   let tasks = try? JSONDecoder().decode(Vulcan.Tasks.self, from: data) {
+			VulcanStore.shared.setTasks(tasks)
+		}
+		
+		// Messages
+		if let data = payload["receivedMessages"] as? Data,
+		   let messages = try? JSONDecoder().decode([Vulcan.Message].self, from: data) {
+			VulcanStore.shared.setMessages(messages, tag: .received)
+		}
+		
+		ud.setValue(Int(Date().timeIntervalSince1970), forKey: "lastSyncDate")
 	}
+	#endif
 	
 	// MARK: - Helper functions
 	
 	/// Send the data to the Watch counterpart.
 	/// - Parameter data: Data to send
 	/// - Throws: Error
-	public func sendData(_ data: [String: Any]) throws {
-		if let session = validSession {
-			self.logger.info("Sending data...")
-
-			do {
-				if session.isReachable {
-					self.logger.info("Sending message! Reachable: \(session.isReachable).")
-					session.sendMessage(data, replyHandler: { reply in
-						self.logger.info("Reply: \(reply)")
-						if (reply["receivedData"] as? Bool ?? true == true) {
-							return
-						}
-					}, errorHandler: { error in
-						self.logger.error("Error sending a message: \(error.localizedDescription).")
-					})
-				} else {
-					self.logger.warning("Session not reachable!")
-				}
-			}
-			
-			self.logger.info("Done sending data!")
-		} else {
-			self.logger.warning("No session!")
+	public func sendMessage(_ message: [String: Any]) {
+		guard let session = validSession else {
+			self.logger.error("No session!")
+			return
 		}
+		
+		self.logger.info("Sending data...")
+		
+		if session.isReachable {
+			self.logger.info("Sending message! Reachable: \(session.isReachable), Type: \"\(message["type"] as? String ?? "<unknown>", privacy: .private)\".")
+			
+			session.sendMessage(message, replyHandler: { reply in
+				self.logger.info("Reply: \(reply, privacy: .private)")
+				
+				self.handleMessage(message)
+			}, errorHandler: { error in
+				self.logger.error("Error sending a message: \(error.localizedDescription).")
+			})
+		} else {
+			self.logger.warning("Session not reachable!")
+		}		
 	}
 	
-	/// Updates application context
+	/// Handles the received message.
+	/// - Parameter message: Received message
+	private func handleMessage(_ message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void = { _ in }) {
+		guard let type = message["type"] as? String else {
+			self.logger.error("No `type` in message! Message: \(message, privacy: .private)")
+			replyHandler(["type": "MessageReceived"])
+			return
+		}
+				
+		switch type {
+			case "MessageReceived":
+				return
+			
+			case "DataRequest":
+				guard let requestedData = message["requestedData"] as? String else {
+					self.logger.warning("No \"requestedData\" in DataRequest!")
+					break
+				}
+				
+				#if os(iOS)
+				switch requestedData {
+					case "InitData":
+						replyHandler(self.initData)
+						return
+						
+					default:
+						self.logger.warning("Unknown \"requestedData\": \(requestedData, privacy: .private)")
+				}
+			#endif
+				
+			#if os(watchOS)
+			case "Vulcan":
+				guard let payload = message["payload"] as? [String: Any] else {
+					break
+				}
+				
+				// Current user
+				if let data = payload["currentUser"] as? Data,
+				   let user = try? JSONDecoder().decode(Vulcan.Student.self, from: data) {
+					VulcanStore.shared.setUser(user)
+				}
+				
+				// Schedule
+				if let data = payload["schedule"] as? Data,
+				   let schedule = try? JSONDecoder().decode([Vulcan.Schedule].self, from: data) {
+					VulcanStore.shared.setSchedule(schedule)
+				}
+				
+				// Grades
+				if let data = payload["grades"] as? Data,
+				   let grades = try? JSONDecoder().decode([Vulcan.SubjectGrades].self, from: data) {
+					VulcanStore.shared.setGrades(grades)
+				}
+				
+				// EOT Grades
+				if let data = payload["eotGrades"] as? Data,
+				   let eotGrades = try? JSONDecoder().decode([Vulcan.EndOfTermGrade].self, from: data) {
+					VulcanStore.shared.setEOTGrades(eotGrades)
+				}
+				
+				// Tasks
+				if let data = payload["tasks"] as? Data,
+				   let tasks = try? JSONDecoder().decode(Vulcan.Tasks.self, from: data) {
+					VulcanStore.shared.setTasks(tasks)
+				}
+				
+				// Received Messages
+				if let data = payload["receivedMessages"] as? Data,
+				   let messages = try? JSONDecoder().decode([Vulcan.Message].self, from: data) {
+					VulcanStore.shared.setMessages(messages, tag: .received)
+				}
+			#endif
+				
+			case "InitData":
+				guard let payload = message["payload"] as? [String: Any] else {
+					self.logger.warning("No payload in \"InitData\"!")
+					break
+				}
+				
+				for (key, value) in payload {
+					self.logger.debug("Setting UD: \"\(key)\" = \"\(String(describing: value), privacy: .private)\"")
+					ud.setValue(value, forKey: key)
+				}
+				
+			case "Dictionary":
+				guard let payload = message["payload"] as? [String: Any] else {
+					self.logger.warning("No payload in \"Dictionary\"!")
+					break
+				}
+				
+				let context = CoreDataModel.shared.persistentContainer.viewContext
+				
+				let decoder = JSONDecoder()
+				decoder.userInfo[CodingUserInfoKey.managedObjectContext] = context
+				
+				// Employees
+				if let data = payload["employees"] as? Data {
+					do {
+						try context.execute(NSBatchDeleteRequest(fetchRequest: DictionaryEmployee.fetchRequest()))
+						_ = try decoder.decode([DictionaryEmployee].self, from: data)
+					} catch {
+						logger.error("Error executing request: \(error.localizedDescription)")
+					}
+				}
+				
+				// Subjects
+				if let data = payload["subjects"] as? Data {
+					do {
+						try context.execute(NSBatchDeleteRequest(fetchRequest: DictionarySubject.fetchRequest()))
+						_ = try decoder.decode([DictionarySubject].self, from: data)
+					} catch {
+						logger.error("Error executing request: \(error.localizedDescription)")
+					}
+				}
+				
+				// Grade categories
+				if let data = payload["gradeCategories"] as? Data {
+					do {
+						try context.execute(NSBatchDeleteRequest(fetchRequest: DictionaryGradeCategory.fetchRequest()))
+						_ = try decoder.decode([DictionaryGradeCategory].self, from: data)
+					} catch {
+						logger.error("Error executing request: \(error.localizedDescription)")
+					}
+				}
+				
+				CoreDataModel.shared.saveContext()
+				
+			default:
+				self.logger.warning("Unknown type: \"\(type, privacy: .private)\".")
+		}
+		
+		replyHandler(["type": "MessageReceived"])
+	}
+	
+	/// Updates application context.
 	/// - Parameters:
+	///   - user: `Vulcan.Student`
 	///   - schedule: `[Vulcan.Schedule]`
 	///   - grades: `[Vulcan.SubjectGrades]`
 	///   - eotGrades: `[Vulcan.EndOfTermGrade]`
 	///   - tasks: `Vulcan.Tasks`
 	///   - receivedMessages: `[Vulcan.Message]`
 	/// - Throws: Error
-	public func updateApplicationContext(schedule: [Vulcan.Schedule], grades: [Vulcan.SubjectGrades], eotGrades: [Vulcan.EndOfTermGrade], tasks: Vulcan.Tasks = Vulcan.Tasks(exams: [], homework: []), receivedMessages: [Vulcan.Message]) throws {
+	public func updateApplicationContext(user: Vulcan.Student?, schedule: [Vulcan.Schedule], grades: [Vulcan.SubjectGrades], eotGrades: [Vulcan.EndOfTermGrade], tasks: Vulcan.Tasks = Vulcan.Tasks(exams: [], homework: []), receivedMessages: [Vulcan.Message]) {
 		self.logger.info("Updating application context...")
 		
-		let encoder: JSONEncoder = JSONEncoder()
-		let data: [String: Any] = [
-			"type": "Vulcan",
-			"data": [
-				"schedule": try encoder.encode(schedule),
-				"grades": try encoder.encode(grades),
-				"eotGrades": try encoder.encode(eotGrades),
-				"tasks": try encoder.encode(tasks),
-				"receivedMessages": try encoder.encode(receivedMessages)
+		do {
+			let encoder: JSONEncoder = JSONEncoder()
+			let message: [String: Any] = [
+				"type": "ApplicationContext",
+				"payload": [
+					"currentUser": try encoder.encode(user),
+					"schedule": try encoder.encode(schedule),
+					"grades": try encoder.encode(grades),
+					"eotGrades": try encoder.encode(eotGrades),
+					"tasks": try encoder.encode(tasks),
+					"receivedMessages": try encoder.encode(receivedMessages)
+				]
 			]
-		]
-		
-		try self.sendData(data)
-	}
-	
-	/// Handles the received message.
-	/// - Parameter message: Received message
-	public func handleMessage(_ message: [String: Any]) {
-		guard let type: String = message["type"] as? String else {
-			self.logger.warning("Unknown message: \(message)")
-			return
-		}
-		
-		switch type {
-			#if os(iOS)
-			// Request
-			case "Request":
-				if let requestedData = message["requestedData"] as? String,
-				   requestedData == "initData" {
-					try? self.sendData(initData)
-				}
-			#endif
-				
-			#if os(watchOS)
-			// UserDefaults
-			case "UserDefaults":
-				if let data = message["data"] as? [String: Any] {
-					for (key, value) in data {
-						logger.debug("Setting \"\(key, privacy: .sensitive)\" to \"\(String(describing: value), privacy: .sensitive)\"!")
-						ud.setValue(value, forKey: key)
-					}
-				}
 			
-			// Vulcan
-			case "Vulcan":
-				guard let data = message["data"] as? [String: Any] else {
-					return
-				}
-				
-				// Current user
-				if let data = data["currentUser"] as? Data,
-				   let user = try? JSONDecoder().decode(Vulcan.Student.self, from: data) {
-					VulcanStore.shared.setUser(user)
-				}
-				
-				// Schedule
-				if let data = data["schedule"] as? Data,
-				   let schedule = try? JSONDecoder().decode([Vulcan.Schedule].self, from: data) {
-					VulcanStore.shared.setSchedule(schedule)
-				}
-				
-				// Grades
-				if let data = data["grades"] as? Data,
-				   let grades = try? JSONDecoder().decode([Vulcan.SubjectGrades].self, from: data) {
-					VulcanStore.shared.setGrades(grades)
-				}
-				
-				// EOT Grades
-				if let data = data["eotGrades"] as? Data,
-				   let eotGrades = try? JSONDecoder().decode([Vulcan.EndOfTermGrade].self, from: data) {
-					VulcanStore.shared.setEOTGrades(eotGrades)
-				}
-				
-				// Tasks
-				if let data = data["tasks"] as? Data,
-				   let tasks = try? JSONDecoder().decode(Vulcan.Tasks.self, from: data) {
-					VulcanStore.shared.setTasks(tasks)
-				}
-				
-				// Received Messages
-				if let data = data["receivedMessages"] as? Data,
-				   let messages = try? JSONDecoder().decode([Vulcan.Message].self, from: data) {
-					VulcanStore.shared.setMessages(messages, tag: .received)
-				}
-			#endif
-				
-			// Default
-			default: break
+			self.sendMessage(message)
+		} catch {
+			self.logger.error("Error encoding: \(error.localizedDescription)")
 		}
 	}
 }
 
 #if os(iOS)
 public extension WatchSessionManager {
-	/// Called when session became inactive
+	/// Called when session became inactive.
 	/// - Parameter session: Current session
 	func sessionDidBecomeInactive(_ session: WCSession) {
 		self.logger.info("(WatchSessionManager) Session inactive.")
 	}
 	
-	/// Called when session deactivated
+	/// Called when session deactivated.
 	/// - Parameter session: Current session
 	func sessionDidDeactivate(_ session: WCSession) {
 		self.logger.info("(WatchSessionManager) Session deactivated.")

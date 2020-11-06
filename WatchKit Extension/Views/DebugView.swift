@@ -36,11 +36,11 @@ struct DebugView: View {
 					Text(ud.bool(forKey: "isLoggedIn") ? "true" : "false")
 				}
 				
-				// UserGroup
+				// LastSyncDate
 				HStack {
-					Text("userGroup")
+					Text("lastSyncDate")
 					Spacer()
-					Text("\(ud.integer(forKey: "userGroup"))")
+					Text(Date(timeIntervalSince1970: TimeInterval(ud.integer(forKey: "lastSyncDate"))), style: .date)
 				}
 			}
 			
@@ -51,6 +51,7 @@ struct DebugView: View {
 						CLKComplicationServer.sharedInstance().reloadTimeline(for: complication)
 					}
 				}
+				.padding()
 								
 				ForEach(CLKComplicationServer.sharedInstance().activeComplications ?? [], id: \.identifier) { complication in
 					Text("\(complication.identifier): \(complication.family.rawValue)")

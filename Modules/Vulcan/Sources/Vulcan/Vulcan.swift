@@ -21,7 +21,7 @@ import WidgetKit
 @available (iOS 14, macOS 11, watchOS 7, tvOS 14, *)
 /// Model that manages all of the Vulcan-related data.
 public final class Vulcan: ObservableObject {
-	static public let shared: Vulcan = Vulcan()
+	public static let shared: Vulcan = Vulcan()
 	
 	// MARK: - Private variables
 	
@@ -46,8 +46,13 @@ public final class Vulcan: ObservableObject {
 		set (value) { self.keychain["symbol"] = value }
 	}
 	
+	/// Logs
+	@Published public private(set) var logs: [String] = []
+	@Published public var loggingEnabled: Bool = false
+	
 	/// Notifiers
-	@Published public private(set) var scheduleDidChange: PassthroughSubject = PassthroughSubject<Bool, Never>()
+	public let scheduleDidChange: PassthroughSubject = PassthroughSubject<Bool, Never>()
+	public let dictionaryDidChange: PassthroughSubject = PassthroughSubject<Void, Never>()
 	
 	/// Data state
 	@Published public private(set) var dataState: DataState = DataState()
@@ -70,6 +75,15 @@ public final class Vulcan: ObservableObject {
 		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Init")
 		monitor.start(queue: .global(qos: .utility))
 		
+		// Set up publishers
+		self.$loggingEnabled
+			.sink { enabled in
+				if !enabled {
+					self.logs = []
+				}
+			}
+			.store(in: &cancellableSet)
+		
 		// If we have the certificate, we're logged in
 		if (self.keychain["CertificatePfx"] != nil) && (self.keychain["CertificatePfx"] != "") {
 			logger.debug("Logged in. Key: \(self.keychain["CertificateKey"] ?? "none", privacy: .private).")
@@ -84,7 +98,7 @@ public final class Vulcan: ObservableObject {
 		let context = self.persistentContainer.viewContext
 		
 		let studentFetchRequest: NSFetchRequest = StoredStudent.fetchRequest()
-		studentFetchRequest.predicate = NSPredicate(format: "id == %d", ud.integer(forKey: UserDefaults.AppKeys.userID.rawValue))
+		studentFetchRequest.predicate = NSPredicate(format: "id == %i", ud.integer(forKey: UserDefaults.AppKeys.userID.rawValue))
 		if let storedStudents: [StoredStudent] = try? context.fetch(studentFetchRequest),
 		   let storedStudent: StoredStudent = storedStudents.first {
 			self.currentUser = Vulcan.Student(from: storedStudent)
@@ -337,7 +351,7 @@ public final class Vulcan: ObservableObject {
 			.receive(on: DispatchQueue.global(qos: .background))
 			.mapError { $0 as Error }
 			.tryCompactMap { value -> AnyPublisher<Data, Error> in
-				guard let dictionary: [String: Any] = try? JSONSerialization.jsonObject(with: value.data, options: []) as? [String: Any] else {
+				guard let dictionary: [String: Any] = try? JSONSerialization.jsonObject(with: value.data) as? [String: Any] else {
 					throw APIError.error(reason: "Error serializing JSON")
 				}
 				
@@ -439,7 +453,7 @@ public final class Vulcan: ObservableObject {
 			.flatMap { $0 }
 			.tryMap { data -> [String: Any]? in
 				// Parse certificate
-				guard let json: [String: Any] = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+				guard let json: [String: Any] = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
 					throw APIError.error(reason: "Error serializing JSON")
 				}
 				
@@ -561,7 +575,7 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data -> [String: Any]? in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let data = json["Data"] as? [String: Any] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
@@ -573,7 +587,7 @@ public final class Vulcan: ObservableObject {
 					self.dataState.dictionary.loading = false
 					switch completion {
 						case .finished:
-							break
+							self.dictionaryDidChange.send()
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
 					}
@@ -584,62 +598,35 @@ public final class Vulcan: ObservableObject {
 					}
 					
 					let context = self.persistentContainer.viewContext
+					let decoder = JSONDecoder()
+					decoder.userInfo[CodingUserInfoKey.managedObjectContext] = context
 					
 					// Teachers + Employees
 					if let teachersDictionary: [[String: Any]] = dictionary["Nauczyciele"] as? [[String: Any]],
 					   let employeesDictionary: [[String: Any]] = dictionary["Pracownicy"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: (teachersDictionary + employeesDictionary), options: []) {
-						let decoded: [Vulcan.Employee]? = try? JSONDecoder().decode([Vulcan.Employee].self, from: data)
-						if let decoded = decoded?.uniques {
-							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionaryEmployee.fetchRequest())
-							
-							do {
-								try context.execute(deleteRequest)
-							} catch {
-								logger.error("Error executing request: \(error.localizedDescription)")
-							}
-							
-							for item in decoded {
-								let object = DictionaryEmployee(context: context)
-								object.code = item.code
-								object.id = Int64(item.id)
-								object.name = item.name
-								object.surname = item.surname
-								
-								if let loginID = item.loginID { object.loginID = Int32(loginID) }
-								if let active = item.active { object.active = active }
-								if let teacher = item.teacher { object.teacher = teacher }
-							}
+					   let data: Data = try? JSONSerialization.data(withJSONObject: (teachersDictionary + employeesDictionary)) {
+						do {
+							try context.execute(NSBatchDeleteRequest(fetchRequest: DictionaryEmployee.fetchRequest()))
+							_ = try decoder.decode([DictionaryEmployee].self, from: data)
+						} catch {
+							logger.error("Error executing request: \(String(describing: error))")
 						}
 					}
 					
 					// Subjects
 					if let rawDictionary: [[String: Any]] = dictionary["Przedmioty"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary, options: []) {
-						let decoded: [Vulcan.Subject]? = try? JSONDecoder().decode([Vulcan.Subject].self, from: data)
-						if let decoded = decoded {
-							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionarySubject.fetchRequest())
-							
-							do {
-								try context.execute(deleteRequest)
-							} catch {
-								logger.error("Error executing request: \(error.localizedDescription)")
-							}
-							
-							for item in decoded {
-								let object = DictionarySubject(context: context)
-								object.active = item.active
-								object.code = item.code
-								object.id = Int64(item.id)
-								object.name = item.name
-								object.position = Int16(item.position)
-							}
+					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary) {
+						do {
+							try context.execute(NSBatchDeleteRequest(fetchRequest: DictionarySubject.fetchRequest()))
+							_ = try decoder.decode([DictionarySubject].self, from: data)
+						} catch {
+							logger.error("Error executing request: \(String(describing: error))")
 						}
 					}
 					
 					// Lesson times
 					if let rawDictionary: [[String: Any]] = dictionary["PoryLekcji"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary, options: []) {
+					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary) {
 						let decoded: [Vulcan.LessonTime]? = try? JSONDecoder().decode([Vulcan.LessonTime].self, from: data)
 						if let decoded = decoded {
 							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionaryLessonTime.fetchRequest())
@@ -662,29 +649,18 @@ public final class Vulcan: ObservableObject {
 					
 					// Grade categories
 					if let rawDictionary: [[String: Any]] = dictionary["KategorieOcen"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary, options: []) {
-						let decoded: [Vulcan.GradeCategory]? = try? JSONDecoder().decode([Vulcan.GradeCategory].self, from: data)
-						if let decoded = decoded {
-							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionaryGradeCategory.fetchRequest())
-							
-							do {
-								try context.execute(deleteRequest)
-							} catch {
-								logger.error("Error executing request: \(error.localizedDescription)")
-							}
-							
-							for item in decoded {
-								let object = DictionaryGradeCategory(context: context)
-								object.code = item.code
-								object.id = Int64(item.id)
-								object.name = item.name
-							}
+					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary) {
+						do {
+							try context.execute(NSBatchDeleteRequest(fetchRequest: DictionaryGradeCategory.fetchRequest()))
+							_ = try decoder.decode([DictionaryGradeCategory].self, from: data)
+						} catch {
+							logger.error("Error executing request: \(String(describing: error))")
 						}
 					}
 					
 					// Note categories
 					if let rawDictionary: [[String: Any]] = dictionary["KategorieUwag"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary, options: []) {
+					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary) {
 						let decoded: [Vulcan.NoteCategory]? = try? JSONDecoder().decode([Vulcan.NoteCategory].self, from: data)
 						if let decoded = decoded {
 							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionaryNoteCategory.fetchRequest())
@@ -706,7 +682,7 @@ public final class Vulcan: ObservableObject {
 					
 					// Presence categories
 					if let rawDictionary: [[String: Any]] = dictionary["KategorieFrekwencji"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary, options: []) {
+					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary) {
 						let decoded: [Vulcan.PresenceCategory]? = try? JSONDecoder().decode([Vulcan.PresenceCategory].self, from: data)
 						if let decoded = decoded {
 							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionaryPresenceCategory.fetchRequest())
@@ -733,7 +709,7 @@ public final class Vulcan: ObservableObject {
 					
 					// Presence types
 					if let rawDictionary: [[String: Any]] = dictionary["TypyFrekwencji"] as? [[String: Any]],
-					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary, options: []) {
+					   let data: Data = try? JSONSerialization.data(withJSONObject: rawDictionary) {
 						let decoded: [Vulcan.PresenceType]? = try? JSONDecoder().decode([Vulcan.PresenceType].self, from: data)
 						if let decoded = decoded {
 							let deleteRequest = NSBatchDeleteRequest(fetchRequest: DictionaryPresenceType.fetchRequest())
@@ -794,12 +770,12 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let objects = json["Data"] as? [[String: Any]] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
-					return try JSONSerialization.data(withJSONObject: objects, options: [])
+					return try JSONSerialization.data(withJSONObject: objects)
 				}
 				.decode(type: [Vulcan.Student].self, decoder: JSONDecoder())
 				.sink(receiveCompletion: { completion in
@@ -891,12 +867,12 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let objects = json["Data"] as? [[String: Any]] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
-					return try JSONSerialization.data(withJSONObject: objects, options: [])
+					return try JSONSerialization.data(withJSONObject: objects)
 				}
 				.decode(type: [Vulcan.ScheduleEvent].self, decoder: JSONDecoder())
 				.sink(receiveCompletion: { completion in
@@ -1043,12 +1019,12 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let objects = json["Data"] as? [[String: Any]] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
-					return try JSONSerialization.data(withJSONObject: objects, options: [])
+					return try JSONSerialization.data(withJSONObject: objects)
 				}
 				.decode(type: [Vulcan.Grade].self, decoder: JSONDecoder())
 				.sink(receiveCompletion: { completion in
@@ -1180,17 +1156,17 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data -> ([Vulcan.EndOfTermGrade], [Vulcan.EndOfTermGrade], [Vulcan.EndOfTermPoints]) in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let objects: [String: Any] = json["Data"] as? [String: Any] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
 					guard let expectedObjects: [[String: Any]] = objects["OcenyPrzewidywane"] as? [[String: Any]],
-						  let expectedData: Data = try? JSONSerialization.data(withJSONObject: expectedObjects, options: []),
+						  let expectedData: Data = try? JSONSerialization.data(withJSONObject: expectedObjects),
 						  let finalObjects: [[String: Any]] = objects["OcenyKlasyfikacyjne"] as? [[String: Any]],
-						  let finalData: Data = try? JSONSerialization.data(withJSONObject: finalObjects, options: []),
+						  let finalData: Data = try? JSONSerialization.data(withJSONObject: finalObjects),
 						  let pointsObjects: [[String: Any]] = objects["SrednieOcen"] as? [[String: Any]],
-						  let pointsData: Data = try? JSONSerialization.data(withJSONObject: pointsObjects, options: [])
+						  let pointsData: Data = try? JSONSerialization.data(withJSONObject: pointsObjects)
 					else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
@@ -1308,12 +1284,12 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let objects = json["Data"] as? [[String: Any]] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
-					return try JSONSerialization.data(withJSONObject: objects, options: [])
+					return try JSONSerialization.data(withJSONObject: objects)
 				}
 				.decode(type: [Vulcan.Note].self, decoder: JSONDecoder())
 				.sink(receiveCompletion: { completion in
@@ -1429,17 +1405,17 @@ public final class Vulcan: ObservableObject {
 					let error = APIError.error(reason: "Error serializing JSON")
 					
 					// Exams
-					guard let examsJSON = try JSONSerialization.jsonObject(with: examsResponse, options: []) as? [String: Any],
+					guard let examsJSON = try JSONSerialization.jsonObject(with: examsResponse) as? [String: Any],
 						  let examsObject = examsJSON["Data"] as? [[String: Any]],
-						  let examsData = try? JSONSerialization.data(withJSONObject: examsObject, options: []),
+						  let examsData = try? JSONSerialization.data(withJSONObject: examsObject),
 						  let exams = try? decoder.decode([Vulcan.Exam].self, from: examsData) else {
 						throw error
 					}
 					
 					// Homework
-					guard let homeworkJSON = try JSONSerialization.jsonObject(with: homeworkResponse, options: []) as? [String: Any],
+					guard let homeworkJSON = try JSONSerialization.jsonObject(with: homeworkResponse) as? [String: Any],
 						  let homeworkObject = homeworkJSON["Data"] as? [[String: Any]],
-						  let homeworkData = try? JSONSerialization.data(withJSONObject: homeworkObject, options: []),
+						  let homeworkData = try? JSONSerialization.data(withJSONObject: homeworkObject),
 						  let homework = try? decoder.decode([Vulcan.Homework].self, from: homeworkData) else {
 						throw error
 					}
@@ -1591,12 +1567,12 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
 						  let objects = json["Data"] as? [[String: Any]] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
-					return try JSONSerialization.data(withJSONObject: objects, options: [])
+					return try JSONSerialization.data(withJSONObject: objects)
 				}
 				.decode(type: [Vulcan.Message].self, decoder: JSONDecoder())
 				.sink(receiveCompletion: { completion in
@@ -1696,7 +1672,7 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data -> [String: Any] in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 										
@@ -1783,7 +1759,7 @@ public final class Vulcan: ObservableObject {
 			try self.request(request)
 				.receive(on: DispatchQueue.main)
 				.tryMap { data -> [String: Any] in
-					guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+					guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
 						throw APIError.error(reason: "Error serializing JSON")
 					}
 					
@@ -1848,7 +1824,7 @@ public final class Vulcan: ObservableObject {
 		
 		// Merge request bodies
 		if let httpBody: Data = request.httpBody,
-		   let oldRequestBody: [String: Any] = try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: Any] {
+		   let oldRequestBody: [String: Any] = try? JSONSerialization.jsonObject(with: httpBody) as? [String: Any] {
 			body = body.merging(oldRequestBody) { _, new in new }
 		}
 		
@@ -1878,7 +1854,13 @@ public final class Vulcan: ObservableObject {
 		// Send the request and pass it on
 		return URLSession.shared.dataTaskPublisher(for: modifiedRequest)
 			.mapError { $0 as Error }
-			.map { $0.data }
+			.map {
+				if self.loggingEnabled {
+					self.logs.append($0.data.base64EncodedString())
+				}
+				
+				return $0.data
+			}
 			.eraseToAnyPublisher()
 	}
 	

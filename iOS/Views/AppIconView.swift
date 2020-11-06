@@ -36,15 +36,12 @@ struct AppIconView: View {
 						.cornerRadius(cornerRadius)
 						.onTapGesture {
 							if Bundle.main.currentAppIconName == icon {
-								print("YUP")
 								return
 							}
 							
-							generateHaptic(.light)
+							UIDevice.current.generateHaptic(.light)
 							UIApplication.shared.setAlternateIconName(icon == "Default" ? nil : icon) { error in
-								if let error = error {
-									AppState.shared.logger.error("Error setting alternative icon: \(error.localizedDescription)")
-								} else {
+								if error == nil {
 									withAnimation {
 										currentIcon = icon
 									}

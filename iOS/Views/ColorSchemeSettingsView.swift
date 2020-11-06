@@ -45,7 +45,7 @@ struct ColorSchemeSettingsView: View {
 					return
 				}
 				
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				withAnimation {
 					colorScheme = scheme
 				}

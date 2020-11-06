@@ -47,7 +47,7 @@ fileprivate struct MessageRecipientsListView: View {
 						}
 						.contentShape(Rectangle())
 						.onTapGesture {
-							generateHaptic(.selectionChanged)
+							UIDevice.current.generateHaptic(.selectionChanged)
 							
 							withAnimation(.easeInOut(duration: 0.1)) {
 								if isRecipient(employee) {
@@ -108,16 +108,16 @@ struct ComposeMessageView: View {
 		}
 		
 		loading = true
-		generateHaptic(.light)
+		UIDevice.current.generateHaptic(.light)
 		
 		Vulcan.shared.sendMessage(to: messageRecipients, title: messageTitle, content: messageContent) { error in
 			loading = false
 			
 			if error == nil {
-				generateHaptic(.success)
+				UIDevice.current.generateHaptic(.success)
 				isPresented = false
 			} else {
-				generateHaptic(.error)
+				UIDevice.current.generateHaptic(.error)
 			}
 		}
 	}
@@ -160,7 +160,7 @@ struct ComposeMessageView: View {
 				isRecipientsSheetVisible.toggle()
 			}
 			.onLongPressGesture {
-				generateHaptic(.selectionChanged)
+				UIDevice.current.generateHaptic(.selectionChanged)
 				messageRecipients.removeAll()
 			}
 			
@@ -175,10 +175,11 @@ struct ComposeMessageView: View {
 		.contentShape(Rectangle())
 		.sheet(isPresented: $isRecipientsSheetVisible) {
 			MessageRecipientsListView(isRecipientsSheetVisible: $isRecipientsSheetVisible, messageRecipients: $messageRecipients)
+				.environment(\.managedObjectContext, CoreDataModel.shared.persistentContainer.viewContext)
 		}
 		.loadingOverlay(loading)
 		.allowsHitTesting(!loading)
-		.userActivity(Self.activityIdentifier, isActive: isPresented) { activity in
+		/* .userActivity(Self.activityIdentifier, isActive: isPresented) { activity in
 			activity.isEligibleForSearch = true
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForPublicIndexing = false
@@ -217,7 +218,7 @@ struct ComposeMessageView: View {
 			if let messageRecipients = activity.userInfo?["messageRecipients"] as? [Vulcan.Recipient] {
 				self.messageRecipients = messageRecipients
 			}
-		}
+		} */
 		.onAppear {
 			// Message reply setup
 			if let message: Vulcan.Message = message {

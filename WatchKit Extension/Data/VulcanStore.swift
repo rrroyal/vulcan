@@ -17,18 +17,21 @@ final class VulcanStore: ObservableObject {
 	static let shared: VulcanStore = VulcanStore()
 	
 	/// Selected user
-	@Published public var currentUser: Vulcan.Student?
+	@Published public private(set) var currentUser: Vulcan.Student?
 	
 	/// Data
-	@Published public var schedule: [Vulcan.Schedule] = []
-	@Published public var grades: [Vulcan.SubjectGrades] = []
-	@Published public var eotGrades: [Vulcan.EndOfTermGrade] = []
-	@Published public var tasks: Vulcan.Tasks = Vulcan.Tasks(exams: [], homework: [])
-	@Published public var receivedMessages: [Vulcan.Message] = []
+	@Published public private(set) var schedule: [Vulcan.Schedule] = []
+	@Published public private(set) var grades: [Vulcan.SubjectGrades] = []
+	@Published public private(set) var eotGrades: [Vulcan.EndOfTermGrade] = []
+	@Published public private(set) var tasks: Vulcan.Tasks = Vulcan.Tasks(exams: [], homework: [])
+	@Published public private(set) var receivedMessages: [Vulcan.Message] = []
 	
 	private init() {
 		// Load data
 		let context = CoreDataModel.shared.persistentContainer.viewContext
+		
+		let dictionarySubjects: [DictionarySubject]? = try? context.fetch(DictionarySubject.fetchRequest()) as? [DictionarySubject]
+		let dictionaryEmployees: [DictionaryEmployee]? = try? context.fetch(DictionaryEmployee.fetchRequest()) as? [DictionaryEmployee]
 		
 		// Student
 		if let storedStudents = try? context.fetch(StoredStudent.fetchRequest()) as? [StoredStudent],
@@ -52,15 +55,15 @@ final class VulcanStore: ObservableObject {
 		}
 		
 		// Grades
-		/* if let storedGrades = try? context.fetch(StoredGrade.fetchRequest()) as? [StoredGrade] {
+		if let storedGrades = try? context.fetch(StoredGrade.fetchRequest()) as? [StoredGrade] {
 			let dictionary = Dictionary(grouping: storedGrades, by: \.subjectID)
 			self.grades = dictionary
 				.compactMap { subjectID, grades in
-					guard let dictionarySubject: DictionarySubject = dictionarySubjects.first(where: { $0.id == subjectID }),
+					guard let dictionarySubject: DictionarySubject = dictionarySubjects?.first(where: { $0.id == subjectID }),
 						  let subjectName: String = dictionarySubject.name,
 						  let subjectCode: String = dictionarySubject.code,
 						  let dEmployeeID = grades.first?.dEmployeeID,
-						  let dictionaryEmployee: DictionaryEmployee = dictionaryEmployees.first(where: { $0.id == dEmployeeID }),
+						  let dictionaryEmployee: DictionaryEmployee = dictionaryEmployees?.first(where: { $0.id == dEmployeeID }),
 						  let employeeName: String = dictionaryEmployee.name,
 						  let employeeSurname: String = dictionaryEmployee.surname,
 						  let employeeCode: String = dictionaryEmployee.code
@@ -73,51 +76,69 @@ final class VulcanStore: ObservableObject {
 					
 					let grades: [Vulcan.Grade] = storedGrades
 						.map { grade in
-							var grade = Grade(from: grade)
+							var grade = Vulcan.Grade(from: grade)
 							
-							if let categoryID = grade.categoryID,
-							   let dictionaryGradeCategories: [DictionaryGradeCategory] = try? context.fetch(DictionaryGradeCategory.fetchRequest()) {
-								grade.category = dictionaryGradeCategories.first(where: { $0.id == categoryID })
+							if let categoryID = grade.categoryID {
+								let fetchRequest: NSFetchRequest<DictionaryGradeCategory> = DictionaryGradeCategory.fetchRequest()
+								fetchRequest.predicate = NSPredicate(format: "id == %i", categoryID)
+								
+								if let dictionaryGradeCategories: [DictionaryGradeCategory] = try? context.fetch(fetchRequest) {
+									grade.category = dictionaryGradeCategories.first(where: { $0.id == categoryID })
+								}
 							}
 							
 							return grade
 						}
-						.sorted { $0.dateCreatedEpoch < $1.dateCreatedEpoch }
+						.sorted { ($0.dateCreated, $0.entry ?? "") < ($1.dateCreated, $1.entry ?? "") }
 						.filter { $0.subjectID == subject.id }
 					
 					return Vulcan.SubjectGrades(subject: subject, employee: employee, grades: grades)
 				}
 				.sorted { $0.subject.name < $1.subject.name }
-		} */
+		}
 		
 		// End of Term Grades
-		/* if let storedEndOfTermGrades = try? context.fetch(StoredEndOfTermGrade.fetchRequest()) as? [StoredEndOfTermGrade] {
+		if let storedEndOfTermGrades = try? context.fetch(StoredEndOfTermGrade.fetchRequest()) as? [StoredEndOfTermGrade] {
 			self.eotGrades = storedEndOfTermGrades
 				.compactMap { grade in
-					var eotGrade = EndOfTermGrade(from: grade)
-					eotGrade?.subject = dictionarySubjects.first(where: { $0.id == grade.subjectID })
+					var eotGrade = Vulcan.EndOfTermGrade(from: grade)
+					eotGrade?.subject = dictionarySubjects?.first(where: { $0.id == grade.subjectID })
 					
 					return eotGrade
 				}
 				.sorted { ($0.subject?.name ?? "") < ($1.subject?.name ?? "") }
-		} */
+		}
 		
 		// Exams
 		if let storedExams = try? context.fetch(StoredExam.fetchRequest()) as? [StoredExam] {
 			self.tasks.exams = storedExams
-				.compactMap { exam in
-					Vulcan.Exam(from: exam)
+				.compactMap { storedExam in
+					guard let exam = Vulcan.Exam(from: storedExam) else {
+						return nil
+					}
+					
+					exam.subject = dictionarySubjects?.first(where: { $0.id == exam.subjectID })
+					exam.employee = dictionaryEmployees?.first(where: { $0.id == exam.employeeID })
+					
+					return exam
 				}
-				.sorted { $0.dateEpoch < $1.dateEpoch }
+				.sorted { ($0.date, $0.subject?.name ?? "", $0.entry) < ($1.date, $1.subject?.name ?? "", $1.entry) }
 		}
 		
 		// Homework
 		if let storedHomework = try? context.fetch(StoredHomework.fetchRequest()) as? [StoredHomework] {
 			self.tasks.homework = storedHomework
-				.compactMap { task in
-					Vulcan.Homework(from: task)
+				.compactMap { storedHomework in
+					guard let homework = Vulcan.Homework(from: storedHomework) else {
+						return nil
+					}
+					
+					homework.subject = dictionarySubjects?.first(where: { $0.id == homework.subjectID })
+					homework.employee = dictionaryEmployees?.first(where: { $0.id == homework.employeeID })
+					
+					return homework
 				}
-				.sorted { $0.dateEpoch < $1.dateEpoch }
+				.sorted { ($0.date, $0.subject?.name ?? "", $0.entry) < ($1.date, $1.subject?.name ?? "", $1.entry) }
 		}
 		
 		// Messages
@@ -160,7 +181,7 @@ final class VulcanStore: ObservableObject {
 		CoreDataModel.shared.saveContext()
 	}
 	
-	/// Sets the app' schedule.
+	/// Sets the store schedule.
 	/// - Parameter schedule: Schedule received from the phone app
 	public func setSchedule(_ schedule: [Vulcan.Schedule]) {
 		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Schedule")
@@ -191,7 +212,7 @@ final class VulcanStore: ObservableObject {
 		CoreDataModel.shared.saveContext()
 	}
 	
-	/// Sets the app' grades.
+	/// Sets the store grades.
 	/// - Parameter grades: Received grades
 	public func setGrades(_ grades: [Vulcan.SubjectGrades]) {
 		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Grades")
@@ -216,7 +237,7 @@ final class VulcanStore: ObservableObject {
 		CoreDataModel.shared.saveContext()
 	}
 	
-	/// Sets the app' EOT grades.
+	/// Sets the store EOT grades.
 	/// - Parameter eotGrades: End of term grades
 	public func setEOTGrades(_ eotGrades: [Vulcan.EndOfTermGrade]) {
 		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "EOTGrades")
@@ -241,7 +262,7 @@ final class VulcanStore: ObservableObject {
 		CoreDataModel.shared.saveContext()
 	}
 	
-	/// Sets the app' tasks.
+	/// Sets the store tasks.
 	/// - Parameter tasks: Received tasks
 	public func setTasks(_ tasks: Vulcan.Tasks) {
 		let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).VulcanStore", category: "Tasks")
@@ -270,7 +291,7 @@ final class VulcanStore: ObservableObject {
 		CoreDataModel.shared.saveContext()
 	}
 	
-	/// Sets the app' messages.
+	/// Sets the store messages.
 	/// - Parameters:
 	///   - messages: Received messages with certain tag
 	///   - tag: Tag of the messages

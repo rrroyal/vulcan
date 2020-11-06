@@ -19,7 +19,7 @@ struct LicenseView: View {
 					.font(.system(.body, design: .monospaced))
 					.onTapGesture {
 						guard let url = KeychainAccessURL else { return }
-						generateHaptic(.light)
+						UIDevice.current.generateHaptic(.light)
 						UIApplication.shared.open(url)
 					}
 			}

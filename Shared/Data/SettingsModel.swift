@@ -13,7 +13,7 @@ import Vulcan
 
 /// Model containing user settings data
 final class SettingsModel: ObservableObject {
-	static public let shared: SettingsModel = SettingsModel()
+	public static let shared: SettingsModel = SettingsModel()
 	
 	// MARK: App data
 	@AppStorage(UserDefaults.AppKeys.launchedBefore.rawValue, store: .group) public var launchedBefore: Bool = false
@@ -33,7 +33,10 @@ final class SettingsModel: ObservableObject {
 	@AppStorage(UserDefaults.AppKeys.colorScheme.rawValue, store: .group) public var colorScheme: String = "Default"
 	@AppStorage(UserDefaults.AppKeys.hapticFeedback.rawValue, store: .group) public var hapticFeedback: Bool = true
 	
+	// MARK: Other
 	@Published public private(set) var latestVersion: String = Bundle.main.buildVersion
+	
+	// MARK: Private variables
 	private var cancellableSet: Set<AnyCancellable> = []
 	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Settings", category: "Settings")
 	

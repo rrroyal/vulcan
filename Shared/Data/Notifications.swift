@@ -11,8 +11,8 @@ import UserNotifications
 import os
 
 final class Notifications: NSObject, UNUserNotificationCenterDelegate {
-	public static var shared: Notifications = Notifications()
-	public var notificationCenter: UNUserNotificationCenter = UNUserNotificationCenter.current()
+	public static let shared: Notifications = Notifications()
+	public private(set) var notificationCenter: UNUserNotificationCenter = UNUserNotificationCenter.current()
 	
 	public let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Vulcan", category: "Notifications")
 	

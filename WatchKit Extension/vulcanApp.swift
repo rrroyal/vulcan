@@ -17,8 +17,8 @@ struct vulcanApp: App {
         WindowGroup {
             NavigationView {
                 ContentView()
-					.navigationTitle(Text("vulcan"))
 					.environmentObject(vulcanStore)
+					.navigationTitle(Text("vulcan"))
             }
         }
 

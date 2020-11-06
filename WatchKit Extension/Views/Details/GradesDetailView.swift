@@ -20,18 +20,19 @@ struct GradesDetailView: View {
 				Text(LocalizedStringKey(grade.category?.name ?? "No category"))
 					.font(.headline)
 				Spacer()
-				Text(grade.entry ?? "...")
+				Text((grade.entry?.isReallyEmpty ?? true) ? "..." : grade.entry ?? "...")
 			}
 			.padding(.vertical)
-			.foregroundColor(colorizeGrades ? Color("ColorSchemes/\(scheme)/\(grade.grade ?? 0)", bundle: Bundle(identifier: "Colors")) : .primary)
-			.listRowPlatterColor(colorizeGrades ? Color("ColorSchemes/\(scheme)/\(grade.grade ?? 0)", bundle: Bundle(identifier: "Colors")).opacity(0.25) : nil)
+			.coloredGrade(scheme: scheme, colorize: colorizeGrades, grade: grade.grade)
+			.coloredListBackground(scheme: scheme, colorize: colorizeGrades, grade: grade.grade)
 		}
+		.listStyle(CarouselListStyle())
 		.navigationTitle(subject.subject.name)
 	}
 }
 
-struct GradesDetailView_Previews: PreviewProvider {
+/* struct GradesDetailView_Previews: PreviewProvider {
 	static var previews: some View {
-		GradesView()
+		GradesDetailView()
 	}
-}
+} */

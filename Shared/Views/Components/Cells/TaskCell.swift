@@ -51,7 +51,7 @@ struct TaskCell: View {
 		.contextMenu {
 			// Reminders
 			Button(action: {
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				task.addToReminders(isBigType: isBigType)
 			}) {
 				Label("Add to reminders", systemImage: "bell.fill")
@@ -59,7 +59,7 @@ struct TaskCell: View {
 			
 			// Calendar
 			Button(action: {
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				task.addToCalendar(isBigType: isBigType)
 			}) {
 				Label("Add to calendar", systemImage: "calendar.badge.plus")

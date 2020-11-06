@@ -14,7 +14,7 @@ struct UsersView: View {
 	private func fetch() {
 		vulcan.getUsers() { error in
 			if error != nil {
-				generateHaptic(.error)
+				UIDevice.current.generateHaptic(.error)
 			}
 		}
 	}
@@ -22,7 +22,7 @@ struct UsersView: View {
 	var body: some View {
 		List(vulcan.users) { user in
 			Button(action: {
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				withAnimation {
 					vulcan.setUser(user, force: true)
 				}
@@ -47,7 +47,7 @@ struct UsersView: View {
 			// Refresh button
 			ToolbarItem(placement: .navigationBarTrailing) {
 				RefreshButton(loading: vulcan.dataState.users.loading, iconName: "arrow.clockwise", edge: .trailing) {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					fetch()
 				}
 			}

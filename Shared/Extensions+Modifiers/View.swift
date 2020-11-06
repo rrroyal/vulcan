@@ -23,24 +23,30 @@ extension View {
 	}
 	
 	@ViewBuilder
-	func coloredGrade(scheme: String, colorize: Bool, grade: Double?) -> some View {
-		if let double: Double = grade {
+	func coloredGrade(scheme: String, colorize: Bool, grade: Int?) -> some View {		
+		if colorize,
+		   let uiColor = UIColor(named: "ColorSchemes/\(scheme)/\(grade ?? 0)") {
 			self
-				.coloredGrade(scheme: scheme, colorize: colorize, grade: Int(double))
+				.foregroundColor(Color(uiColor))
 		} else {
 			self
 				.foregroundColor(Color.primary)
 		}
 	}
 	
-	func coloredGrade(scheme: String, colorize: Bool, grade: Int?) -> some View {		
+	@ViewBuilder
+	func coloredListBackground(scheme: String, colorize: Bool, grade: Int?) -> some View {
 		if colorize,
 		   let uiColor = UIColor(named: "ColorSchemes/\(scheme)/\(grade ?? 0)") {
-			return self
-				.foregroundColor(Color(uiColor))
+			#if os(iOS) || os(macOS)
+			self
+				.listRowBackground(Color(uiColor))
+			#elseif os(watchOS)
+			self
+				.listRowPlatterColor(Color(uiColor))
+			#endif
 		} else {
-			return self
-				.foregroundColor(Color.primary)
+			self
 		}
 	}
 	

@@ -1,0 +1,15 @@
+//
+//  UIWindow.swift
+//  vulcan
+//
+//  Created by Kacper on 06/11/2020.
+//
+
+import UIKit.UIWindow
+
+extension UIWindow {
+	open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+		super.motionEnded(motion, with: event)
+		NotificationCenter.default.post(name: .DeviceDidShakeNotification, object: event)
+	}
+}

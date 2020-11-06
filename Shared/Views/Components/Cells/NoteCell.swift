@@ -44,7 +44,7 @@ struct NoteCell: View {
 				string += "Od: \(note.employee?.name ?? "Unknown employee") \(note.employee?.surname ?? "")\n"
 				string += "Data: \(note.date.formattedString(format: "yyyy-MM-dd HH:mm:ss"))\n\n"
 				string += note.entry
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				UIPasteboard.general.string = string.trimmingCharacters(in: .whitespacesAndNewlines)
 			}) {
 				Text("Copy")

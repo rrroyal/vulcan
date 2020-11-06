@@ -319,6 +319,16 @@ public extension Vulcan {
 	// MARK: - Dictionary
 	
 	struct Employee: Identifiable, Codable, Hashable {
+		public init(id: Int, name: String, surname: String, code: String, active: Bool?, teacher: Bool?, loginID: Int?) {
+			self.id = id
+			self.name = name
+			self.surname = surname
+			self.code = code
+			self.active = active
+			self.teacher = teacher
+			self.loginID = loginID
+		}
+		
 		enum CodingKeys: String, CodingKey {
 			case id = "Id"
 			case name = "Imie"
@@ -339,6 +349,14 @@ public extension Vulcan {
 	}
 	
 	struct Subject: Identifiable, Codable, Hashable {
+		public init(id: Int, name: String, code: String, active: Bool, position: Int) {
+			self.id = id
+			self.name = name
+			self.code = code
+			self.active = active
+			self.position = position
+		}
+		
 		enum CodingKeys: String, CodingKey {
 			case id = "Id"
 			case name = "Nazwa"

@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E7C1451E25012A2100363BD3"
-               BuildableName = "Widget.appex"
+               BuildableName = "vulcan Widget.appex"
                BlueprintName = "Widget"
                ReferencedContainer = "container:vulcan.xcodeproj">
             </BuildableReference>
@@ -63,7 +63,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E7C1451E25012A2100363BD3"
-            BuildableName = "Widget.appex"
+            BuildableName = "vulcan Widget.appex"
             BlueprintName = "Widget"
             ReferencedContainer = "container:vulcan.xcodeproj">
          </BuildableReference>

@@ -39,7 +39,7 @@ struct MessagesView: View {
 		
 		vulcan.getMessages(tag: tag, isPersistent: (self.date.startOfMonth == Date().startOfMonth), from: startDate, to: endDate) { error in
 			if let error = error {
-				generateHaptic(.error)
+				UIDevice.current.generateHaptic(.error)
 				self.date = previousDate
 				AppNotifications.shared.notification = .init(error: error.localizedDescription)
 			}
@@ -49,13 +49,13 @@ struct MessagesView: View {
 	/// Removes the selected messages
 	/// - Parameter indexSet: Indexes of the messages
 	private func delete(indexSet: IndexSet) {
-		generateHaptic(.medium)
+		UIDevice.current.generateHaptic(.medium)
 		for index in indexSet {
 			if (index <= vulcan.messages.combined.filter({ $0.tag == self.tag }).count) {
 				let message: Vulcan.Message = vulcan.messages.combined.filter({ $0.tag == self.tag })[index]
 				vulcan.moveMessage(message: message, to: .deleted) { error in
 					if let error = error {
-						generateHaptic(.error)
+						UIDevice.current.generateHaptic(.error)
 						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}
@@ -130,7 +130,7 @@ struct MessagesView: View {
 	/// Button used to refresh current messages.
 	private var refreshButton: some View {
 		RefreshButton(loading: (vulcan.dataState.messages[tag]?.loading ?? false), progressValue: vulcan.dataState.messages[tag]?.progress, iconName: "arrow.clockwise", edge: .trailing) {
-			generateHaptic(.light)
+			UIDevice.current.generateHaptic(.light)
 			fetch()
 		}
 	}

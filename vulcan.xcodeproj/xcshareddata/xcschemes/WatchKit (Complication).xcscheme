@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E7C144D5250123F500363BD3"
-               BuildableName = "WatchKit.app"
+               BuildableName = "vulcan WatchKit.app"
                BlueprintName = "WatchKit"
                ReferencedContainer = "container:vulcan.xcodeproj">
             </BuildableReference>
@@ -55,16 +55,18 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "32">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/vulcan">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E7C144D5250123F500363BD3"
-            BuildableName = "WatchKit.app"
+            BuildableName = "vulcan WatchKit.app"
             BlueprintName = "WatchKit"
             ReferencedContainer = "container:vulcan.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -73,16 +75,27 @@
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
       launchAutomaticallySubstyle = "32">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/vulcan">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E7C144D5250123F500363BD3"
-            BuildableName = "WatchKit.app"
+            BuildableName = "vulcan WatchKit.app"
             BlueprintName = "WatchKit"
             ReferencedContainer = "container:vulcan.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E7C144D5250123F500363BD3"
+            BuildableName = "vulcan WatchKit.app"
+            BlueprintName = "WatchKit"
+            ReferencedContainer = "container:vulcan.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

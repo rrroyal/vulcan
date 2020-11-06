@@ -36,42 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 				
 		// Listeners
-		Vulcan.shared.$currentUser
-			.sink { user in
-				self.setShortcuts(visible: user != nil)
-				
-				let watchData: [String: Any] = [
-					"type": "Vulcan",
-					"data": [
-						"currentUser": try? JSONEncoder().encode(user)
-					]
-				]
-				
-				try? WatchSessionManager.shared.sendData(watchData)
-			}
-			.store(in: &cancellableSet)
-		
-		Vulcan.shared.scheduleDidChange
-			.sink { isPersistent in
-				if !isPersistent {
-					return
-				}
-				
-				// Widgets
-				WidgetCenter.shared.reloadTimelines(ofKind: "NextUpWidget")
-				WidgetCenter.shared.reloadTimelines(ofKind: "NowWidget")
-				
-				// Watch
-				let watchData: [String: Any] = [
-					"type": "Vulcan",
-					"data": [
-						"schedule": try? JSONEncoder().encode(Vulcan.shared.schedule)
-					]
-				]
-				
-				try? WatchSessionManager.shared.sendData(watchData)
-			}
-			.store(in: &cancellableSet)
+		self.setupListeners()
 		
 		return true
 	}
@@ -99,6 +64,96 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	// MARK: - Helper functions
+	
+	/// Sets up the variable and publisher listeners.
+	private func setupListeners() {
+		// Current user
+		Vulcan.shared.$currentUser
+			.sink { user in
+				self.setShortcuts(visible: user != nil)
+				
+				guard let user = user else {
+					return
+				}
+				
+				let watchData: [String: Any] = [
+					"type": "Vulcan",
+					"payload": [
+						"currentUser": try? JSONEncoder().encode(user)
+					]
+				]
+				
+				WatchSessionManager.shared.sendMessage(watchData)
+			}
+			.store(in: &cancellableSet)
+		
+		// Dictionary
+		Vulcan.shared.dictionaryDidChange
+			.sink {
+				let context = CoreDataModel.shared.persistentContainer.viewContext
+				var payload: [String: Any] = [:]
+				
+				if let employees: [DictionaryEmployee] = try? context.fetch(DictionaryEmployee.fetchRequest()),
+				   let encoded = try? JSONEncoder().encode(employees) {
+					payload["employees"] = encoded
+				}
+				
+				if let subjects: [DictionarySubject] = try? context.fetch(DictionarySubject.fetchRequest()),
+				   let encoded = try? JSONEncoder().encode(subjects) {
+					payload["subjects"] = encoded
+				}
+				
+				if let gradeCategories: [DictionaryGradeCategory] = try? context.fetch(DictionaryGradeCategory.fetchRequest()),
+				   let encoded = try? JSONEncoder().encode(gradeCategories) {
+					payload["gradeCategories"] = encoded
+				}
+				
+				let watchData: [String: Any] = [
+					"type": "Dictionary",
+					"payload": payload
+				]
+				
+				WatchSessionManager.shared.sendMessage(watchData)
+			}
+			.store(in: &cancellableSet)
+		
+		// Schedule
+		Vulcan.shared.scheduleDidChange
+			.sink { isPersistent in
+				if !isPersistent {
+					return
+				}
+				
+				// Widgets
+				WidgetCenter.shared.reloadTimelines(ofKind: "NextUpWidget")
+				WidgetCenter.shared.reloadTimelines(ofKind: "NowWidget")
+				
+				// Watch
+				let watchData: [String: Any] = [
+					"type": "Vulcan",
+					"payload": [
+						"schedule": try? JSONEncoder().encode(Vulcan.shared.schedule)
+					]
+				]
+				
+				WatchSessionManager.shared.sendMessage(watchData)
+			}
+			.store(in: &cancellableSet)
+		
+		// Grades
+		Vulcan.shared.$grades
+			.sink { grades in
+				let watchData: [String: Any] = [
+					"type": "Vulcan",
+					"payload": [
+						"grades": try? JSONEncoder().encode(grades)
+					]
+				]
+				
+				WatchSessionManager.shared.sendMessage(watchData)
+			}
+			.store(in: &cancellableSet)
+	}
 	
 	/// Sets the currently visible shortcuts
 	/// - Parameter visible: Should shortcuts be visible?

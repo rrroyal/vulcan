@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20B5012d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="DictionaryEmployee" representedClassName="DictionaryEmployee" syncable="YES" codeGenerationType="class">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20B5012d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DictionaryEmployee" representedClassName="DictionaryEmployee" syncable="YES">
         <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="code" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
@@ -8,8 +8,13 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="surname" attributeType="String"/>
         <attribute name="teacher" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
-    <entity name="DictionaryGradeCategory" representedClassName="DictionaryGradeCategory" syncable="YES" codeGenerationType="class">
+    <entity name="DictionaryGradeCategory" representedClassName="DictionaryGradeCategory" syncable="YES">
         <attribute name="code" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
@@ -43,7 +48,7 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="symbol" attributeType="String"/>
     </entity>
-    <entity name="DictionarySubject" representedClassName="DictionarySubject" syncable="YES" codeGenerationType="class">
+    <entity name="DictionarySubject" representedClassName="DictionarySubject" syncable="YES">
         <attribute name="active" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="code" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
@@ -206,22 +211,22 @@
         <attribute name="userRole" attributeType="String"/>
     </entity>
     <elements>
-        <element name="DictionaryEmployee" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DictionaryGradeCategory" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DictionaryLessonTime" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DictionaryNoteCategory" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DictionaryPresenceCategory" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DictionaryPresenceType" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DictionarySubject" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredEndOfTermGrade" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredEndOfTermPoints" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredExam" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredGrade" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredHomework" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredNote" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredPresence" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredScheduleEvent" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="StoredStudent" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="DictionaryEmployee" positionX="0" positionY="0" width="128" height="134"/>
+        <element name="DictionaryGradeCategory" positionX="0" positionY="0" width="128" height="74"/>
+        <element name="DictionaryLessonTime" positionX="0" positionY="0" width="128" height="89"/>
+        <element name="DictionaryNoteCategory" positionX="0" positionY="0" width="128" height="74"/>
+        <element name="DictionaryPresenceCategory" positionX="0" positionY="0" width="128" height="149"/>
+        <element name="DictionaryPresenceType" positionX="0" positionY="0" width="128" height="119"/>
+        <element name="DictionarySubject" positionX="0" positionY="0" width="128" height="104"/>
+        <element name="StoredEndOfTermGrade" positionX="0" positionY="0" width="128" height="74"/>
+        <element name="StoredEndOfTermPoints" positionX="0" positionY="0" width="128" height="74"/>
+        <element name="StoredExam" positionX="0" positionY="0" width="128" height="179"/>
+        <element name="StoredGrade" positionX="0" positionY="0" width="128" height="299"/>
+        <element name="StoredHomework" positionX="0" positionY="0" width="128" height="119"/>
+        <element name="StoredMessage" positionX="0" positionY="0" width="128" height="194"/>
+        <element name="StoredNote" positionX="0" positionY="0" width="128" height="209"/>
+        <element name="StoredPresence" positionX="0" positionY="0" width="128" height="104"/>
+        <element name="StoredScheduleEvent" positionX="0" positionY="0" width="128" height="329"/>
+        <element name="StoredStudent" positionX="0" positionY="0" width="128" height="434"/>
     </elements>
 </model>

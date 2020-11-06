@@ -87,7 +87,7 @@ struct OnboardingView: View {
 					InformationContainerView()
 					Spacer()
 					Button(action: {
-						generateHaptic(.light)
+						UIDevice.current.generateHaptic(.light)
 						withAnimation {
 							showSetup = true
 						}

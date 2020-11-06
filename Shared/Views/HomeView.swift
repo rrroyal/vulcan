@@ -237,10 +237,10 @@ struct HomeView: View {
 		.loadingOverlay(vulcan.dataState.eotGrades.loading)
 		.contentShape(Rectangle())
 		.onTapGesture(count: 2) {
-			generateHaptic(.light)
+			UIDevice.current.generateHaptic(.light)
 			vulcan.getEndOfTermGrades() { error in
 				if let error = error {
-					generateHaptic(.error)
+					UIDevice.current.generateHaptic(.error)
 					AppNotifications.shared.notification = .init(error: error.localizedDescription)
 				}
 			}
@@ -266,10 +266,10 @@ struct HomeView: View {
 		.loadingOverlay(vulcan.dataState.eotGrades.loading)
 		.contentShape(Rectangle())
 		.onTapGesture(count: 2) {
-			generateHaptic(.light)
+			UIDevice.current.generateHaptic(.light)
 			vulcan.getEndOfTermGrades() { error in
 				if let error = error {
-					generateHaptic(.error)
+					UIDevice.current.generateHaptic(.error)
 					AppNotifications.shared.notification = .init(error: error.localizedDescription)
 				}
 			}
@@ -294,10 +294,10 @@ struct HomeView: View {
 		.loadingOverlay(vulcan.dataState.notes.loading)
 		.contentShape(Rectangle())
 		.onTapGesture(count: 2) {
-			generateHaptic(.light)
+			UIDevice.current.generateHaptic(.light)
 			vulcan.getNotes() { error in
 				if let error = error {
-					generateHaptic(.error)
+					UIDevice.current.generateHaptic(.error)
 					AppNotifications.shared.notification = .init(error: error.localizedDescription)
 				}
 			}
@@ -359,7 +359,7 @@ struct HomeView: View {
 			if notesNextFetch <= Date() {
 				vulcan.getNotes() { error in
 					if let error = error {
-						generateHaptic(.error)
+						UIDevice.current.generateHaptic(.error)
 						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}
@@ -370,7 +370,7 @@ struct HomeView: View {
 			if eotGradesNextFetch <= Date() {
 				vulcan.getEndOfTermGrades() { error in
 					if let error = error {
-						generateHaptic(.error)
+						UIDevice.current.generateHaptic(.error)
 						AppNotifications.shared.notification = .init(error: error.localizedDescription)
 					}
 				}

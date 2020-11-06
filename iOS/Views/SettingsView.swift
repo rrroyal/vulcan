@@ -9,6 +9,7 @@ import SwiftUI
 import Vulcan
 import UserNotifications
 import os
+import AppNotifications
 
 /// Component used as a setting option cell.
 fileprivate struct SettingsOption: View {
@@ -116,14 +117,14 @@ struct SettingsView: View {
 		Section(header: Text("UONET+").sectionTitle()) {
 			// Log in/out
 			HStack {
-				if (vulcan.currentUser != nil) {
+				if vulcan.currentUser != nil || UserDefaults.group.bool(forKey: UserDefaults.AppKeys.isLoggedIn.rawValue) {
 					Text("SETTINGS_LOGGEDIN : \(vulcan.currentUser?.userLogin ?? "")")
 						.font(.body)
 						.bold()
 						.id("settings:loggedin:" + String(describing: vulcan.currentUser != nil))
 					Spacer()
 					Button(action: {
-						generateHaptic(.light)
+						UIDevice.current.generateHaptic(.light)
 						vulcan.logOut()
 					}) {
 						Text("Log out")
@@ -138,7 +139,7 @@ struct SettingsView: View {
 						.id("settings:notloggedin:")
 					Spacer()
 					Button(action: {
-						generateHaptic(.light)
+						UIDevice.current.generateHaptic(.light)
 						withAnimation {
 							showingSetupView = true
 						}
@@ -232,7 +233,7 @@ struct SettingsView: View {
 			if settings.latestVersion > Bundle.main.buildVersion {
 				Button(action: {
 					guard let url = URL(string: "https://github.com/rrroyal/vulcan/releases/latest") else { return }
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					openURL(url)
 				}) {
 					Text("New update available!")
@@ -243,7 +244,7 @@ struct SettingsView: View {
 			
 			// Reset button
 			Button(action: {
-				generateHaptic(.warning)
+				UIDevice.current.generateHaptic(.warning)
 				showingResetSheet = true
 			}) {
 				Text("Reset user settings")
@@ -253,7 +254,7 @@ struct SettingsView: View {
 			.actionSheet(isPresented: $showingResetSheet) {
 				ActionSheet(title: Text("SETTINGS_RESET"), message: Text("SETTINGS_RESET_TOOLTIP"), buttons: [
 					.destructive(Text("Reset")) {
-						generateHaptic(.medium)
+						UIDevice.current.generateHaptic(.medium)
 						settings.resetSettings()
 						showingResetAlert = true
 					},
@@ -265,6 +266,14 @@ struct SettingsView: View {
 			}
 		}
 		.padding(.vertical, 10)
+		.onReceive(NotificationCenter.default.publisher(for: .DeviceDidShakeNotification)) { _ in
+			UIDevice.current.generateHaptic(.warning)
+			vulcan.loggingEnabled.toggle()
+			
+			let notificationTitle = vulcan.loggingEnabled ? "Logging enabled!" : "Logging disabled."
+			let notificationSubtitle = vulcan.loggingEnabled ? "Your network requests will now be logged. Shake or restart the application to disable logging." : "App will no longer log your requests."
+			AppNotifications.shared.notification = .init(autodismisses: true, dismissable: true, style: vulcan.loggingEnabled ? .warning : .information, icon: "exclamationmark.triangle.fill", title: notificationTitle, subtitle: notificationSubtitle)
+		}
 	}
 	
 	/// App credits, displayed as the footer of the last settings section.
@@ -279,6 +288,17 @@ struct SettingsView: View {
 				Text("🚧 DEBUG 🚧")
 					.bold()
 				#endif
+				
+				if vulcan.loggingEnabled {
+					Text("Logging enabled")
+						.bold()
+						.foregroundColor(.red)
+						.padding([.top, .horizontal], 5)
+						.onTapGesture {
+							UIPasteboard.general.string = vulcan.logs.joined(separator: "\n")
+							UIDevice.current.generateHaptic(.selectionChanged)
+						}
+				}
 			}
 			.font(.callout)
 			.opacity(0.2)
@@ -287,12 +307,12 @@ struct SettingsView: View {
 		}
 		.fullWidth()
 		.padding()
-		.edgesIgnoringSafeArea(.bottom)
-		.onTapGesture {
+		// .edgesIgnoringSafeArea(.bottom)
+		/* .onTapGesture {
 			guard let url = URL(string: "https://vulcan.shameful.xyz") else { return }
-			generateHaptic(.light)
+			UIDevice.current.generateHaptic(.light)
 			openURL(url)
-		}
+		} */
 	}
 	
 	var body: some View {
@@ -312,7 +332,7 @@ struct SettingsView: View {
 }
 
 /* struct SettingsView_Previews: PreviewProvider {
-static var previews: some View {
-SettingsView()
-}
+	static var previews: some View {
+		SettingsView()
+	}
 } */

@@ -13,13 +13,13 @@ import NotificationCenter
 import os
 
 final class AppState: ObservableObject {
-	static public var shared: AppState = AppState()
+	public static let shared: AppState = AppState()
 	
 	// Private variables
 	private var cancellableSet: Set<AnyCancellable> = []
+	private let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).AppState", category: "AppState")
 	
 	// Public variables
-	public let logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).AppState", category: "AppState")
 
 	@Published public var currentTab: Tab = .home
 	

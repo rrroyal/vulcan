@@ -17,24 +17,24 @@ struct ContentView: View {
 	
 	var loggedInView: some View {
 		List {
-			NavigationLink(destination: ScheduleView()) {
+			NavigationLink(destination: ScheduleView().environmentObject(vulcanStore)) {
 				HomeCardCell(title: "Schedule", emoji: "📆")
 			}
-			NavigationLink(destination: GradesView()) {
+			NavigationLink(destination: GradesView().environmentObject(vulcanStore)) {
 				HomeCardCell(title: "Grades", emoji: "🏅")
 			}
-			NavigationLink(destination: FinalGradesView()) {
+			NavigationLink(destination: FinalGradesView().environmentObject(vulcanStore)) {
 				HomeCardCell(title: "Final Grades", emoji: "🎉")
 			}
-			NavigationLink(destination: TasksView()) {
+			NavigationLink(destination: TasksView().environmentObject(vulcanStore)) {
 				HomeCardCell(title: "Tasks", emoji: "📚")
 			}
-			NavigationLink(destination: MessagesView()) {
+			NavigationLink(destination: MessagesView().environmentObject(vulcanStore)) {
 				HomeCardCell(title: "Messages", emoji: messagesEmoji)
 			}
 			
 			#if DEBUG
-			NavigationLink(destination: DebugView()) {
+			NavigationLink(destination: DebugView().environmentObject(vulcanStore)) {
 				HomeCardCell(title: "Debug", emoji: "🤫")
 			}
 			#endif
@@ -52,7 +52,7 @@ struct ContentView: View {
 				
 				Button("Refresh") {
 					WKInterfaceDevice.current().play(.start)
-					try? WatchSessionManager.shared.sendData(["type": "Request", "requestedData": "InitData"])
+					WatchSessionManager.shared.sendMessage(["type": "DataRequest", "requestedData": "InitData"])
 				}
 			}
 		}

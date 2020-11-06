@@ -35,7 +35,7 @@ struct TasksView: View {
 		
 		vulcan.getTasks(isPersistent: self.date.startOfMonth <= Date() && self.date.endOfMonth >= Date(), from: startDate, to: endDate) { error in
 			if let error = error {
-				generateHaptic(.error)
+				UIDevice.current.generateHaptic(.error)
 				self.date = previousDate
 				AppNotifications.shared.notification = .init(error: error.localizedDescription)
 			}
@@ -101,7 +101,7 @@ struct TasksView: View {
 			// Refresh button
 			ToolbarItem(placement: .primaryAction) {
 				RefreshButton(loading: vulcan.dataState.tasks.loading, iconName: "arrow.clockwise", edge: .trailing) {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					fetch()
 				}
 			}

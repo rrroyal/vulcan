@@ -15,7 +15,7 @@ extension String {
 			return nil
 		}
 		
-		detector.enumerateMatches(in: self, options: [], range: NSMakeRange(0, self.count), using: { result, _, _ in
+		detector.enumerateMatches(in: self, range: NSMakeRange(0, self.count), using: { result, _, _ in
 			if let match = result, let url = match.url {
 				urls.append(url)
 			}

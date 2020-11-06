@@ -78,7 +78,7 @@ struct MessageCell: View {
 		.contextMenu {
 			// Reply
 			Button(action: {
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				messageToReply = message
 				isComposeSheetPresented = true
 			}) {
@@ -90,10 +90,10 @@ struct MessageCell: View {
 			// Mark as read - only visible if not read yet or message sender isn't us
 			if (!message.hasBeenRead && message.tag != .sent) {
 				Button(action: {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					Vulcan.shared.moveMessage(message: message, to: .read) { error in
 						if let error = error {
-							generateHaptic(.error)
+							UIDevice.current.generateHaptic(.error)
 							AppNotifications.shared.notification = .init(error: error.localizedDescription)
 						}
 					}
@@ -112,7 +112,7 @@ struct MessageCell: View {
 				}
 				string += "Data: \(message.dateSent.formattedString(format: "yyyy-MM-dd HH:mm:ss"))\n\n"
 				string += message.content
-				generateHaptic(.light)
+				UIDevice.current.generateHaptic(.light)
 				UIPasteboard.general.string = string.trimmingCharacters(in: .whitespacesAndNewlines)
 			}) {
 				Text("Copy")
@@ -125,10 +125,10 @@ struct MessageCell: View {
 			// Remove
 			if (message.tag == .received || message.tag == .sent) {
 				Button(action: {
-					generateHaptic(.medium)
+					UIDevice.current.generateHaptic(.medium)
 					Vulcan.shared.moveMessage(message: message, to: .deleted) { error in
 						if let error = error {
-							generateHaptic(.error)
+							UIDevice.current.generateHaptic(.error)
 							AppNotifications.shared.notification = .init(error: error.localizedDescription)
 						}
 					}

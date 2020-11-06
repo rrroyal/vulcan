@@ -74,8 +74,6 @@
 		00FACA3D24A3EDC900ACAC83 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA3A24A3EDC900ACAC83 /* OnboardingView.swift */; };
 		00FACA3E24A3EDC900ACAC83 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA3B24A3EDC900ACAC83 /* SetupView.swift */; };
 		00FACA3F24A3EDC900ACAC83 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA3B24A3EDC900ACAC83 /* SetupView.swift */; };
-		00FACA4124A3EE6F00ACAC83 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA4024A3EE6F00ACAC83 /* Global.swift */; };
-		00FACA4224A3EE6F00ACAC83 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA4024A3EE6F00ACAC83 /* Global.swift */; };
 		00FACA5224A4073A00ACAC83 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA5124A4073A00ACAC83 /* DebugView.swift */; };
 		00FACA5B24A40C2800ACAC83 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00FACA5A24A40C2700ACAC83 /* Colors.xcassets */; };
 		00FACA5C24A40C2800ACAC83 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00FACA5A24A40C2700ACAC83 /* Colors.xcassets */; };
@@ -95,6 +93,8 @@
 		E723FAC92518F02700DD8184 /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E723FAC82518F02700DD8184 /* AppIconView.swift */; };
 		E723FAD02518F05500DD8184 /* ColorSchemeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E723FACF2518F05500DD8184 /* ColorSchemeSettingsView.swift */; };
 		E723FAD72518F06C00DD8184 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E723FAD62518F06C00DD8184 /* LicenseView.swift */; };
+		E734AC3625544ADF007664D7 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E734AC3525544ADF007664D7 /* UIDevice.swift */; };
+		E734AC3725544ADF007664D7 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E734AC3525544ADF007664D7 /* UIDevice.swift */; };
 		E7360BCF25028B26006A4E17 /* VulcanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7360BCE25028B26006A4E17 /* VulcanStore.swift */; };
 		E74F54A5250924EF003F8066 /* ScheduleEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74F54A4250924EF003F8066 /* ScheduleEventCell.swift */; };
 		E7518A2B25012C9000135D55 /* NextUpEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7518A2A25012C9000135D55 /* NextUpEntryView.swift */; };
@@ -104,6 +104,10 @@
 		E75AC87E25506B5000E69CE2 /* Dark~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87A25506B5000E69CE2 /* Dark~iPad.png */; };
 		E75AC87F25506B5000E69CE2 /* Dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87B25506B5000E69CE2 /* Dark@3x.png */; };
 		E75AC88025506B5000E69CE2 /* Dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87C25506B5000E69CE2 /* Dark@2x.png */; };
+		E76AFEE925556BA7000F75CC /* NSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEE825556BA7000F75CC /* NSNotification.swift */; };
+		E76AFEEA25556BA7000F75CC /* NSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEE825556BA7000F75CC /* NSNotification.swift */; };
+		E76AFEF125556BBB000F75CC /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEF025556BBB000F75CC /* UIWindow.swift */; };
+		E76AFEF225556BBB000F75CC /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEF025556BBB000F75CC /* UIWindow.swift */; };
 		E772FEF2253C9489003F80AF /* NextUpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E772FEF1253C9489003F80AF /* NextUpProvider.swift */; };
 		E772FF17253C9786003F80AF /* NowEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E772FF16253C9786003F80AF /* NowEntryView.swift */; };
 		E7790C6A24B9275600BA4187 /* Vulcan in Frameworks */ = {isa = PBXBuildFile; productRef = E7790C6924B9275600BA4187 /* Vulcan */; };
@@ -125,7 +129,7 @@
 		E7A624B2253CA121006DEDDE /* SmallEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A624B1253CA121006DEDDE /* SmallEventCell.swift */; };
 		E7A7D38D2503A7EF00B7D4CB /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00FACA5A24A40C2700ACAC83 /* Colors.xcassets */; };
 		E7C144D9250123F500363BD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C144D8250123F500363BD3 /* Assets.xcassets */; };
-		E7C144E0250123F600363BD3 /* WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E7C144DF250123F600363BD3 /* WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E7C144E0250123F600363BD3 /* vulcan WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E7C144DF250123F600363BD3 /* vulcan WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E7C144E5250123F600363BD3 /* vulcanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C144E4250123F600363BD3 /* vulcanApp.swift */; };
 		E7C144E7250123F600363BD3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C144E6250123F600363BD3 /* ContentView.swift */; };
 		E7C144E9250123F600363BD3 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C144E8250123F600363BD3 /* NotificationController.swift */; };
@@ -133,13 +137,13 @@
 		E7C144ED250123F600363BD3 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C144EC250123F600363BD3 /* ComplicationController.swift */; };
 		E7C144EF250123F600363BD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C144EE250123F600363BD3 /* Assets.xcassets */; };
 		E7C144F2250123F600363BD3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C144F1250123F600363BD3 /* Preview Assets.xcassets */; };
-		E7C144F7250123F600363BD3 /* WatchKit.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E7C144D6250123F500363BD3 /* WatchKit.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E7C144F7250123F600363BD3 /* vulcan WatchKit.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E7C144D6250123F500363BD3 /* vulcan WatchKit.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E7C14503250124E500363BD3 /* Vulcan in Frameworks */ = {isa = PBXBuildFile; productRef = E7C14502250124E500363BD3 /* Vulcan */; };
 		E7C1452025012A2100363BD3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0088EBCA24A38D9E006F044E /* WidgetKit.framework */; platformFilter = ios; };
 		E7C1452125012A2100363BD3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0088EBCC24A38D9E006F044E /* SwiftUI.framework */; };
 		E7C1452425012A2100363BD3 /* VulcanWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C1452325012A2100363BD3 /* VulcanWidget.swift */; };
 		E7C1452725012A2200363BD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C1452625012A2200363BD3 /* Assets.xcassets */; };
-		E7C1452D25012A2200363BD3 /* Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E7C1451F25012A2100363BD3 /* Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E7C1452D25012A2200363BD3 /* vulcan Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E7C1451F25012A2100363BD3 /* vulcan Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E7EB03E725080773003043D8 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EB03E625080773003043D8 /* ExtensionDelegate.swift */; };
 		E7EB03EC25080F3A003043D8 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EB03EB25080F3A003043D8 /* WatchSessionManager.swift */; };
 		E7EB03ED25081177003043D8 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EB03EB25080F3A003043D8 /* WatchSessionManager.swift */; };
@@ -180,7 +184,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				E7C144F7250123F600363BD3 /* WatchKit.app in Embed Watch Content */,
+				E7C144F7250123F600363BD3 /* vulcan WatchKit.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,7 +195,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E7C144E0250123F600363BD3 /* WatchKit Extension.appex in Embed App Extensions */,
+				E7C144E0250123F600363BD3 /* vulcan WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,7 +206,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E7C1452D25012A2200363BD3 /* Widget.appex in Embed App Extensions */,
+				E7C1452D25012A2200363BD3 /* vulcan Widget.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,7 +257,6 @@
 		00FACA3724A3EAB300ACAC83 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		00FACA3A24A3EDC900ACAC83 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		00FACA3B24A3EDC900ACAC83 /* SetupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
-		00FACA4024A3EE6F00ACAC83 /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		00FACA5124A4073A00ACAC83 /* DebugView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		00FACA5A24A40C2700ACAC83 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		00FACA6124A40EF100ACAC83 /* GradesDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradesDetailView.swift; sourceTree = "<group>"; };
@@ -267,6 +270,7 @@
 		E723FAC82518F02700DD8184 /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
 		E723FACF2518F05500DD8184 /* ColorSchemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSchemeSettingsView.swift; sourceTree = "<group>"; };
 		E723FAD62518F06C00DD8184 /* LicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
+		E734AC3525544ADF007664D7 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		E7360BCE25028B26006A4E17 /* VulcanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VulcanStore.swift; sourceTree = "<group>"; };
 		E74A6DAB24B907A100DBB988 /* AppNotifications */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppNotifications; path = Modules/AppNotifications; sourceTree = "<group>"; };
 		E74A6DAC24B907E100DBB988 /* Vulcan */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vulcan; path = Modules/Vulcan; sourceTree = "<group>"; };
@@ -277,6 +281,8 @@
 		E75AC87A25506B5000E69CE2 /* Dark~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark~iPad.png"; sourceTree = "<group>"; };
 		E75AC87B25506B5000E69CE2 /* Dark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark@3x.png"; sourceTree = "<group>"; };
 		E75AC87C25506B5000E69CE2 /* Dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark@2x.png"; sourceTree = "<group>"; };
+		E76AFEE825556BA7000F75CC /* NSNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotification.swift; sourceTree = "<group>"; };
+		E76AFEF025556BBB000F75CC /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
 		E772FEF1253C9489003F80AF /* NextUpProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextUpProvider.swift; sourceTree = "<group>"; };
 		E772FF16253C9786003F80AF /* NowEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowEntryView.swift; sourceTree = "<group>"; };
 		E783D39C2502917200514060 /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
@@ -291,10 +297,10 @@
 		E7A62496253CA093006DEDDE /* NextEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextEventView.swift; sourceTree = "<group>"; };
 		E7A624A4253CA0E4006DEDDE /* CurrentEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentEventView.swift; sourceTree = "<group>"; };
 		E7A624B1253CA121006DEDDE /* SmallEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallEventCell.swift; sourceTree = "<group>"; };
-		E7C144D6250123F500363BD3 /* WatchKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7C144D6250123F500363BD3 /* vulcan WatchKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vulcan WatchKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7C144D8250123F500363BD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E7C144DA250123F500363BD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E7C144DF250123F600363BD3 /* WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7C144DF250123F600363BD3 /* vulcan WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vulcan WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7C144E4250123F600363BD3 /* vulcanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vulcanApp.swift; sourceTree = "<group>"; };
 		E7C144E6250123F600363BD3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E7C144E8250123F600363BD3 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
@@ -305,7 +311,7 @@
 		E7C144F3250123F600363BD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7C144F4250123F600363BD3 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		E7C145002501242D00363BD3 /* WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "WatchKit Extension.entitlements"; sourceTree = "<group>"; };
-		E7C1451F25012A2100363BD3 /* Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Widget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7C1451F25012A2100363BD3 /* vulcan Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vulcan Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7C1452325012A2100363BD3 /* VulcanWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VulcanWidget.swift; sourceTree = "<group>"; };
 		E7C1452625012A2200363BD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E7C1452825012A2200363BD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -364,7 +370,6 @@
 		0012BAAD24A4FBEB00371F23 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				00FACA4024A3EE6F00ACAC83 /* Global.swift */,
 				006AF91D24A600B500D06D21 /* Tab.swift */,
 			);
 			path = Other;
@@ -420,9 +425,9 @@
 			children = (
 				0088EB5F24A37BB7006F044E /* vulcan.app */,
 				0088EB6724A37BB7006F044E /* vulcan.app */,
-				E7C144D6250123F500363BD3 /* WatchKit.app */,
-				E7C144DF250123F600363BD3 /* WatchKit Extension.appex */,
-				E7C1451F25012A2100363BD3 /* Widget.appex */,
+				E7C144D6250123F500363BD3 /* vulcan WatchKit.app */,
+				E7C144DF250123F600363BD3 /* vulcan WatchKit Extension.appex */,
+				E7C1451F25012A2100363BD3 /* vulcan Widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -457,6 +462,9 @@
 				00FAC9DB24A3D93000ACAC83 /* Date.swift */,
 				00FAC9F024A3D9A600ACAC83 /* Bundle.swift */,
 				00FAC9ED24A3D9A600ACAC83 /* DeviceInfo.swift */,
+				E734AC3525544ADF007664D7 /* UIDevice.swift */,
+				E76AFEF025556BBB000F75CC /* UIWindow.swift */,
+				E76AFEE825556BA7000F75CC /* NSNotification.swift */,
 			);
 			path = "Extensions+Modifiers";
 			sourceTree = "<group>";
@@ -823,7 +831,7 @@
 			);
 			name = WatchKit;
 			productName = watchkit;
-			productReference = E7C144D6250123F500363BD3 /* WatchKit.app */;
+			productReference = E7C144D6250123F500363BD3 /* vulcan WatchKit.app */;
 			productType = "com.apple.product-type.application.watchapp2";
 		};
 		E7C144DE250123F600363BD3 /* WatchKit Extension */ = {
@@ -843,7 +851,7 @@
 				E7C14502250124E500363BD3 /* Vulcan */,
 			);
 			productName = "watchkit Extension";
-			productReference = E7C144DF250123F600363BD3 /* WatchKit Extension.appex */;
+			productReference = E7C144DF250123F600363BD3 /* vulcan WatchKit Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
 		E7C1451E25012A2100363BD3 /* Widget */ = {
@@ -863,7 +871,7 @@
 				E7518A3125012D5500135D55 /* Vulcan */,
 			);
 			productName = widgetExtension;
-			productReference = E7C1451F25012A2100363BD3 /* Widget.appex */;
+			productReference = E7C1451F25012A2100363BD3 /* vulcan Widget.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -995,6 +1003,7 @@
 				00FAC9F924A3D9A600ACAC83 /* View.swift in Sources */,
 				00FACA0124A3D9A600ACAC83 /* DeviceInfo.swift in Sources */,
 				00FACA5224A4073A00ACAC83 /* DebugView.swift in Sources */,
+				E734AC3625544ADF007664D7 /* UIDevice.swift in Sources */,
 				003FC5F724A4B54400001F47 /* AppDelegate.swift in Sources */,
 				E723FAD72518F06C00DD8184 /* LicenseView.swift in Sources */,
 				00FACA3C24A3EDC900ACAC83 /* OnboardingView.swift in Sources */,
@@ -1006,14 +1015,15 @@
 				E723FAD02518F05500DD8184 /* ColorSchemeSettingsView.swift in Sources */,
 				00FACA6624A40F9900ACAC83 /* GradeCell.swift in Sources */,
 				006AF91B24A6008500D06D21 /* TaskCell.swift in Sources */,
+				E76AFEE925556BA7000F75CC /* NSNotification.swift in Sources */,
 				0088EBB524A37D86006F044E /* GradesView.swift in Sources */,
 				0026DB8524A7C17D00E232E5 /* FinalGradeCell.swift in Sources */,
 				00FACA6224A40EF100ACAC83 /* GradesDetailView.swift in Sources */,
 				0026DB8B24A7C6AD00E232E5 /* CloseButton.swift in Sources */,
 				00FACA3824A3EAB300ACAC83 /* SettingsView.swift in Sources */,
 				0088EBBB24A37D9B006F044E /* TasksView.swift in Sources */,
-				00FACA4124A3EE6F00ACAC83 /* Global.swift in Sources */,
 				0088EBB824A37D92006F044E /* ScheduleView.swift in Sources */,
+				E76AFEF125556BBB000F75CC /* UIWindow.swift in Sources */,
 				00FACA6D24A41D5B00ACAC83 /* AppTabNavigation.swift in Sources */,
 				0088EB6D24A37BB7006F044E /* ContentView.swift in Sources */,
 				006AF91E24A600B500D06D21 /* Tab.swift in Sources */,
@@ -1037,6 +1047,7 @@
 				0088EBAA24A37C50006F044E /* String.swift in Sources */,
 				00FAC9C924A3D85400ACAC83 /* SettingsModel.swift in Sources */,
 				0088EBBF24A37DA2006F044E /* MessagesView.swift in Sources */,
+				E76AFEEA25556BA7000F75CC /* NSNotification.swift in Sources */,
 				00FACA2724A3E2E600ACAC83 /* MacSettingsView.swift in Sources */,
 				0088EBB624A37D86006F044E /* GradesView.swift in Sources */,
 				00FACA0E24A3D9A600ACAC83 /* Bundle.swift in Sources */,
@@ -1049,11 +1060,13 @@
 				00FACA6724A40F9900ACAC83 /* GradeCell.swift in Sources */,
 				00FACA3F24A3EDC900ACAC83 /* SetupView.swift in Sources */,
 				0026DB8C24A7C6AD00E232E5 /* CloseButton.swift in Sources */,
+				E734AC3725544ADF007664D7 /* UIDevice.swift in Sources */,
 				0012BAA224A4C16B00371F23 /* RefreshButton.swift in Sources */,
 				0088EBB924A37D92006F044E /* ScheduleView.swift in Sources */,
 				00FACA6324A40EF100ACAC83 /* GradesDetailView.swift in Sources */,
 				00FACA2024A3DC0600ACAC83 /* DeviceInfo.swift in Sources */,
 				00FACA3D24A3EDC900ACAC83 /* OnboardingView.swift in Sources */,
+				E76AFEF225556BBB000F75CC /* UIWindow.swift in Sources */,
 				0088EB6E24A37BB7006F044E /* ContentView.swift in Sources */,
 				00FACA6E24A41D5B00ACAC83 /* AppTabNavigation.swift in Sources */,
 				006AF91324A5F90F00D06D21 /* ScheduleEventCell.swift in Sources */,
@@ -1064,7 +1077,6 @@
 				0088EBB324A37CD2006F044E /* HomeView.swift in Sources */,
 				00708A6C24B743B1009FB4DD /* Notifications.swift in Sources */,
 				0088EB6C24A37BB7006F044E /* vulcanApp.swift in Sources */,
-				00FACA4224A3EE6F00ACAC83 /* Global.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1299,7 +1311,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/vulcan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1328,7 +1340,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/vulcan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1359,7 +1371,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1386,7 +1398,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1411,13 +1423,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				IBSC_MODULE = watchkit_Extension;
 				INFOPLIST_FILE = watchkit/Info.plist;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan.watchkit;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "vulcan $(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1433,13 +1445,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				IBSC_MODULE = watchkit_Extension;
 				INFOPLIST_FILE = watchkit/Info.plist;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan.watchkit;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "vulcan $(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1455,7 +1467,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "WatchKit Extension/WatchKit Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_PREVIEWS = YES;
@@ -1467,7 +1479,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan.watchkit.extension;
-				PRODUCT_NAME = "${TARGET_NAME}";
+				PRODUCT_NAME = "vulcan ${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1482,7 +1494,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "WatchKit Extension/WatchKit Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				ENABLE_PREVIEWS = YES;
@@ -1494,7 +1506,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan.watchkit.extension;
-				PRODUCT_NAME = "${TARGET_NAME}";
+				PRODUCT_NAME = "vulcan ${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1511,7 +1523,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = Widget/Widget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				INFOPLIST_FILE = Widget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1521,7 +1533,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan.widget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "vulcan $(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
@@ -1537,7 +1549,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = Widget/Widget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 3P384S9N87;
 				INFOPLIST_FILE = Widget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1547,7 +1559,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.niepostek.vulcan.widget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "vulcan $(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;

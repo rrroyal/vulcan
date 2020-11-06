@@ -19,11 +19,10 @@ struct DebugView: View {
 	
 	@State private var pendingTaskRequests: [BGTaskRequest] = []
 	private let logger: Logger = Logger(subsystem: "\(Bundle.main.bundleIdentifier!).Debug", category: "Debug")
-		
+	
 	private var logsView: some View {
-		List([""], id: \.self) { entry in
-			Text(entry.isEmpty ? "<empty>" : entry)
-				.foregroundColor(entry.isEmpty ? .secondary : .primary)
+		List(vulcan.logs, id: \.self) { entry in
+			Text(entry)
 				.multilineTextAlignment(.leading)
 				.lineLimit(nil)
 				.font(.system(.body, design: .monospaced))
@@ -33,25 +32,37 @@ struct DebugView: View {
 	
 	var body: some View {
 		Form {
+			Section(header: Text("General").textCase(.none)) {
+				NavigationLink(destination: logsView) {
+					Text("Logs")
+						.font(.body)
+						.bold()
+				}
+			}
+			
 			// VulcanAPI
 			Section(header: Text("VulcanAPI").textCase(.none)) {
 				// Reset dictionary
 				Button(action: {
 					logger.debug("Resetting dictionary!")
 					vulcan.getDictionary(force: true)
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 				}) {
 					Text("Reset dictionary")
 						.foregroundColor(.red)
 				}
 				
-				NavigationLink(destination: logsView) {
-					Text("Logs")
-						.font(.body)
-						.bold()
+				Button("Update applicationContext") {
+					UIDevice.current.generateHaptic(.light)
+					WatchSessionManager.shared.updateApplicationContext(user: vulcan.currentUser, schedule: vulcan.schedule, grades: vulcan.grades, eotGrades: vulcan.eotGrades, receivedMessages: vulcan.messages[.received] ?? [])
 				}
 				
-				Text(String(describing: Vulcan.shared.currentUser))
+				if let user = vulcan.currentUser {
+					Text(String(describing: user))
+				} else {
+					Text("No user")
+						.foregroundColor(.secondary)
+				}
 			}
 			.padding(.vertical, 10)
 			
@@ -68,7 +79,7 @@ struct DebugView: View {
 				Button(action: {
 					logger.debug("Resetting CoreData DB!")
 					CoreDataModel.shared.clearDatabase()
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 				}) {
 					Text("Reset CoreData DB")
 						.foregroundColor(.red)
@@ -85,7 +96,7 @@ struct DebugView: View {
 					BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { items in
 						pendingTaskRequests = items
 					})
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 				}) {
 					Text("Register refresh background task")
 				}
@@ -97,7 +108,7 @@ struct DebugView: View {
 					BGTaskScheduler.shared.getPendingTaskRequests(completionHandler: { items in
 						pendingTaskRequests = items
 					})
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 				}) {
 					Text("Cancel all tasks")
 				}
@@ -115,7 +126,7 @@ struct DebugView: View {
 				Button(action: {
 					logger.debug("Reloading widget timelines.")
 					WidgetCenter.shared.reloadAllTimelines()
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 				}) {
 					Text("Reload all timelines")
 				}

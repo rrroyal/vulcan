@@ -29,6 +29,8 @@ public struct NotificationOverlay: View {
 	@State private var isExpanded: Bool = false
 	@State private var translation = CGSize.zero
 	
+	let animation: Animation = .interpolatingSpring(mass: 0.5, stiffness: 45, damping: 45, initialVelocity: 15)
+	
 	private var yOffset: CGFloat {
 		if translation.height > 0 {
 			return translation.height * 0.075
@@ -74,6 +76,8 @@ public struct NotificationOverlay: View {
 							.foregroundColor(notification.primaryColor)
 					}
 					.padding(.horizontal, 5)
+					.transition(.slide)
+					.animation(animation)
 					
 					Spacer()
 				}
@@ -123,7 +127,7 @@ public struct NotificationOverlay: View {
 			}
 			.shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 0)
 			.offset(x: 0, y: appNotifications.isPresented ? yOffset : -200)
-			.animation(.interpolatingSpring(mass: 0.5, stiffness: 45, damping: 45, initialVelocity: 15))
+			.animation(animation)
 			.transition(.asymmetric(insertion: .move(edge: .top), removal: .offset(x: 0, y: -200)))
 		}
 	}

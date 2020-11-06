@@ -36,7 +36,7 @@ struct ScheduleView: View {
 		
 		vulcan.getSchedule(isPersistent: startDate >= Date().startOfWeek ?? Date(), from: startDate, to: endDate) { error in
 			if let error = error {
-				generateHaptic(.error)
+				UIDevice.current.generateHaptic(.error)
 				self.date = previousDate
 				AppNotifications.shared.notification = .init(error: error.localizedDescription)
 			}
@@ -88,7 +88,7 @@ struct ScheduleView: View {
 			// Refresh button
 			ToolbarItem(placement: .primaryAction) {
 				RefreshButton(loading: vulcan.dataState.schedule.loading, iconName: "arrow.clockwise", edge: .trailing) {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					fetch()
 				}
 			}

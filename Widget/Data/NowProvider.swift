@@ -43,13 +43,13 @@ struct NowProvider: TimelineProvider {
 					}
 					
 					let employeeFetchRequest: NSFetchRequest = DictionaryEmployee.fetchRequest()
-					employeeFetchRequest.predicate = NSPredicate(format: "id == %d", event.employeeID)
+					employeeFetchRequest.predicate = NSPredicate(format: "id == %i", event.employeeID)
 					if let employee: DictionaryEmployee = (try? context.fetch(employeeFetchRequest))?.first {
 						event.employee = employee
 					}
 					
 					let timeFetchRequest: NSFetchRequest = DictionaryLessonTime.fetchRequest()
-					timeFetchRequest.predicate = NSPredicate(format: "id == %d", event.lessonTimeID)
+					timeFetchRequest.predicate = NSPredicate(format: "id == %i", event.lessonTimeID)
 					guard let time: DictionaryLessonTime = (try? context.fetch(timeFetchRequest))?.first else {
 						return nil
 					}

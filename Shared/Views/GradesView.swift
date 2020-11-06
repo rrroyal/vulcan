@@ -35,7 +35,7 @@ struct GradesView: View {
 		}
 		
 		if let error = requestsError {
-			generateHaptic(.error)
+			UIDevice.current.generateHaptic(.error)
 			AppNotifications.shared.notification = .init(error: error.localizedDescription)
 		}
 	}
@@ -81,7 +81,7 @@ struct GradesView: View {
 			// Refresh button
 			ToolbarItem(placement: .primaryAction) {
 				RefreshButton(loading: vulcan.dataState.grades.loading || vulcan.dataState.eotGrades.loading, iconName: "arrow.clockwise", edge: .trailing) {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					fetch()
 				}
 			}

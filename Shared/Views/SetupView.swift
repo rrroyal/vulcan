@@ -55,7 +55,7 @@ struct SetupView: View {
 					let string = token
 					token = token.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
 					if (token != string) {
-						generateHaptic(.light)
+						UIDevice.current.generateHaptic(.light)
 					}
 				})
 				.padding(12)
@@ -72,7 +72,7 @@ struct SetupView: View {
 					let string = symbol
 					symbol = symbol.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 					if (symbol != string) {
-						generateHaptic(.light)
+						UIDevice.current.generateHaptic(.light)
 					}
 				})
 				.padding(12)
@@ -100,16 +100,16 @@ struct SetupView: View {
 					symbol.isReallyEmpty ||
 					pin.isReallyEmpty
 				) {
-					generateHaptic(.error)
+					UIDevice.current.generateHaptic(.error)
 					setButton(color: Color(UIColor.systemRed), text: "Fill all fields!")
 				} else {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					setButton(text: "Logging in...")
 					Vulcan.shared.login(token: token.trimmingCharacters(in: .whitespacesAndNewlines), symbol: symbol.trimmingCharacters(in: .whitespacesAndNewlines), pin: Int(pin) ?? 0) { success, error in
 						isParentPresented = !success
 						if (!success) {
 							setButton(color: Color(UIColor.systemRed), text: error?.localizedDescription ?? "Error logging in")
-							generateHaptic(.error)
+							UIDevice.current.generateHaptic(.error)
 						}
 					}
 				}

@@ -20,7 +20,7 @@ struct GradesDetailView: View {
 	
 	private var average: String? {
 		let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StoredEndOfTermPoints.fetchRequest()
-		fetchRequest.predicate = NSPredicate(format: "subjectID == %d", subject.id)
+		fetchRequest.predicate = NSPredicate(format: "subjectID == %i", subject.id)
 		
 		if let fetchResults: [StoredEndOfTermPoints] = try? CoreDataModel.shared.persistentContainer.viewContext.fetch(fetchRequest) as? [StoredEndOfTermPoints],
 		   let entity = fetchResults.first {
@@ -46,7 +46,7 @@ struct GradesDetailView: View {
 		}
 		
 		if shouldProvideErrorFeedback {
-			generateHaptic(.error)
+			UIDevice.current.generateHaptic(.error)
 		}
 	}
 	
@@ -123,7 +123,7 @@ struct GradesDetailView: View {
 			// Refresh button
 			ToolbarItem(placement: .navigationBarTrailing) {
 				RefreshButton(loading: vulcan.dataState.grades.loading || vulcan.dataState.eotGrades.loading, iconName: "arrow.clockwise", edge: .trailing) {
-					generateHaptic(.light)
+					UIDevice.current.generateHaptic(.light)
 					fetch()
 				}
 			}
