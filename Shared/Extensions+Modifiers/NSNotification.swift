@@ -8,5 +8,5 @@
 import Foundation
 
 extension NSNotification.Name {
-	public static let DeviceDidShakeNotification = NSNotification.Name("DeviceDidShakeNotification")
+	public static let DeviceDidShake = NSNotification.Name("DeviceDidShake")
 }

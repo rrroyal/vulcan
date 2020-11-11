@@ -10,23 +10,29 @@ import LinkPresentation
 
 /// LPLinkView wrapper
 struct LinkPreview: UIViewRepresentable {
-	var url: URL
+	let url: URL
+	
+	let lpLinkView: LPLinkView
+	
+	public init(url: URL) {
+		self.url = url
+		self.lpLinkView = LPLinkView(url: url)
+	}
 	
 	func makeUIView(context: Context) -> LPLinkView {
-		let view = LPLinkView(url: url)
 		let provider = LPMetadataProvider()
 		
 		provider.startFetchingMetadata(for: url) { metadata, error in
 			if let metadata = metadata {
 				DispatchQueue.main.async {
-					view.metadata = metadata
-					view.sizeToFit()
+					self.lpLinkView.metadata = metadata
+					self.lpLinkView.sizeToFit()
 				}
 			}
 		}
 		
-		return view
+		return lpLinkView
 	}
 	
-	func updateUIView(_ uiView: LPLinkView, context: UIViewRepresentableContext<LinkPreview>) {	}
+	func updateUIView(_ uiView: LPLinkView, context: UIViewRepresentableContext<LinkPreview>) { }
 }

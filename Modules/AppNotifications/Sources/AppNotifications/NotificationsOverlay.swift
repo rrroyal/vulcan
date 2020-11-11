@@ -54,61 +54,59 @@ public struct NotificationOverlay: View {
 	
 	@ViewBuilder var notificationContent: some View {
 		if let notification = appNotifications.notification {
-			VStack(alignment: .leading) {
+			VStack(alignment: .leading, spacing: 5) {
 				HStack {
 					Image(systemName: notification.icon)
 						.font(.system(size: 26, weight: .bold, design: .default))
-						.id(notification.icon)
 						.foregroundColor(notification.primaryColor)
+						.id(notification.icon)
 					
 					VStack(alignment: .leading) {
 						Text(LocalizedStringKey(notification.title))
 							.font(.headline)
 							.lineLimit(2)
-							.id(notification.title)
 							.foregroundColor(notification.primaryColor)
+							.id(notification.title)
 						
 						Text(LocalizedStringKey(notification.subtitle))
 							.font(.headline)
 							.opacity(0.5)
 							.lineLimit(3)
-							.id(notification.subtitle)
 							.foregroundColor(notification.primaryColor)
+							.id(notification.subtitle)
 					}
 					.padding(.horizontal, 5)
-					.transition(.slide)
-					.animation(animation)
-					
-					Spacer()
 				}
 				
 				if let expandedText = notification.expandedText,
 				   isExpanded {
-					VStack {
-						Text(LocalizedStringKey(expandedText))
-							.font(.headline)
-							.multilineTextAlignment(.leading)
-							.lineLimit(nil)
-							.foregroundColor(notification.primaryColor)
-							.opacity(0.75)
-					}
-					.transition(.opacity)
-					.padding(.top, 5)
-					.onAppear {
-						appNotifications.cancelTimer()
-					}
-					.onDisappear {
-						if notification.autodismisses {
-							appNotifications.instantiateTimer()
+					Text(LocalizedStringKey(expandedText))
+						.font(.headline)
+						.multilineTextAlignment(.leading)
+						.lineLimit(nil)
+						.foregroundColor(notification.primaryColor)
+						.opacity(0.75)
+						.padding(.top, 5)
+						.onAppear {
+							appNotifications.cancelTimer()
 						}
-					}
+						.onDisappear {
+							if notification.autodismisses {
+								appNotifications.instantiateTimer()
+							}
+						}
+						.transition(.opacity)
+						.id(expandedText)
 				}
 			}
+			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
 			.padding()
 			.padding(.vertical, 5)
 			.background(notification.backgroundColor)
-			.background(Color(UIColor.systemBackground))
+			.background(VisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial)))
+			// .background(Color(UIColor.systemBackground))
 			.mask(RoundedRectangle(cornerRadius: 14, style: .circular))
+			.contentShape(RoundedRectangle(cornerRadius: 14, style: .circular))
 			.gesture(notificationDragGesture)
 			.onTapGesture {
 				if notification.expandedText != nil {
@@ -129,6 +127,7 @@ public struct NotificationOverlay: View {
 			.offset(x: 0, y: appNotifications.isPresented ? yOffset : -200)
 			.animation(animation)
 			.transition(.asymmetric(insertion: .move(edge: .top), removal: .offset(x: 0, y: -200)))
+			// .id(notification.id)
 		}
 	}
 	

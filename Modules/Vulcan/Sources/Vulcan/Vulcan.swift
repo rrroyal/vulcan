@@ -47,11 +47,13 @@ public final class Vulcan: ObservableObject {
 	}
 	
 	/// Logs
-	@Published public private(set) var logs: [String] = []
+	public private(set) var logs: [String] = []
 	@Published public var loggingEnabled: Bool = false
 	
 	/// Notifiers
 	public let scheduleDidChange: PassthroughSubject = PassthroughSubject<Bool, Never>()
+	public let tasksDidChange: PassthroughSubject = PassthroughSubject<Bool, Never>()
+	public let messagesDidChange: PassthroughSubject = PassthroughSubject<Bool, Never>()
 	public let dictionaryDidChange: PassthroughSubject = PassthroughSubject<Void, Never>()
 	
 	/// Data state
@@ -461,6 +463,9 @@ public final class Vulcan: ObservableObject {
 				if (json["IsError"] as? Bool ?? true) {
 					logger.error("IsError!")
 					logger.debug("\(json)")
+					if self.loggingEnabled {
+						self.logs.append(String(describing: json))
+					}
 					throw APIError.error(reason: json["Message"] as? String ?? "Unknown")
 				}
 				
@@ -476,6 +481,9 @@ public final class Vulcan: ObservableObject {
 						self.getUsers()
 					case .failure(let error):
 						logger.error("Error logging in: \(error.localizedDescription)")
+						if self.loggingEnabled {
+							self.logs.append(String(describing: error))
+						}
 						self.symbol = nil
 						completionHandler(false, error)
 						self.logOut()
@@ -514,6 +522,9 @@ public final class Vulcan: ObservableObject {
 			logger.debug("Done!")
 		} catch {
 			logger.error("Error removing Keychain: \(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 		}
 		
 		// Variables
@@ -590,6 +601,9 @@ public final class Vulcan: ObservableObject {
 							self.dictionaryDidChange.send()
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 					}
 				}, receiveValue: { dictionary in
 					guard let dictionary: [String: Any] = dictionary else {
@@ -610,6 +624,9 @@ public final class Vulcan: ObservableObject {
 							_ = try decoder.decode([DictionaryEmployee].self, from: data)
 						} catch {
 							logger.error("Error executing request: \(String(describing: error))")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 					}
 					
@@ -621,6 +638,9 @@ public final class Vulcan: ObservableObject {
 							_ = try decoder.decode([DictionarySubject].self, from: data)
 						} catch {
 							logger.error("Error executing request: \(String(describing: error))")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 					}
 					
@@ -635,6 +655,9 @@ public final class Vulcan: ObservableObject {
 								try context.execute(deleteRequest)
 							} catch {
 								logger.error("Error executing request: \(error.localizedDescription)")
+								if self.loggingEnabled {
+									self.logs.append(String(describing: error))
+								}
 							}
 							
 							for item in decoded {
@@ -655,6 +678,9 @@ public final class Vulcan: ObservableObject {
 							_ = try decoder.decode([DictionaryGradeCategory].self, from: data)
 						} catch {
 							logger.error("Error executing request: \(String(describing: error))")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 					}
 					
@@ -669,6 +695,9 @@ public final class Vulcan: ObservableObject {
 								try context.execute(deleteRequest)
 							} catch {
 								logger.error("Error executing request: \(error.localizedDescription)")
+								if self.loggingEnabled {
+									self.logs.append(String(describing: error))
+								}
 							}
 							
 							for item in decoded {
@@ -691,6 +720,9 @@ public final class Vulcan: ObservableObject {
 								try context.execute(deleteRequest)
 							} catch {
 								logger.error("Error executing request: \(error.localizedDescription)")
+								if self.loggingEnabled {
+									self.logs.append(String(describing: error))
+								}
 							}
 							
 							for item in decoded {
@@ -718,6 +750,9 @@ public final class Vulcan: ObservableObject {
 								try context.execute(deleteRequest)
 							} catch {
 								logger.error("Error executing request: \(error.localizedDescription)")
+								if self.loggingEnabled {
+									self.logs.append(String(describing: error))
+								}
 							}
 							
 							for item in decoded {
@@ -739,6 +774,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.dictionary.loading = false
 		}
 	}
@@ -791,6 +829,9 @@ public final class Vulcan: ObservableObject {
 							}
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { users in
@@ -804,6 +845,9 @@ public final class Vulcan: ObservableObject {
 						try context.execute(deleteRequest)
 					} catch {
 						logger.error("Error executing request: \(error.localizedDescription)")
+						if self.loggingEnabled {
+							self.logs.append(String(describing: error))
+						}
 					}
 					
 					for user in users {
@@ -815,6 +859,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.users.loading = false
 			completionHandler(error)
 		}
@@ -893,6 +940,9 @@ public final class Vulcan: ObservableObject {
 							}
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { events in
@@ -961,6 +1011,9 @@ public final class Vulcan: ObservableObject {
 							try context.execute(NSBatchDeleteRequest(fetchRequest: fetchRequest))
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 						
 						for event in tempSchedule.flatMap(\.events) {
@@ -973,6 +1026,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.schedule.loading = false
 			completionHandler(error)
 		}
@@ -1036,6 +1092,9 @@ public final class Vulcan: ObservableObject {
 							completionHandler(nil)
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { grades in
@@ -1099,6 +1158,9 @@ public final class Vulcan: ObservableObject {
 							try context.execute(deleteRequest)
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 						
 						for grade in grades {
@@ -1111,6 +1173,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.grades.loading = false
 			completionHandler(error)
 		}
@@ -1186,6 +1251,9 @@ public final class Vulcan: ObservableObject {
 							completionHandler(nil)
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { expected, final, points in
@@ -1224,6 +1292,9 @@ public final class Vulcan: ObservableObject {
 						try context.execute(NSBatchDeleteRequest(fetchRequest: StoredEndOfTermPoints.fetchRequest()))
 					} catch {
 						logger.error("Error executing request: \(error.localizedDescription)")
+						if self.loggingEnabled {
+							self.logs.append(String(describing: error))
+						}
 					}
 					
 					for grade in self.eotGrades {
@@ -1239,6 +1310,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.eotGrades.loading = false
 			completionHandler(error)
 		}
@@ -1301,6 +1375,9 @@ public final class Vulcan: ObservableObject {
 							completionHandler(nil)
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { notes in
@@ -1332,6 +1409,9 @@ public final class Vulcan: ObservableObject {
 						try context.execute(deleteRequest)
 					} catch {
 						logger.error("Error executing request: \(error.localizedDescription)")
+						if self.loggingEnabled {
+							self.logs.append(String(describing: error))
+						}
 					}
 					
 					for note in notes {
@@ -1343,6 +1423,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.notes.loading = false
 			completionHandler(error)
 		}
@@ -1428,6 +1511,7 @@ public final class Vulcan: ObservableObject {
 						case .finished:
 							self.tasks = tempTasks
 							self.dataState.tasks.lastFetched = Date()
+							self.tasksDidChange.send(isPersistent)
 							completionHandler(nil)
 							
 							if self.ud.bool(forKey: UserDefaults.AppKeys.enableTaskNotifications.rawValue) {
@@ -1445,6 +1529,9 @@ public final class Vulcan: ObservableObject {
 							}
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { exams, homework in
@@ -1492,6 +1579,9 @@ public final class Vulcan: ObservableObject {
 							try context.execute(NSBatchDeleteRequest(fetchRequest: homeworkFetchRequest))
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 						
 						for exam in exams {
@@ -1508,6 +1598,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.tasks.loading = false
 			completionHandler(error)
 		}
@@ -1581,9 +1674,13 @@ public final class Vulcan: ObservableObject {
 						case .finished:
 							self.messages[tag] = tempMessages
 							self.dataState.messages[tag]?.lastFetched = Date()
+							self.messagesDidChange.send(isPersistent)
 							completionHandler(nil)
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { messages in
@@ -1617,6 +1714,9 @@ public final class Vulcan: ObservableObject {
 							try context.execute(NSBatchDeleteRequest(fetchRequest: fetchRequest))
 						} catch {
 							logger.error("Error executing request: \(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 						}
 						
 						for message in messages {
@@ -1629,6 +1729,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			self.dataState.messages[tag]?.loading = false
 			completionHandler(error)
 		}
@@ -1684,6 +1787,9 @@ public final class Vulcan: ObservableObject {
 							completionHandler(nil)
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { response in
@@ -1709,6 +1815,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			completionHandler(error)
 		}
 	}
@@ -1771,6 +1880,9 @@ public final class Vulcan: ObservableObject {
 							completionHandler(nil)
 						case .failure(let error):
 							logger.error("\(error.localizedDescription)")
+							if self.loggingEnabled {
+								self.logs.append(String(describing: error))
+							}
 							completionHandler(error)
 					}
 				}, receiveValue: { response in
@@ -1782,6 +1894,9 @@ public final class Vulcan: ObservableObject {
 				.store(in: &cancellableSet)
 		} catch {
 			logger.error("\(error.localizedDescription)")
+			if self.loggingEnabled {
+				self.logs.append(String(describing: error))
+			}
 			completionHandler(error)
 		}
 	}
@@ -1848,6 +1963,9 @@ public final class Vulcan: ObservableObject {
 				}
 			} catch {
 				logger.error("Error importing certificate: \(error.localizedDescription)")
+				if self.loggingEnabled {
+					self.logs.append(String(describing: error))
+				}
 			}
 		}
 		
@@ -1856,7 +1974,7 @@ public final class Vulcan: ObservableObject {
 			.mapError { $0 as Error }
 			.map {
 				if self.loggingEnabled {
-					self.logs.append($0.data.base64EncodedString())
+					self.logs.append("\"\(request.url?.absoluteString ?? "<NO_URL>")\": \($0.data.base64EncodedString())")
 				}
 				
 				return $0.data

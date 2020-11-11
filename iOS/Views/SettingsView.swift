@@ -266,13 +266,13 @@ struct SettingsView: View {
 			}
 		}
 		.padding(.vertical, 10)
-		.onReceive(NotificationCenter.default.publisher(for: .DeviceDidShakeNotification)) { _ in
+		.onReceive(NotificationCenter.default.publisher(for: .DeviceDidShake)) { _ in
 			UIDevice.current.generateHaptic(.warning)
 			vulcan.loggingEnabled.toggle()
 			
 			let notificationTitle = vulcan.loggingEnabled ? "Logging enabled!" : "Logging disabled."
-			let notificationSubtitle = vulcan.loggingEnabled ? "Your network requests will now be logged. Shake or restart the application to disable logging." : "App will no longer log your requests."
-			AppNotifications.shared.notification = .init(autodismisses: true, dismissable: true, style: vulcan.loggingEnabled ? .warning : .information, icon: "exclamationmark.triangle.fill", title: notificationTitle, subtitle: notificationSubtitle)
+			let notificationSubtitle = vulcan.loggingEnabled ? "Your network requests will now be logged. Shake again or restart the application to disable logging." : "App will no longer log your requests."
+			AppNotifications.shared.notification = .init(autodismisses: true, dismissable: true, style: vulcan.loggingEnabled ? .warning : .information, icon: "text.alignleft", title: notificationTitle, subtitle: notificationSubtitle)
 		}
 	}
 	

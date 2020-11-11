@@ -69,8 +69,8 @@ extension View {
 	}
 	
 	/// Makes the view full width.
-	func fullWidth() -> some View {
-		return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+	func fullWidth(alignment: Alignment = .center) -> some View {
+		return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: alignment)
 	}
 }
 

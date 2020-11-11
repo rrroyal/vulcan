@@ -87,6 +87,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			.store(in: &cancellableSet)
 		
+		// Grades
+		Vulcan.shared.$grades
+			.sink { grades in
+				let watchData: [String: Any] = [
+					"type": "Vulcan",
+					"payload": [
+						"grades": try? JSONEncoder().encode(grades)
+					]
+				]
+				
+				WatchSessionManager.shared.sendMessage(watchData)
+			}
+			.store(in: &cancellableSet)
+		
 		// Dictionary
 		Vulcan.shared.dictionaryDidChange
 			.sink {
@@ -140,13 +154,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			.store(in: &cancellableSet)
 		
-		// Grades
-		Vulcan.shared.$grades
-			.sink { grades in
+		// Tasks
+		Vulcan.shared.tasksDidChange
+			.sink { isPersistent in
+				if !isPersistent {
+					return
+				}
+				
+				// Watch
 				let watchData: [String: Any] = [
 					"type": "Vulcan",
 					"payload": [
-						"grades": try? JSONEncoder().encode(grades)
+						"tasks": try? JSONEncoder().encode(Vulcan.shared.tasks)
+					]
+				]
+				
+				WatchSessionManager.shared.sendMessage(watchData)
+			}
+			.store(in: &cancellableSet)
+		
+		// Messages
+		Vulcan.shared.messagesDidChange
+			.sink { isPersistent in
+				if !isPersistent {
+					return
+				}
+				
+				// Watch
+				let watchData: [String: Any] = [
+					"type": "Vulcan",
+					"payload": [
+						"receivedMessages": try? JSONEncoder().encode(Vulcan.shared.messages[.received] ?? [])
 					]
 				]
 				
