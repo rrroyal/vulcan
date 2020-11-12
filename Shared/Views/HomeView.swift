@@ -330,7 +330,7 @@ struct HomeView: View {
 		}
 		.listStyle(InsetGroupedListStyle())
 		.sheet(isPresented: $isComposeSheetPresented, content: { ComposeMessageView(isPresented: $isComposeSheetPresented, message: $messageToReply) })
-		.userActivity(Self.activityIdentifier) { activity in
+		/* .userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForPublicIndexing = true
@@ -348,7 +348,7 @@ struct HomeView: View {
 			attributes.contentDescription = "Your summary for today".localized
 			
 			activity.contentAttributeSet = attributes
-		}
+		} */
 		.onAppear {
 			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return

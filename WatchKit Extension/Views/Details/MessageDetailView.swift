@@ -11,6 +11,8 @@ import Vulcan
 struct MessageDetailView: View {
 	let message: Vulcan.Message
 	
+	public static let activityIdentifier: String = "\(Bundle.main.bundleIdentifier ?? "vulcan").MessageDetailActivity"
+	
     var body: some View {
 		ScrollView {
 			VStack(alignment: .leading) {
@@ -33,6 +35,18 @@ struct MessageDetailView: View {
 			Text(message.content)
 		}
 		.navigationTitle(message.title)
+		/* .userActivity(Self.activityIdentifier) { activity in
+			activity.isEligibleForSearch = false
+			activity.isEligibleForPrediction = false
+			activity.isEligibleForPublicIndexing = false
+			activity.isEligibleForHandoff = true
+			activity.title = message.title
+			activity.persistentIdentifier = "MessageActivity"
+			
+			activity.userInfo = [
+				"messageID": message.id
+			]
+		} */
     }
 }
 

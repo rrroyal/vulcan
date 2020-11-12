@@ -193,7 +193,7 @@ struct MessagesView: View {
 				}
 				#endif
 			}
-			.userActivity(Self.activityIdentifier) { activity in
+			/* .userActivity(Self.activityIdentifier) { activity in
 				activity.isEligibleForSearch = true
 				activity.isEligibleForPrediction = true
 				activity.isEligibleForPublicIndexing = true
@@ -211,7 +211,7 @@ struct MessagesView: View {
 				attributes.contentDescription = "See your received messages".localized
 				
 				activity.contentAttributeSet = attributes
-			}
+			} */
 			.onAppear {
 				if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 					return

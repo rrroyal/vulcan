@@ -116,7 +116,7 @@ struct TasksView: View {
 			attributes.contentDescription = "Displays your upcoming exams and homework".localized
 			activity.contentAttributeSet = attributes			
 		} */
-		.userActivity(Self.activityIdentifier) { activity in
+		/* .userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForPublicIndexing = true
@@ -129,7 +129,7 @@ struct TasksView: View {
 			attributes.contentDescription = "See your upcoming exams and homework".localized
 			
 			activity.contentAttributeSet = attributes
-		}
+		} */
 		.onAppear {
 			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return

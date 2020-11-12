@@ -86,7 +86,7 @@ struct GradesView: View {
 				}
 			}
 		}
-		.userActivity(Self.activityIdentifier) { activity in
+		/* .userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForPublicIndexing = true
@@ -99,7 +99,7 @@ struct GradesView: View {
 			attributes.contentDescription = "See your grades".localized
 			
 			activity.contentAttributeSet = attributes
-		}
+		} */
 		.onAppear {
 			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return

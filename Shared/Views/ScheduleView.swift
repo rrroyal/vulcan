@@ -119,7 +119,7 @@ struct ScheduleView: View {
 			attributes.relatedUniqueIdentifier = event.id
 			activity.contentAttributeSet = attributes
 		} */
-		.userActivity(Self.activityIdentifier) { activity in
+		/* .userActivity(Self.activityIdentifier) { activity in
 			activity.isEligibleForSearch = true
 			activity.isEligibleForPrediction = true
 			activity.isEligibleForPublicIndexing = true
@@ -136,7 +136,7 @@ struct ScheduleView: View {
 			attributes.contentDescription = "See your schedule".localized
 			
 			activity.contentAttributeSet = attributes
-		}
+		} */
 		.onAppear {
 			if AppState.shared.networkingMonitor.currentPath.isExpensive || AppState.shared.isLowPowerModeEnabled || vulcan.currentUser == nil {
 				return
