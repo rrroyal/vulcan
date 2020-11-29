@@ -56,8 +56,6 @@
 		0088EBBF24A37DA2006F044E /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0088EBBD24A37DA2006F044E /* MessagesView.swift */; };
 		00FAC9C824A3D85400ACAC83 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9C224A3D85400ACAC83 /* SettingsModel.swift */; };
 		00FAC9C924A3D85400ACAC83 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9C224A3D85400ACAC83 /* SettingsModel.swift */; };
-		00FAC9D524A3D8E800ACAC83 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 00FAC9D424A3D8E800ACAC83 /* KeychainAccess */; };
-		00FAC9D924A3D8F300ACAC83 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 00FAC9D824A3D8F300ACAC83 /* KeychainAccess */; };
 		00FAC9E124A3D93000ACAC83 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9DB24A3D93000ACAC83 /* Date.swift */; };
 		00FAC9E224A3D93000ACAC83 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9DB24A3D93000ACAC83 /* Date.swift */; };
 		00FAC9F924A3D9A600ACAC83 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FAC9EB24A3D9A600ACAC83 /* View.swift */; };
@@ -85,6 +83,11 @@
 		00FACA6B24A41D3900ACAC83 /* AppSidebarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA6924A41D3900ACAC83 /* AppSidebarNavigation.swift */; };
 		00FACA6D24A41D5B00ACAC83 /* AppTabNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA6C24A41D5B00ACAC83 /* AppTabNavigation.swift */; };
 		00FACA6E24A41D5B00ACAC83 /* AppTabNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FACA6C24A41D5B00ACAC83 /* AppTabNavigation.swift */; };
+		E700575E25742F2100B6B739 /* TestAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700575D25742F2100B6B739 /* TestAppApp.swift */; };
+		E700576025742F2100B6B739 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700575F25742F2100B6B739 /* ContentView.swift */; };
+		E700576225742F2200B6B739 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E700576125742F2200B6B739 /* Assets.xcassets */; };
+		E700576525742F2200B6B739 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E700576425742F2200B6B739 /* Preview Assets.xcassets */; };
+		E700577125742F2B00B6B739 /* VulcanKit in Frameworks */ = {isa = PBXBuildFile; productRef = E700577025742F2B00B6B739 /* VulcanKit */; };
 		E704C12D24F9A1F90036073F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E704C12C24F9A1F90036073F /* LaunchScreen.storyboard */; };
 		E704C12E24F9A1F90036073F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E704C12C24F9A1F90036073F /* LaunchScreen.storyboard */; };
 		E71374932501825D000EA663 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E71374952501825D000EA663 /* Localizable.strings */; };
@@ -263,6 +266,13 @@
 		00FACA6524A40F9900ACAC83 /* GradeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeCell.swift; sourceTree = "<group>"; };
 		00FACA6924A41D3900ACAC83 /* AppSidebarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebarNavigation.swift; sourceTree = "<group>"; };
 		00FACA6C24A41D5B00ACAC83 /* AppTabNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabNavigation.swift; sourceTree = "<group>"; };
+		E700574C25742DE400B6B739 /* VulcanKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = VulcanKit; path = Modules/VulcanKit; sourceTree = "<group>"; };
+		E700575B25742F2100B6B739 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E700575D25742F2100B6B739 /* TestAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppApp.swift; sourceTree = "<group>"; };
+		E700575F25742F2100B6B739 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E700576125742F2200B6B739 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E700576425742F2200B6B739 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E700576625742F2200B6B739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E704C12C24F9A1F90036073F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E71374942501825D000EA663 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E7187BDE253CBBE400C55A95 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -273,7 +283,6 @@
 		E734AC3525544ADF007664D7 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		E7360BCE25028B26006A4E17 /* VulcanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VulcanStore.swift; sourceTree = "<group>"; };
 		E74A6DAB24B907A100DBB988 /* AppNotifications */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppNotifications; path = Modules/AppNotifications; sourceTree = "<group>"; };
-		E74A6DAC24B907E100DBB988 /* Vulcan */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vulcan; path = Modules/Vulcan; sourceTree = "<group>"; };
 		E74F54A4250924EF003F8066 /* ScheduleEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEventCell.swift; sourceTree = "<group>"; };
 		E7518A2A25012C9000135D55 /* NextUpEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextUpEntryView.swift; sourceTree = "<group>"; };
 		E7518A2D25012CC800135D55 /* NowProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowProvider.swift; sourceTree = "<group>"; };
@@ -330,7 +339,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00FAC9D524A3D8E800ACAC83 /* KeychainAccess in Frameworks */,
 				E7790C6A24B9275600BA4187 /* Vulcan in Frameworks */,
 				E7790C7024B9280B00BA4187 /* AppNotifications in Frameworks */,
 			);
@@ -341,8 +349,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				E71A45D225263492003176B3 /* AppNotifications in Frameworks */,
-				00FAC9D924A3D8F300ACAC83 /* KeychainAccess in Frameworks */,
 				E7A419AC24FA5A7400FC55D6 /* Vulcan in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E700575825742F2100B6B739 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E700577125742F2B00B6B739 /* VulcanKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,8 +412,9 @@
 				E7C144D7250123F500363BD3 /* WatchKit */,
 				E7C144E3250123F600363BD3 /* WatchKit Extension */,
 				E7C1452225012A2100363BD3 /* Widget */,
-				E74A6DAC24B907E100DBB988 /* Vulcan */,
 				E74A6DAB24B907A100DBB988 /* AppNotifications */,
+				E700574C25742DE400B6B739 /* VulcanKit */,
+				E700575C25742F2100B6B739 /* TestApp */,
 				0088EBC924A38D9E006F044E /* Frameworks */,
 				0088EB6024A37BB7006F044E /* Products */,
 			);
@@ -428,6 +444,7 @@
 				E7C144D6250123F500363BD3 /* vulcan WatchKit.app */,
 				E7C144DF250123F600363BD3 /* vulcan WatchKit Extension.appex */,
 				E7C1451F25012A2100363BD3 /* vulcan Widget.appex */,
+				E700575B25742F2100B6B739 /* TestApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -573,6 +590,26 @@
 				00FACA6924A41D3900ACAC83 /* AppSidebarNavigation.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		E700575C25742F2100B6B739 /* TestApp */ = {
+			isa = PBXGroup;
+			children = (
+				E700575D25742F2100B6B739 /* TestAppApp.swift */,
+				E700575F25742F2100B6B739 /* ContentView.swift */,
+				E700576125742F2200B6B739 /* Assets.xcassets */,
+				E700576625742F2200B6B739 /* Info.plist */,
+				E700576325742F2200B6B739 /* Preview Content */,
+			);
+			path = TestApp;
+			sourceTree = "<group>";
+		};
+		E700576325742F2200B6B739 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E700576425742F2200B6B739 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		E71374902501821D000EA663 /* Localization */ = {
@@ -787,7 +824,6 @@
 			);
 			name = iOS;
 			packageProductDependencies = (
-				00FAC9D424A3D8E800ACAC83 /* KeychainAccess */,
 				E7790C6924B9275600BA4187 /* Vulcan */,
 				E7790C6F24B9280B00BA4187 /* AppNotifications */,
 			);
@@ -809,12 +845,31 @@
 			);
 			name = macOS;
 			packageProductDependencies = (
-				00FAC9D824A3D8F300ACAC83 /* KeychainAccess */,
 				E7A419AB24FA5A7400FC55D6 /* Vulcan */,
 				E71A45D125263492003176B3 /* AppNotifications */,
 			);
 			productName = macOS;
 			productReference = 0088EB6724A37BB7006F044E /* vulcan.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E700575A25742F2100B6B739 /* TestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E700576725742F2200B6B739 /* Build configuration list for PBXNativeTarget "TestApp" */;
+			buildPhases = (
+				E700575725742F2100B6B739 /* Sources */,
+				E700575825742F2100B6B739 /* Frameworks */,
+				E700575925742F2100B6B739 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestApp;
+			packageProductDependencies = (
+				E700577025742F2B00B6B739 /* VulcanKit */,
+			);
+			productName = TestApp;
+			productReference = E700575B25742F2100B6B739 /* TestApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E7C144D5250123F500363BD3 /* WatchKit */ = {
@@ -881,7 +936,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					0088EB5E24A37BB7006F044E = {
@@ -889,6 +944,9 @@
 					};
 					0088EB6624A37BB7006F044E = {
 						CreatedOnToolsVersion = 12.0;
+					};
+					E700575A25742F2100B6B739 = {
+						CreatedOnToolsVersion = 12.3;
 					};
 					E7C144D5250123F500363BD3 = {
 						CreatedOnToolsVersion = 12.0;
@@ -912,7 +970,6 @@
 			);
 			mainGroup = 0088EB5224A37BB4006F044E;
 			packageReferences = (
-				00FAC9D324A3D8E800ACAC83 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = 0088EB6024A37BB7006F044E /* Products */;
 			projectDirPath = "";
@@ -923,6 +980,7 @@
 				E7C144D5250123F500363BD3 /* WatchKit */,
 				E7C144DE250123F600363BD3 /* WatchKit Extension */,
 				E7C1451E25012A2100363BD3 /* Widget */,
+				E700575A25742F2100B6B739 /* TestApp */,
 			);
 		};
 /* End PBXProject section */
@@ -952,6 +1010,15 @@
 				00FACA5C24A40C2800ACAC83 /* Colors.xcassets in Resources */,
 				E704C12E24F9A1F90036073F /* LaunchScreen.storyboard in Resources */,
 				00FACA3224A3E34000ACAC83 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E700575925742F2100B6B739 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E700576525742F2200B6B739 /* Preview Assets.xcassets in Resources */,
+				E700576225742F2200B6B739 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1077,6 +1144,15 @@
 				0088EBB324A37CD2006F044E /* HomeView.swift in Sources */,
 				00708A6C24B743B1009FB4DD /* Notifications.swift in Sources */,
 				0088EB6C24A37BB7006F044E /* vulcanApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E700575725742F2100B6B739 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E700576025742F2100B6B739 /* ContentView.swift in Sources */,
+				E700575E25742F2100B6B739 /* TestAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1418,6 +1494,53 @@
 			};
 			name = Release;
 		};
+		E700576825742F2200B6B739 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"TestApp/Preview Content\"";
+				DEVELOPMENT_TEAM = WPN9Y7CDCT;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = TestApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.TestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E700576925742F2200B6B739 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"TestApp/Preview Content\"";
+				DEVELOPMENT_TEAM = WPN9Y7CDCT;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = TestApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.shameful.TestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		E7C144F9250123F600363BD3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1603,6 +1726,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		E700576725742F2200B6B739 /* Build configuration list for PBXNativeTarget "TestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E700576825742F2200B6B739 /* Debug */,
+				E700576925742F2200B6B739 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E7C144FE250123F600363BD3 /* Build configuration list for PBXNativeTarget "WatchKit Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1632,27 +1764,10 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		00FAC9D324A3D8E800ACAC83 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		00FAC9D424A3D8E800ACAC83 /* KeychainAccess */ = {
+		E700577025742F2B00B6B739 /* VulcanKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 00FAC9D324A3D8E800ACAC83 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
-		00FAC9D824A3D8F300ACAC83 /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 00FAC9D324A3D8E800ACAC83 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
+			productName = VulcanKit;
 		};
 		E71A45D125263492003176B3 /* AppNotifications */ = {
 			isa = XCSwiftPackageProductDependency;

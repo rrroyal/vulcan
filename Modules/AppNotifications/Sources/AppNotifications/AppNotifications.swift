@@ -5,7 +5,6 @@
 //  Created by royal on 10/07/2020.
 //
 
-#if !WIDGET
 import Foundation
 import SwiftUI
 import Combine
@@ -15,7 +14,8 @@ public final class AppNotifications: ObservableObject {
 	public static let shared: AppNotifications = AppNotifications()
 	
 	@Published public var notification: NotificationData? = nil
-	@Published public var isPresented: Bool = false
+	
+	@Published public private(set) var isPresented: Bool = false
 	
 	private var timer: AnyCancellable? = nil
 	private var cancellableSet: Set<AnyCancellable> = []
@@ -47,6 +47,7 @@ public final class AppNotifications: ObservableObject {
 	
 	public func cancelTimer() {
 		self.timer?.cancel()
+		self.timer = nil
 	}
 }
 
@@ -71,8 +72,8 @@ extension AppNotifications {
 			self.expandedText = expandedText
 		}
 		
-		public init(error: String) {
-			self.init(autodismisses: true, dismissable: true, style: .error, icon: "exclamationmark.triangle.fill", title: "Error!", subtitle: error)
+		public init(error: String, expandedText: String? = nil) {
+			self.init(autodismisses: true, dismissable: true, style: .error, icon: "exclamationmark.triangle.fill", title: "Error!", subtitle: error, expandedText: expandedText)
 		}
 		
 		public var id: UUID = UUID()
@@ -109,4 +110,3 @@ extension AppNotifications {
 		}
 	}
 }
-#endif
