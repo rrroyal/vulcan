@@ -120,8 +120,8 @@ public class X509 {
 	}
 	
 	/// Get certificate thumbrint.
-	/// - Returns: Certificate thumbprint
-	public func getCertificateThumbrint() -> String {
+	/// - Returns: Certificate fingerprint
+	public func getCertificateFingerprint() -> String {
 		let md: UnsafeMutablePointer<UInt8> = .allocate(capacity: Int(EVP_MAX_MD_SIZE))
 		var n: UInt32 = 0
 		
@@ -137,9 +137,9 @@ public class X509 {
 			.uppercased()
 	}
 	
-	/// Get public key thumbprint
-	/// - Returns: Public key thumbprint
-	public func getPublicKeyThumbrint() -> String? {
+	/// Get public key fingerprint
+	/// - Returns: Public key fingerprint
+	public func getPublicKeyFingerprint() -> String? {
 		guard let keyData = self.getPublicKeyData(),
 			  let rawKeyB64 = String(data: keyData, encoding: .utf8) else {
 			return nil
@@ -159,10 +159,10 @@ public class X509 {
 		return hash.map { String(format: "%02hhx", $0) }.joined()
 	}
 	
-	/// Get private key thumbprint
+	/// Get private key fingerprint
 	/// - Parameter format: Format of the returned key
-	/// - Returns: Private key thumbprint
-	public func getPrivateKeyThumbrint(format: KeyFormat) -> String? {
+	/// - Returns: Private key fingerprint
+	public func getPrivateKeyFingerprint(format: KeyFormat) -> String? {
 		guard let keyData = self.getPrivateKeyData(format: format),
 			  let rawKeyB64 = String(data: keyData, encoding: .utf8) else {
 			return nil

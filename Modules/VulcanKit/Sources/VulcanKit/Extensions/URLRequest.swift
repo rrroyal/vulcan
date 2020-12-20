@@ -8,7 +8,7 @@
 import Foundation
 
 extension URLRequest {
-	func signed(with certificate: X509) throws -> URLRequest {
+	func signed(with certificate: X509, deviceModel: String) throws -> URLRequest {
 		// Create request
 		var request = self
 		
@@ -39,8 +39,7 @@ extension URLRequest {
 		}
 		
 		// Get fingerprint
-		guard let fingerprint = certificate.getPrivateKeyThumbrint(format: .DER),
-			  let signatureValues = VulcanKit.Signer.getSignatureValues(body: request.httpBody, url: urlString, privateKey: secKey, privateKeyFingerprint: fingerprint) else {
+		guard let signatureValues = VulcanKit.Signer.getSignatureValues(body: request.httpBody, url: urlString, privateKey: secKey, fingerprint: certificate.getCertificateFingerprint().lowercased()) else {
 			throw VulcanKit.APIError.noSignatureValues
 		}
 		
@@ -56,7 +55,7 @@ extension URLRequest {
 		
 		// Headers
 		request.setValue("iOS", forHTTPHeaderField: "vOS")
-		request.setValue("iPhone", forHTTPHeaderField: "vDeviceModel")
+		request.setValue(deviceModel, forHTTPHeaderField: "vDeviceModel")
 		request.setValue("1", forHTTPHeaderField: "vAPI")
 		request.setValue(vDate, forHTTPHeaderField: "vDate")
 		request.setValue(signatureValues.canonicalURL, forHTTPHeaderField: "vCanonicalUrl")

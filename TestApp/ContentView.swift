@@ -25,7 +25,7 @@ struct ContentView: View {
 					}
 					
 					vulcanKit.certificate = certificate
-					vulcanKit.login(token: token, symbol: "powiatbochenski", pin: pin, deviceName: "vulcan internal", deviceSystemVersion: "v0") { string, error in
+					vulcanKit.login(token: token, symbol: "powiatbochenski", pin: pin, deviceModel: "vulcan internal", deviceSystemVersion: "v0") { string, error in
 						print(string ?? "<none>")
 						print(error ?? "<none>")
 					}

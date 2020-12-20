@@ -23,7 +23,7 @@ final class VulcanKitTests: XCTestCase {
 		return SecKeyCreateWithData(Data(base64Encoded: TestData.privateKeyBase64)! as NSData, parameters as NSDictionary, nil)!
 	}
 	var signatureValues: (digest: String?, canonicalURL: String, signature: String)? {
-		VulcanKit.Signer.getSignatureValues(body: TestData.body, url: TestData.fullURL, date: TestData.date, privateKey: secKey, privateKeyFingerprint: TestData.fingerprint)
+		VulcanKit.Signer.getSignatureValues(body: TestData.body, url: TestData.fullURL, date: TestData.date, privateKey: secKey, fingerprint: TestData.fingerprint)
 	}
 	
 	// MARK: - Tests

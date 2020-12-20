@@ -124,7 +124,7 @@ public struct NotificationOverlay: View {
 				}
 			}
 			.shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 0)
-			.offset(x: 0, y: appNotifications.isPresented ? yOffset : -200)
+			.offset(x: 0, y: appNotifications.isPresented ? yOffset : 200)
 			.animation(animation)
 			.transition(.asymmetric(insertion: .move(edge: .top), removal: .offset(x: 0, y: -200)))
 			// .id(notification.id)

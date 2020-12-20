@@ -3,7 +3,7 @@ import CryptoKit
 
 public extension VulcanKit {
 	struct Signer {
-		static public func getSignatureValues(body: Data?, url: String, date: Date = Date(), privateKey: SecKey, privateKeyFingerprint: String) -> (digest: String?, canonicalURL: String, signature: String)? {
+		static public func getSignatureValues(body: Data?, url: String, date: Date = Date(), privateKey: SecKey, fingerprint: String) -> (digest: String?, canonicalURL: String, signature: String)? {
 			// Canonical URL
 			guard let canonicalURL = getCanonicalURL(url) else {
 				return nil
@@ -33,7 +33,7 @@ public extension VulcanKit {
 			return (
 				digest,
 				canonicalURL,
-				"keyId=\"\(privateKeyFingerprint)\",headers=\"\(headersList.headers)\",algorithm=\"sha256withrsa\",signature=Base64(SHA256withRSA(\(signatureValue)))"
+				"keyId=\"\(fingerprint.replacingOccurrences(of: ":", with: ""))\",headers=\"\(headersList.headers)\",algorithm=\"sha256withrsa\",signature=Base64(SHA256withRSA(\(signatureValue)))"
 			)
 		}
 		

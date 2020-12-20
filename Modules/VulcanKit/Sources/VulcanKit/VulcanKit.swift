@@ -25,7 +25,7 @@ public class VulcanKit {
 	///   - deviceName: Name of the device
 	///   - deviceSystemVersion: Version of the device's system
 	///   - completion: Access token
-	public func login(token: String, symbol: String, pin: String, deviceName: String, deviceSystemVersion: String, completionHandler: @escaping (String?, Error?) -> Void) {
+	public func login(token: String, symbol: String, pin: String, deviceModel: String, deviceSystemVersion: String, completionHandler: @escaping (String?, Error?) -> Void) {
 		let logger: Logger = Logger(subsystem: self.loggerSubsystem, category: "Login")
 		logger.debug("Logging in...")
 		
@@ -44,7 +44,7 @@ public class VulcanKit {
 			"digest": "",
 			"checkin": [
 				"iosbuild": [
-					"model": deviceName,
+					"model": deviceModel,
 					"os_version": deviceSystemVersion
 				],
 				"last_checkin_msec": 0,
@@ -117,7 +117,7 @@ public class VulcanKit {
 				return (finalEndpointURL, token)
 			}
 			.tryMap { endpointURL, firebaseToken in
-				try self.registerDevice(endpointURL: endpointURL, firebaseToken: firebaseToken, token: token, symbol: symbol, pin: pin)
+				try self.registerDevice(endpointURL: endpointURL, firebaseToken: firebaseToken, token: token, symbol: symbol, pin: pin, deviceModel: deviceModel)
 					.mapError { $0 as Error }
 					.map { $0.data }
 					.eraseToAnyPublisher()
@@ -134,7 +134,7 @@ public class VulcanKit {
 	
 	// MARK: - Private functions
 	
-	private func registerDevice(endpointURL: String, firebaseToken: String, token: String, symbol: String, pin: String) throws -> URLSession.DataTaskPublisher {
+	private func registerDevice(endpointURL: String, firebaseToken: String, token: String, symbol: String, pin: String, deviceModel: String) throws -> URLSession.DataTaskPublisher {
 		guard let certificate = self.certificate,
 			  let certificateData = certificate.getCertificateData(),
 			  let certificateBase64 = String(data: certificateData, encoding: .utf8)?
@@ -145,34 +145,43 @@ public class VulcanKit {
 		else {
 			throw APIError.noCertificate
 		}
-				
+						
 		// Request
-		let url = "\(endpointURL)/\(token)/api/mobile/register/new"
+		let url = "\(endpointURL)/\(symbol)/api/mobile/register/new"
 		var request = URLRequest(url: URL(string: url)!)
 		request.httpMethod = "POST"
 		
 		let now: Date = Date()
+		var timestampFormatted: String {
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss"
+			dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+			
+			return "\(dateFormatter.string(from: now)) GMT"
+		}
+		
+		let certificateFingerprint = certificate.getCertificateFingerprint().replacingOccurrences(of: ":", with: "").lowercased()
 		
 		// Body
 		let body: [String: Encodable?] = [
 			"AppName": "DzienniczekPlus 2.0",
-			"AppVersion": "1.4.2",
-			"CertificateId": nil,
+			"AppVersion": "1.0",
+			"CertificateId": certificateFingerprint,
 			"Envelope": [
 				"OS": "iOS",
 				"PIN": pin,
 				"Certificate": certificateBase64,
 				"CertificateType": "X509",
-				"DeviceModel": "iPhone",
+				"DeviceModel": deviceModel,
 				"SecurityToken": token,
 				"SelfIdentifier": UUID().uuidString.lowercased(),
-				"CertificateThumbprint": certificate.getCertificateThumbrint().replacingOccurrences(of: ":", with: "").lowercased()
+				"CertificateThumbprint": certificateFingerprint
 			],
-			"FirebaseToken": firebaseToken,
+			"FirebaseToken": "dcDsM0catD8:APA91bGbcFa6VcaC5ZqKCbQDiv_QpQtfUfF_gGzAf1HU_F72y9JeKK07EiTbVHNntL-X1bR1lGTT0aNmePLKwtp3A3BfzpJ_oHJsGYS1rxZ0LGFY1PV-bpj9NRXllgvQnrTVm1eoFGRp",
 			"API": 1,
 			"RequestId": UUID().uuidString.lowercased(),
 			"Timestamp": now.millisecondsSince1970,
-			"TimestampFormatted": now.formattedString("yyyy-MM-dd HH:mm:ss")
+			"TimestampFormatted": timestampFormatted
 		]
 		
 		request.httpBody = try? JSONSerialization.data(withJSONObject: body)
@@ -182,7 +191,7 @@ public class VulcanKit {
 			"Accept-Encoding": "gzip",
 		]
 		
-		let signedRequest = try request.signed(with: certificate)
+		let signedRequest = try request.signed(with: certificate, deviceModel: deviceModel)
 		return URLSession.shared.dataTaskPublisher(for: signedRequest)
 	}
 	
