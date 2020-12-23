@@ -136,8 +136,9 @@ public class VulcanKit {
 	
 	private func registerDevice(endpointURL: String, firebaseToken: String, token: String, symbol: String, pin: String, deviceModel: String) throws -> URLSession.DataTaskPublisher {
 		guard let certificate = self.certificate,
-			  let certificateData = certificate.getCertificateData(),
-			  let certificateBase64 = String(data: certificateData, encoding: .utf8)?
+			  let keyFingerprint = certificate.getPrivateKeyFingerprint(format: .PEM)?.replacingOccurrences(of: ":", with: "").lowercased(),
+			  let keyData = certificate.getPublicKeyData(),
+			  let keyBase64 = String(data: keyData, encoding: .utf8)?
 				.split(separator: "\n")	// Split by newline
 				.dropFirst()			// Drop prefix
 				.dropLast()				// Drop suffix
@@ -157,31 +158,29 @@ public class VulcanKit {
 			dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss"
 			dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 			
-			return "\(dateFormatter.string(from: now)) GMT"
+			return dateFormatter.string(from: now)
 		}
-		
-		let certificateFingerprint = certificate.getCertificateFingerprint().replacingOccurrences(of: ":", with: "").lowercased()
-		
+				
 		// Body
 		let body: [String: Encodable?] = [
 			"AppName": "DzienniczekPlus 2.0",
-			"AppVersion": "1.0",
-			"CertificateId": certificateFingerprint,
+			"AppVersion": "1.4.2",
+			"CertificateId": nil,
 			"Envelope": [
 				"OS": "iOS",
 				"PIN": pin,
-				"Certificate": certificateBase64,
-				"CertificateType": "X509",
+				"Certificate": keyBase64,
+				"CertificateType": "RSA_PEM",
 				"DeviceModel": deviceModel,
 				"SecurityToken": token,
 				"SelfIdentifier": UUID().uuidString.lowercased(),
-				"CertificateThumbprint": certificateFingerprint
+				"CertificateThumbprint": keyFingerprint
 			],
-			"FirebaseToken": "dcDsM0catD8:APA91bGbcFa6VcaC5ZqKCbQDiv_QpQtfUfF_gGzAf1HU_F72y9JeKK07EiTbVHNntL-X1bR1lGTT0aNmePLKwtp3A3BfzpJ_oHJsGYS1rxZ0LGFY1PV-bpj9NRXllgvQnrTVm1eoFGRp",
+			"FirebaseToken": "cVZuLAsjQEyhlBxt9pFguP:APA91bFcGj4Nj7pYIfXonGj3s481uFCDurYTGZ_YebwwlN8ca3XxeCKI6LMP2-Thc9rRQUG8MEvqjiroeC6AD0ZZotCs_0yVXUNwTDny_BK8ZV7Y0x_EWsDRD1consgD9-dQK-G0iQhA",
 			"API": 1,
 			"RequestId": UUID().uuidString.lowercased(),
 			"Timestamp": now.millisecondsSince1970,
-			"TimestampFormatted": timestampFormatted
+			"TimestampFormatted": "\(timestampFormatted) GMT"
 		]
 		
 		request.httpBody = try? JSONSerialization.data(withJSONObject: body)
@@ -189,9 +188,10 @@ public class VulcanKit {
 		request.allHTTPHeaderFields = [
 			"Content-Type": "application/json",
 			"Accept-Encoding": "gzip",
+			"vDeviceModel": deviceModel
 		]
 		
-		let signedRequest = try request.signed(with: certificate, deviceModel: deviceModel)
+		let signedRequest = try request.signed(with: certificate)
 		return URLSession.shared.dataTaskPublisher(for: signedRequest)
 	}
 	

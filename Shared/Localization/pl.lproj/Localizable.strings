@@ -134,8 +134,8 @@
 "SETTINGS_FILTERSCHEDULE_TOOLTIP" = "Plan lekcji zamiast pokazywać cały tydzień będzie pokazywał tylko wybrany dzień.";
 "SETTINGS_COLORIZEGRADES" = "Koloruj oceny";
 "SETTINGS_COLORIZEGRADES_TOOLTIP" = "Etykiety ocen będą kolorowe.";
-"SETTINGS_HAPTICFEEDBACK" = "Haptic Feedback";
-"SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "Jeśli nie lubisz Haptic Feedback'u tak bardzo jak ja, możesz go wyłączyć.";
+"SETTINGS_HAPTICFEEDBACK" = "Haptyka";
+"SETTINGS_HAPTICFEEDBACK_TOOLTIP" = "Jeśli nie lubisz haptyki tak bardzo jak ja, możesz ją wyłączyć.";
 
 "Other" = "Inne";
 "Reset user settings" = "Resetuj";

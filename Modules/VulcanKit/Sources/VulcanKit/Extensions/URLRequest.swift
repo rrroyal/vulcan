@@ -8,7 +8,7 @@
 import Foundation
 
 extension URLRequest {
-	func signed(with certificate: X509, deviceModel: String) throws -> URLRequest {
+	func signed(with certificate: X509) throws -> URLRequest {
 		// Create request
 		var request = self
 		
@@ -50,12 +50,11 @@ extension URLRequest {
 			dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 			dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 			
-			return "\(dateFormatter.string(from: now.addingTimeInterval(-3600))) GMT"
+			return "\(dateFormatter.string(from: now)) GMT"
 		}
 		
 		// Headers
 		request.setValue("iOS", forHTTPHeaderField: "vOS")
-		request.setValue(deviceModel, forHTTPHeaderField: "vDeviceModel")
 		request.setValue("1", forHTTPHeaderField: "vAPI")
 		request.setValue(vDate, forHTTPHeaderField: "vDate")
 		request.setValue(signatureValues.canonicalURL, forHTTPHeaderField: "vCanonicalUrl")
