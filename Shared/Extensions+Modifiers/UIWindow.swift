@@ -2,7 +2,7 @@
 //  UIWindow.swift
 //  vulcan
 //
-//  Created by Kacper on 06/11/2020.
+//  Created by royal on 06/11/2020.
 //
 
 import UIKit.UIWindow

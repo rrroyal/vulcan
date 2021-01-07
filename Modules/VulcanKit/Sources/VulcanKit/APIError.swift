@@ -10,5 +10,8 @@ public extension VulcanKit {
 		case noPrivateKey
 		case noSignatureValues
 		case urlError
+		
+		case wrongToken
+		case wrongPin
 	}
 }

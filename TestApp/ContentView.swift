@@ -2,15 +2,14 @@
 //  ContentView.swift
 //  TestApp
 //
-//  Created by Kacper on 29/11/2020.
+//  Created by royal on 29/11/2020.
 //
 
 import SwiftUI
 import VulcanKit
 
 struct ContentView: View {
-	let vulcanKit = VulcanKit()
-	
+	@StateObject var vulcan: VulcanStore = VulcanStore.shared
 	@State var token = "3S1"
 	@State var pin = ""
 	
@@ -20,14 +19,12 @@ struct ContentView: View {
 				TextField("Token", text: $token)
 				TextField("PIN", text: $pin)
 				Button("Login") {
-					guard let certificate: X509 = try? X509(serialNumber: 1, certificateEntries: ["CN": "APP_CERTIFICATE CA Certificate"]) else {
-						return
-					}
-					
-					vulcanKit.certificate = certificate
-					vulcanKit.login(token: token, symbol: "powiatbochenski", pin: pin, deviceModel: "vulcan internal", deviceSystemVersion: "v0") { string, error in
-						print(string ?? "<none>")
-						print(error ?? "<none>")
+					vulcan.login(token: token, symbol: "powiatbochenski", pin: pin, deviceModel: "vulcan internal") { error in
+						if let error = error {
+							print("error: \(error)")
+						} else {
+							print("success")
+						}
 					}
 				}
 			}

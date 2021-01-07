@@ -14,8 +14,7 @@ public final class AppNotifications: ObservableObject {
 	public static let shared: AppNotifications = AppNotifications()
 	
 	@Published public var notification: NotificationData? = nil
-	
-	@Published public private(set) var isPresented: Bool = false
+	@Published public var isPresented: Bool = false
 	
 	private var timer: AnyCancellable? = nil
 	private var cancellableSet: Set<AnyCancellable> = []
@@ -23,12 +22,15 @@ public final class AppNotifications: ObservableObject {
 	private init() {
 		$notification
 			.sink { notification in
-				if notification == nil {
-					self.isPresented = false
-					return
+				DispatchQueue.main.async {
+					if notification == nil {
+						self.isPresented = false
+						return
+					}
+					
+					self.isPresented = true
 				}
 				
-				self.isPresented = true
 				self.instantiateTimer()
 			}
 			.store(in: &cancellableSet)
@@ -39,15 +41,14 @@ public final class AppNotifications: ObservableObject {
 		self.timer = Timer.publish(every: 5, on: .main, in: .common)
 			.autoconnect()
 			.sink { _ in
-				self.notification = nil
 				self.isPresented = false
+				self.notification = nil
 				self.timer?.cancel()
 			}
 	}
 	
 	public func cancelTimer() {
 		self.timer?.cancel()
-		self.timer = nil
 	}
 }
 
@@ -102,10 +103,10 @@ extension AppNotifications {
 				#else
 				case .normal:		return Color(UIColor.tertiarySystemBackground)
 				#endif
-				case .information:	return Color.blue.opacity(0.1)
-				case .warning:		return Color.orange.opacity(0.1)
-				case .error:		return Color.red.opacity(0.1)
-				case .success:		return Color.green.opacity(0.1)
+				case .information:	return Color.blue
+				case .warning:		return Color.orange
+				case .error:		return Color.red
+				case .success:		return Color.green
 			}
 		}
 	}

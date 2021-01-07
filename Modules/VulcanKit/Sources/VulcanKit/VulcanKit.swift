@@ -8,11 +8,11 @@ public class VulcanKit {
 	private let loggerSubsystem: String = "xyz.shameful.VulcanKit"
 	private var cancellables: Set<AnyCancellable> = []
 	
-	public var certificate: X509?
+	public let certificate: X509
 	
 	// MARK: - Init
-	public init() {
-		
+	public init(certificate: X509) {
+		self.certificate = certificate
 	}
 	
 	// MARK: - Public functions
@@ -23,15 +23,13 @@ public class VulcanKit {
 	///   - symbol: Login symbol
 	///   - pin: Login PIN
 	///   - deviceName: Name of the device
-	///   - deviceSystemVersion: Version of the device's system
-	///   - completion: Access token
-	public func login(token: String, symbol: String, pin: String, deviceModel: String, deviceSystemVersion: String, completionHandler: @escaping (String?, Error?) -> Void) {
+	///   - completionHandler: Callback
+	public func login(token: String, symbol: String, pin: String, deviceModel: String, completionHandler: @escaping (Error?) -> Void) {
 		let logger: Logger = Logger(subsystem: self.loggerSubsystem, category: "Login")
 		logger.debug("Logging in...")
 		
 		let endpointPublisher = URLSession.shared.dataTaskPublisher(for: URL(string: "http://komponenty.vulcan.net.pl/UonetPlusMobile/RoutingRules.txt")!)
 			.mapError { $0 as Error }
-			.eraseToAnyPublisher()
 		
 		// Firebase request
 		var firebaseRequest: URLRequest = URLRequest(url: URL(string: "https://android.googleapis.com/checkin")!)
@@ -45,13 +43,13 @@ public class VulcanKit {
 			"checkin": [
 				"iosbuild": [
 					"model": deviceModel,
-					"os_version": deviceSystemVersion
+					"os_version": Self.libraryVersion
 				],
 				"last_checkin_msec": 0,
 				"user_number": 0,
 				"type": 2
 			],
-			"time_zone": "Europe/Warsaw",
+			"time_zone": TimeZone.current.identifier,
 			"user_serial_number": 0,
 			"id": 0,
 			"logging_id": 0,
@@ -63,7 +61,6 @@ public class VulcanKit {
 		
 		let firebasePublisher = URLSession.shared.dataTaskPublisher(for: firebaseRequest)
 			.receive(on: DispatchQueue.global(qos: .background))
-			.mapError { $0 as Error }
 			.tryCompactMap { value -> AnyPublisher<Data, Error> in
 				guard let dictionary: [String: Any] = try? JSONSerialization.jsonObject(with: value.data) as? [String: Any] else {
 					throw APIError.jsonSerialization
@@ -84,20 +81,16 @@ public class VulcanKit {
 					.eraseToAnyPublisher()
 			}
 			.flatMap { $0 }
-			.mapError { $0 }
-			.eraseToAnyPublisher()
 		
 		Publishers.Zip(endpointPublisher, firebasePublisher)
 			.tryMap { (endpoints, firebaseToken) -> (String, String) in
 				// Find endpointURL
 				let lines = String(data: endpoints.data, encoding: .utf8)?.split { $0.isNewline }
-				var endpointURL: String?
 				
-				// Parse lines
+				var endpointURL: String?
 				lines?.forEach { line in
 					let items = line.split(separator: ",")
 					if (token.starts(with: items[0])) {
-						// We found our URL
 						endpointURL = String(items[1])
 						return
 					}
@@ -112,7 +105,6 @@ public class VulcanKit {
 					logger.error("Token empty! Response: \"\(firebaseToken.base64EncodedString(), privacy: .private)\"")
 					throw APIError.noFirebaseToken
 				}
-				logger.debug("Token: \(firebaseToken.count)B")
 				
 				return (finalEndpointURL, token)
 			}
@@ -124,19 +116,37 @@ public class VulcanKit {
 			}
 			.flatMap { $0 }
 			.sink(receiveCompletion: { completion in
-				print(completion)
-				completionHandler(nil, nil)
+				switch completion {
+					case .finished:
+						break
+					case .failure(let error):
+						completionHandler(error)
+				}
 			}, receiveValue: { data in
-				print(String(data: data, encoding: .utf8) ?? "no response")
+				if let response = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+				   let parsedError = self.parseResponse(response) {
+					completionHandler(parsedError)
+				} else {
+					completionHandler(nil)
+				}
 			})
 			.store(in: &cancellables)
 	}
 	
 	// MARK: - Private functions
 	
+	/// Registers the device
+	/// - Parameters:
+	///   - endpointURL: API endpoint URL
+	///   - firebaseToken: FCM token
+	///   - token: Vulcan token
+	///   - symbol: Vulcan symbol
+	///   - pin: Vulcan PIN
+	///   - deviceModel: Device model
+	/// - Throws: Error
+	/// - Returns: URLSession.DataTaskPublisher
 	private func registerDevice(endpointURL: String, firebaseToken: String, token: String, symbol: String, pin: String, deviceModel: String) throws -> URLSession.DataTaskPublisher {
-		guard let certificate = self.certificate,
-			  let keyFingerprint = certificate.getPrivateKeyFingerprint(format: .PEM)?.replacingOccurrences(of: ":", with: "").lowercased(),
+		guard let keyFingerprint = certificate.getPrivateKeyFingerprint(format: .PEM)?.replacingOccurrences(of: ":", with: "").lowercased(),
 			  let keyData = certificate.getPublicKeyData(),
 			  let keyBase64 = String(data: keyData, encoding: .utf8)?
 				.split(separator: "\n")	// Split by newline
@@ -164,7 +174,7 @@ public class VulcanKit {
 		// Body
 		let body: [String: Encodable?] = [
 			"AppName": "DzienniczekPlus 2.0",
-			"AppVersion": "1.4.2",
+			"AppVersion": Self.libraryVersion,
 			"CertificateId": nil,
 			"Envelope": [
 				"OS": "iOS",
@@ -176,7 +186,7 @@ public class VulcanKit {
 				"SelfIdentifier": UUID().uuidString.lowercased(),
 				"CertificateThumbprint": keyFingerprint
 			],
-			"FirebaseToken": "cVZuLAsjQEyhlBxt9pFguP:APA91bFcGj4Nj7pYIfXonGj3s481uFCDurYTGZ_YebwwlN8ca3XxeCKI6LMP2-Thc9rRQUG8MEvqjiroeC6AD0ZZotCs_0yVXUNwTDny_BK8ZV7Y0x_EWsDRD1consgD9-dQK-G0iQhA",
+			"FirebaseToken": firebaseToken,
 			"API": 1,
 			"RequestId": UUID().uuidString.lowercased(),
 			"Timestamp": now.millisecondsSince1970,
@@ -195,4 +205,22 @@ public class VulcanKit {
 		return URLSession.shared.dataTaskPublisher(for: signedRequest)
 	}
 	
+	// MARK: - Helper functions
+	
+	/// Parses the response
+	/// - Parameter response: Request response
+	/// - Returns: VulcanKit.APIError?
+	private func parseResponse(_ response: [String: Any]) -> APIError? {
+		guard let status = response["Status"] as? [String: Any],
+			  let statusCode = status["Code"] as? Int else {
+			return nil
+		}
+				
+		switch statusCode {
+			case 0:		return nil
+			case 200:	return APIError.wrongToken
+			case 203:	return APIError.wrongPin
+			default:	return nil
+		}
+	}
 }

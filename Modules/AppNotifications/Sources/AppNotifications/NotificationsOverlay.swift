@@ -31,6 +31,25 @@ public struct NotificationOverlay: View {
 	
 	let animation: Animation = .interpolatingSpring(mass: 0.5, stiffness: 45, damping: 45, initialVelocity: 15)
 	
+	private func expandGestureHandler() {
+		guard let notification = appNotifications.notification else {
+			return
+		}
+	
+		if notification.expandedText != nil {
+			UIImpactFeedbackGenerator(style: .light).impactOccurred()
+			isExpanded.toggle()
+			
+			if notification.autodismisses {
+				if isExpanded {
+					appNotifications.cancelTimer()
+				} else {
+					appNotifications.instantiateTimer()
+				}
+			}
+		}
+	}
+	
 	private var yOffset: CGFloat {
 		if translation.height > 0 {
 			return translation.height * 0.075
@@ -47,13 +66,21 @@ public struct NotificationOverlay: View {
 			.onEnded { value in
 				if value.translation.height < -20 {
 					appNotifications.isPresented = false
+				} else if value.translation.height > 20 {
+					expandGestureHandler()
 				}
 				translation = CGSize.zero
 			}
 	}
 	
-	@ViewBuilder var notificationContent: some View {
-		if let notification = appNotifications.notification {
+	private var background: some View {
+		Rectangle()
+			.fill(appNotifications.notification?.backgroundColor.opacity(0.1) ?? Color.clear)
+			.background(Color(UIColor.systemBackground))
+	}
+	
+	@ViewBuilder private var notificationView: some View {
+		if let notification = appNotifications.notification, appNotifications.isPresented {
 			VStack(alignment: .leading, spacing: 5) {
 				HStack {
 					Image(systemName: notification.icon)
@@ -61,7 +88,7 @@ public struct NotificationOverlay: View {
 						.foregroundColor(notification.primaryColor)
 						.id(notification.icon)
 					
-					VStack(alignment: .leading) {
+					VStack(alignment: .leading, spacing: 2) {
 						Text(LocalizedStringKey(notification.title))
 							.font(.headline)
 							.lineLimit(2)
@@ -99,45 +126,29 @@ public struct NotificationOverlay: View {
 						.id(expandedText)
 				}
 			}
-			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-			.padding()
-			.padding(.vertical, 5)
-			.background(notification.backgroundColor)
-			.background(VisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial)))
-			// .background(Color(UIColor.systemBackground))
-			.mask(RoundedRectangle(cornerRadius: 14, style: .circular))
-			.contentShape(RoundedRectangle(cornerRadius: 14, style: .circular))
-			.gesture(notificationDragGesture)
-			.onTapGesture {
-				if notification.expandedText != nil {
-					#if os(iOS)
-					UIImpactFeedbackGenerator(style: .light).impactOccurred()
-					#endif
-					isExpanded.toggle()
-					if notification.autodismisses {
-						if isExpanded {
-							appNotifications.cancelTimer()
-						} else {
-							appNotifications.instantiateTimer()
-						}
-					}
-				}
-			}
-			.shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 0)
-			.offset(x: 0, y: appNotifications.isPresented ? yOffset : 200)
-			.animation(animation)
-			.transition(.asymmetric(insertion: .move(edge: .top), removal: .offset(x: 0, y: -200)))
-			// .id(notification.id)
+			.frame(maxWidth: .infinity, alignment: .leading)							// Full width
+			.padding()																	// Background padding
+			.background(background)														// Background
+			.cornerRadius(16)															// Rounded corners
+			.shadow(color: Color.black.opacity(0.1), radius: 16, x: 0, y: 0)			// Shadow
+			.offset(x: 0, y: yOffset)													// Dragging offset
+			.frame(maxWidth: 600)														// Max width
+			.padding(.horizontal)														// Additional padding
+			.padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0)	// Top safe area padding 
 		}
 	}
 	
 	public var body: some View {
-		VStack {
-			notificationContent
+		VStack(spacing: 0) {
+			notificationView
+				.onTapGesture(perform: expandGestureHandler)										// Tap gesture handler
+				.gesture(notificationDragGesture)													// Drag gesture
+				.animation(animation)																// Spring animation
+				.transition(.asymmetric(insertion: .move(edge: .top), removal: .move(edge: .top)))	// Transition
 			
 			Spacer()
 		}
-		.padding()
+		.edgesIgnoringSafeArea(.top)	// Hides the view when notification isn't visible
 	}
 }
 #endif

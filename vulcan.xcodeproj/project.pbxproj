@@ -107,6 +107,7 @@
 		E75AC87E25506B5000E69CE2 /* Dark~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87A25506B5000E69CE2 /* Dark~iPad.png */; };
 		E75AC87F25506B5000E69CE2 /* Dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87B25506B5000E69CE2 /* Dark@3x.png */; };
 		E75AC88025506B5000E69CE2 /* Dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75AC87C25506B5000E69CE2 /* Dark@2x.png */; };
+		E75F79EF2594BDA40072FB3C /* VulcanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75F79EE2594BDA40072FB3C /* VulcanStore.swift */; };
 		E76AFEE925556BA7000F75CC /* NSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEE825556BA7000F75CC /* NSNotification.swift */; };
 		E76AFEEA25556BA7000F75CC /* NSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEE825556BA7000F75CC /* NSNotification.swift */; };
 		E76AFEF125556BBB000F75CC /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76AFEF025556BBB000F75CC /* UIWindow.swift */; };
@@ -291,6 +292,7 @@
 		E75AC87A25506B5000E69CE2 /* Dark~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark~iPad.png"; sourceTree = "<group>"; };
 		E75AC87B25506B5000E69CE2 /* Dark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark@3x.png"; sourceTree = "<group>"; };
 		E75AC87C25506B5000E69CE2 /* Dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dark@2x.png"; sourceTree = "<group>"; };
+		E75F79EE2594BDA40072FB3C /* VulcanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VulcanStore.swift; sourceTree = "<group>"; };
 		E76AFEE825556BA7000F75CC /* NSNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotification.swift; sourceTree = "<group>"; };
 		E76AFEF025556BBB000F75CC /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
 		E772FEF1253C9489003F80AF /* NextUpProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextUpProvider.swift; sourceTree = "<group>"; };
@@ -602,6 +604,7 @@
 				E700576125742F2200B6B739 /* Assets.xcassets */,
 				E700576625742F2200B6B739 /* Info.plist */,
 				E700576325742F2200B6B739 /* Preview Content */,
+				E75F79EE2594BDA40072FB3C /* VulcanStore.swift */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
@@ -1153,6 +1156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E75F79EF2594BDA40072FB3C /* VulcanStore.swift in Sources */,
 				E700576025742F2100B6B739 /* ContentView.swift in Sources */,
 				E700575E25742F2100B6B739 /* TestAppApp.swift in Sources */,
 			);

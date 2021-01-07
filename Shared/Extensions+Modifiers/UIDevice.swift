@@ -2,7 +2,7 @@
 //  UIDevice.swift
 //  vulcan
 //
-//  Created by Kacper on 05/11/2020.
+//  Created by royal on 05/11/2020.
 //
 
 #if canImport(UIKit)
